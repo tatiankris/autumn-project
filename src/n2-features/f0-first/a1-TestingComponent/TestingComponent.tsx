@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import SuperInputText from "../common/c1-SuperInputText/SuperInputText";
-import SuperButton from "../common/c2-SuperButton/SuperButton";
-import SuperCheckbox from "../common/c3-SuperCheckbox/SuperCheckbox";
-import SuperEditableSpan from "../common/c4-SuperEditableSpan/SuperEditableSpan";
+import SuperInputText from "../../../n1-main/m1-ui/common/c1-SuperInputText/SuperInputText";
+import SuperButton from "../../../n1-main/m1-ui/common/c2-SuperButton/SuperButton";
+import SuperCheckbox from "../../../n1-main/m1-ui/common/c3-SuperCheckbox/SuperCheckbox";
+import SuperEditableSpan from "../../../n1-main/m1-ui/common/c4-SuperEditableSpan/SuperEditableSpan";
 
 const TestingComponent = () => {
 
@@ -10,7 +10,6 @@ const TestingComponent = () => {
 
     return (
         <div>
-            Testing
             <div><SuperInputText/></div>
             <div><SuperButton>button</SuperButton></div>
             <div><SuperCheckbox/></div>
