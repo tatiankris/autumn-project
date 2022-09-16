@@ -8,16 +8,16 @@ import PasswordRecovery from "../../../n2-features/f2-password/a2-recovery/Passw
 import NewPassword from "../../../n2-features/f2-password/a1-new/NewPassword";
 import Error404 from "../../../n2-features/f0-first/a2-Error404/404";
 
-const ROOT = '/'
-const LOGIN = '/login'
-const REGISTRATION = '/registration'
+export const ROOT = '/'
+export const LOGIN = '/login'
+export const REGISTRATION = '/registration'
 
-const PASSWORD_RECOVERY = '/password-recovery'
-const NEW_PASSWORD = '/new-password'
+export const PASSWORD_RECOVERY = '/password-recovery'
+export const NEW_PASSWORD = '/new-password'
 
-const PROFILE = '/profile'
+export const PROFILE = '/profile'
 
-const ERROR_404 = '/404'
+export const ERROR_404 = '/404'
 
 
 
