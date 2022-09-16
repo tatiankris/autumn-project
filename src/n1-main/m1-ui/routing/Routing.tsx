@@ -1,7 +1,7 @@
 import React from "react";
 import {Route, Routes} from "react-router-dom";
 import TestingComponent from "../../../n2-features/f0-first/a1-TestingComponent/TestingComponent";
-import Profile from "../../../n2-features/f3-profile/a1-profile/Profile";
+import Profile from "../../../n2-features/f1-auth/a3-profile/Profile";
 import Login from "../../../n2-features/f1-auth/a1-login/Login";
 import Registration from "../../../n2-features/f1-auth/a2-registration/Registration";
 import PasswordRecovery from "../../../n2-features/f2-password/a2-recovery/PasswordRecovery";
