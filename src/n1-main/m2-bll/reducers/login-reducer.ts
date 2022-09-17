@@ -1,13 +1,17 @@
-let initialState = {
+import {Dispatch} from 'redux'
+import {authAPI, LoginDataType} from "../../m3-dal/api/auth-api";
+import {AxiosError} from 'axios';
 
+let initialState = {
+    isLoggedIn:false
 }
 export type StateType = typeof initialState;
 
-export const loginReducer = (state: StateType = initialState, action: ActionType): StateType => {
+export const loginReducer = (state: StateType = initialState, action: ActionsType): StateType => {
 
     switch (action.type) {
-        case 'TEST': {
-            return {...state}
+        case 'LOGIN/SET-ID-LOGGED-IN': {
+            return {...state, isLoggedIn: action.value}
         }
         default:
             return state
@@ -15,9 +19,29 @@ export const loginReducer = (state: StateType = initialState, action: ActionType
 }
 
 
-export const testAC = () => {
+export const loginAC = (value:boolean) => {
     return {
-        type: 'TEST'
+        type: 'LOGIN/SET-ID-LOGGED-IN',
+        value
     } as const
 }
-export type ActionType = ReturnType<typeof testAC>
+
+
+export const loginTC=(data:LoginDataType)=>{
+    return (dispatch:Dispatch<ActionsType>)=>{
+        authAPI.login(data)
+            .then(res=>{
+                dispatch(loginAC(true))
+            })
+            .catch((err:AxiosError<{error:string}>)=>{
+                const error = err.response
+                    ? err.response.data.error
+                    : err.message
+                console.log('error: ', error)
+            })
+    }
+}
+
+
+export type ActionsType = ReturnType<typeof loginAC>
+
