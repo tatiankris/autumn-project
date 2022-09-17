@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 const Profile = () => {
     return (
-        <div>Login new</div>
+        <div>Profile new</div>
     )
 }
 
