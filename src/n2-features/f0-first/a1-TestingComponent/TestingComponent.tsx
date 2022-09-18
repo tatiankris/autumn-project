@@ -13,7 +13,7 @@ const TestingComponent = () => {
             <div><SuperInputText/></div>
             <div><SuperButton>button</SuperButton></div>
             <div><SuperCheckbox/></div>
-            <div><SuperEditableSpan value={value} onChangeText={setValue}/></div>
+            <div><SuperEditableSpan value={value} onChange={setValue}/></div>
         </div>
     )
 }
