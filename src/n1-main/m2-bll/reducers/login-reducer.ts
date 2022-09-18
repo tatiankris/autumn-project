@@ -10,7 +10,7 @@ export type StateType = typeof initialState;
 export const loginReducer = (state: StateType = initialState, action: ActionsType): StateType => {
 
     switch (action.type) {
-        case 'LOGIN/SET-ID-LOGGED-IN': {
+        case 'LOGIN/SET-IS-LOGGED-IN': {
             return {...state, isLoggedIn: action.value}
         }
         default:
@@ -21,7 +21,7 @@ export const loginReducer = (state: StateType = initialState, action: ActionsTyp
 
 export const loginAC = (value:boolean) => {
     return {
-        type: 'LOGIN/SET-ID-LOGGED-IN',
+        type: 'LOGIN/SET-IS-LOGGED-IN',
         value
     } as const
 }
@@ -32,6 +32,22 @@ export const loginTC=(data:LoginDataType)=>{
         authAPI.login(data)
             .then(res=>{
                 dispatch(loginAC(true))
+            })
+            .catch((err:AxiosError<{error:string}>)=>{
+                const error = err.response
+                    ? err.response.data.error
+                    : err.message
+                console.log('error: ', error)
+            })
+    }
+}
+
+
+export const logoutTC=()=>{
+    return (dispatch:Dispatch<ActionsType>)=>{
+        authAPI.logout()
+            .then(res=>{
+                dispatch(loginAC(false))
             })
             .catch((err:AxiosError<{error:string}>)=>{
                 const error = err.response

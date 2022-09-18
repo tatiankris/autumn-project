@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {useFormik} from 'formik';
 import {useDispatch, useSelector} from "react-redux";
 import {loginTC} from "../../../n1-main/m2-bll/reducers/login-reducer";
@@ -13,9 +13,12 @@ import {
     FormGroup,
     FormLabel,
     Grid,
+    IconButton,
+    InputAdornment,
     Paper,
     TextField
 } from "@mui/material";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
 
 type FormikErrorType = {
     email?: string
@@ -31,6 +34,13 @@ type FormikValuesType = {
 const Login = () => {
     const dispatch = useDispatch()
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
+    const [showPassword, setShowPassword] = useState(false)
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword)
+    }
+    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    };
     const validate = (values: FormikValuesType) => {
         const errors: FormikErrorType = {};
         if (!values.email) {
@@ -62,18 +72,18 @@ const Login = () => {
         return <Navigate to={PROFILE}/>
     }
     return (
-        <Grid container justifyContent={'center'} >
-            <Grid item marginTop={'50px'} textAlign={"center"} width={'400px'} >
+        <Grid container justifyContent={'center'}>
+            <Grid item marginTop={'50px'} textAlign={"center"} width={'400px'}>
                 <Paper elevation={14} style={{padding: "30px"}}>
                     <form onSubmit={formik.handleSubmit}>
                         <FormControl fullWidth>
                             <FormLabel style={{textAlign: "center"}}>
                                 <h2>Sign in</h2>
                             </FormLabel>
-                            <FormGroup >
+                            <FormGroup>
                                 <TextField
                                     label="Email"
-                                    helperText={formik.touched.email && !!formik.errors.email?formik.errors.email:" "}
+                                    helperText={formik.touched.email && !!formik.errors.email ? formik.errors.email : " "}
                                     variant="standard"
                                     type="text"
                                     error={formik.touched.email && !!formik.errors.email}
@@ -81,25 +91,41 @@ const Login = () => {
                                 />
                                 <TextField
                                     label="Password"
-                                    helperText={formik.touched.password && !!formik.errors.password?formik.errors.password: " "}
+                                    helperText={formik.touched.password && !!formik.errors.password ? formik.errors.password : " "}
                                     variant="standard"
-                                    type="password"
+                                    type={showPassword ? 'text' : 'password'}
                                     error={formik.touched.password && !!formik.errors.password}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    onClick={handleClickShowPassword}
+                                                    onMouseDown={handleMouseDownPassword}
+                                                >
+                                                    {showPassword ? <VisibilityOff/> : <Visibility/>}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                     {...formik.getFieldProps('password')}
+
                                 />
                                 <FormControlLabel label={'Remember me'}
                                                   control={<Checkbox
                                                       checked={formik.values.rememberMe}
                                                       {...formik.getFieldProps("rememberMe")}
                                                   />}/>
-                                <h6 style={{textAlign:'right'}}><NavLink to={PASSWORD_RECOVERY} style={{color:'gray', textDecoration:'none'}}>Forgot password?</NavLink></h6>
+                                <h6 style={{textAlign: 'right'}}><NavLink to={PASSWORD_RECOVERY} style={{
+                                    color: 'gray',
+                                    textDecoration: 'none'
+                                }}>Forgot password?</NavLink></h6>
                                 <Button type={'submit'} variant={'contained'} color={'primary'} fullWidth>
                                     Sign In
                                 </Button>
                             </FormGroup>
                             <FormLabel style={{textAlign: "center"}}>
                                 <h6 style={{color: "gray"}}>Already have an account?</h6>
-                                <h4><NavLink to={REGISTRATION} style={{color:'blue'}}>Sign Up</NavLink></h4>
+                                <h4><NavLink to={REGISTRATION} style={{color: 'blue'}}>Sign Up</NavLink></h4>
                             </FormLabel>
                         </FormControl>
                     </form>
