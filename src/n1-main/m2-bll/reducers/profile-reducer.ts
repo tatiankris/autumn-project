@@ -33,7 +33,6 @@ export const profileReducer = (state: ProfileStateType = initialState, action: P
 
 //actions
 export const setProfileAC = (id: string, name: string, email: string, avatar?: string ) => {
-    debugger
     return {
         type: 'SET-PROFILE',
         id,
@@ -56,8 +55,8 @@ export const changeNameTC = (name: string) =>
     const avatar = getState().profile.avatar;
 
     profileAPI.changeProfile(name, avatar)
-        .then(() => {
-            dispatch(changeNameAC(name));
+        .then(res => {
+            dispatch(changeNameAC(res.data.updatedUser.name));
         })
 };
 

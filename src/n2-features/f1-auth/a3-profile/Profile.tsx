@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useCallback, useEffect } from "react";
 import SuperEditableSpan from "../../../n1-main/m1-ui/common/c4-SuperEditableSpan/SuperEditableSpan";
 import SuperButton from "../../../n1-main/m1-ui/common/c2-SuperButton/SuperButton";
 import {NavLink} from "react-router-dom";
@@ -12,9 +12,9 @@ const Profile = React.memo(() => {
     const avatar = useAppSelector(state => state.profile.avatar);
     const email = useAppSelector(state => state.profile.email);
 
-    const setNewName = (name: string) => {
+    const setNewName = useCallback((name: string) => {
         dispatch(changeNameTC(name));
-    }
+    }, [name])
 
     useEffect(() => {
         instance.post('/auth/login', {email: "nya-admin@nya.nya", password: "1qazxcvBG", rememberMe: false})
