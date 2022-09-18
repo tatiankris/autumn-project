@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useFormik} from 'formik';
 import {useDispatch, useSelector} from "react-redux";
 import {loginTC} from "../../../n1-main/m2-bll/reducers/login-reducer";
@@ -19,6 +19,8 @@ import {
     TextField
 } from "@mui/material";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
+import {registrationAC} from "../../../n1-main/m2-bll/reducers/registration-reducer";
+
 
 type FormikErrorType = {
     email?: string
@@ -33,6 +35,9 @@ type FormikValuesType = {
 
 const Login = () => {
     const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(registrationAC(false));
+    }, []);
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
     const [showPassword, setShowPassword] = useState(false)
     const handleClickShowPassword = () => {

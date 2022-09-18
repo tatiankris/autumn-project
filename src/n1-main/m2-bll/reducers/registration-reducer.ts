@@ -1,13 +1,22 @@
-let initialState = {
+import {ValuesType} from "../../../n2-features/f1-auth/a2-registration/Registration";
+import {Dispatch} from "redux";
+import {authAPI} from "../../m3-dal/api/registration-api";
+import {LOGIN} from "../../m1-ui/routing/Routing";
+import { AxiosError } from "axios";
 
+let initialState = {
+    signUp: false
+} as StateType
+
+export type StateType = {
+    signUp: boolean
 }
-export type StateType = typeof initialState;
 
 export const registrationReducer = (state: StateType = initialState, action: ActionType): StateType => {
 
     switch (action.type) {
-        case 'TEST': {
-            return {...state}
+        case 'SIGN_UP': {
+            return {...state, signUp: action.value}
         }
         default:
             return state
@@ -15,11 +24,27 @@ export const registrationReducer = (state: StateType = initialState, action: Act
 }
 
 
-    export const testAC = () => {
-        return {
-            type: 'TEST'
-        } as const
-    }
-export type ActionType = ReturnType<typeof testAC>
+export const registrationAC = (value: boolean) => {
+    return {
+        type: 'SIGN_UP',
+        value
+    } as const
+}
 
+export const registrationTC = (values: ValuesType) => async (dispatch: Dispatch<ThunkDispatch>)  => {
+    try {
+
+        let data = await authAPI.createAccount(values.email, values.password)
+        dispatch(registrationAC(true));
+        alert(`${JSON.stringify(data.addedUser.name)} sign up succesfully!`)
+
+    } catch (error: any) {
+
+            alert(error.response.data.error);
+    }
+
+}
+
+export type ActionType = ReturnType<typeof registrationAC>
+type ThunkDispatch = ActionType
 
