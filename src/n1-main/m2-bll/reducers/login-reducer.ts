@@ -1,6 +1,7 @@
-import {Dispatch} from 'redux'
 import {authAPI, LoginDataType} from "../../m3-dal/api/auth-api";
 import {AxiosError} from 'axios';
+import {setProfileAC} from "./profile-reducer";
+import {AppDispatch} from "../store";
 
 let initialState = {
     isLoggedIn:false
@@ -28,10 +29,11 @@ export const loginAC = (value:boolean) => {
 
 
 export const loginTC=(data:LoginDataType)=>{
-    return (dispatch:Dispatch<ActionsType>)=>{
+    return (dispatch: AppDispatch)=>{
         authAPI.login(data)
             .then(res=>{
                 dispatch(loginAC(true))
+                dispatch(setProfileAC(res.data._id, res.data.name, res.data.email, res.data.avatar))
             })
             .catch((err:AxiosError<{error:string}>)=>{
                 const error = err.response
@@ -44,7 +46,7 @@ export const loginTC=(data:LoginDataType)=>{
 
 
 export const logoutTC=()=>{
-    return (dispatch:Dispatch<ActionsType>)=>{
+    return (dispatch: AppDispatch)=>{
         authAPI.logout()
             .then(res=>{
                 dispatch(loginAC(false))
