@@ -1,14 +1,8 @@
-import {Dispatch} from "redux"
 import {profileAPI} from "../../m3-dal/api/profile-api";
-import {AppRootStateType} from "../store";
+import {AppDispatch, AppRootStateType} from "../store";
 
 //state
-const initialState: ProfileStateType = {
-    _id: 'test',
-    name: 'test',
-    avatar: 'test',
-    email: 'test',
-};
+const initialState = {} as ProfileStateType;
 
 //reducer
 export const profileReducer = (state: ProfileStateType = initialState, action: ProfileActionsType): ProfileStateType => {
@@ -38,20 +32,20 @@ export const setProfileAC = (id: string, name: string, email: string, avatar?: s
         id,
         name,
         email,
-        avatar: 'https:\//i.pinimg.com/originals/ea/09/10/ea0910307bcc7fea70790f85c0598aa3.jpg'
+        avatar: 'https:\//i.pinimg.com/originals/ea/09/10/ea0910307bcc7fea70790f85c0598aa3.jpg',
     } as const
 };
 export const changeNameAC = (name: string) => {
     return {
         type: 'CHANGE-NAME',
-        name
+        name,
     } as const
 };
 
 
 //thunks
 export const changeNameTC = (name: string) =>
-    (dispatch: Dispatch, getState: () => AppRootStateType) => {
+    (dispatch: AppDispatch, getState: () => AppRootStateType) => {
     const avatar = getState().profile.avatar;
 
     profileAPI.changeProfile(name, avatar)
