@@ -26,7 +26,7 @@ const Profile = React.memo(() => {
     return (
         <div style={{display: 'flex', flexDirection: 'column', width: '80%', margin: '0 auto'}}>
             <div style={{border: '1px solid'}}>
-                <NavLink to={'/'}>Back to Packs List</NavLink>
+                <NavLink to={'/'}>Back to Packs list</NavLink>
             </div>
             <div style={{
                 border: '1px solid',
