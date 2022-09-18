@@ -1,25 +1,11 @@
-
-import React, {useState} from "react";
+import React from "react";
 import {useFormik} from 'formik';
 import {useDispatch, useSelector} from "react-redux";
-import {loginTC} from "../../../n1-main/m2-bll/reducers/login-reducer";
 import {AppRootStateType} from "../../../n1-main/m2-bll/store";
 import {Navigate, NavLink} from 'react-router-dom'
-import {PASSWORD_RECOVERY, PROFILE, REGISTRATION} from "../../../n1-main/m1-ui/routing/Routing";
-import {
-    Button,
-    Checkbox,
-    FormControl,
-    FormControlLabel,
-    FormGroup,
-    FormLabel,
-    Grid,
-    IconButton,
-    InputAdornment,
-    Paper,
-    TextField
-} from "@mui/material";
-import {Visibility, VisibilityOff} from "@mui/icons-material";
+import {PASSWORD_RECOVERED, REGISTRATION} from "../../../n1-main/m1-ui/routing/Routing";
+import {Button, FormControl, FormGroup, FormLabel, Grid, Paper, TextField} from "@mui/material";
+import {passwordRecoveryTC} from "../../../n1-main/m2-bll/reducers/password-recovery-reducer";
 
 type FormikErrorType = {
     email?: string
@@ -30,7 +16,7 @@ type FormikValuesType = {
 
 const PasswordRecovery = () => {
     const dispatch = useDispatch()
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
+    const isStatusRecovery = useSelector<AppRootStateType, boolean>(state => state.passwordRec.recoveryStatus)
     const validate = (values: FormikValuesType) => {
         const errors: FormikErrorType = {};
         if (!values.email) {
@@ -47,11 +33,11 @@ const PasswordRecovery = () => {
         },
         validate,
         onSubmit: values => {
-            alert(values.email)
+           dispatch(passwordRecoveryTC(values)as any)
         },
     });
-    if (isLoggedIn) {
-        return <Navigate to={PROFILE}/>
+    if (isStatusRecovery) {
+        return <Navigate to={PASSWORD_RECOVERED}/>
     }
     return (
         <Grid container justifyContent={'center'}>
