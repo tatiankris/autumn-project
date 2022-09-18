@@ -1,11 +1,25 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
-import {BrowserRouter} from "react-router-dom";
-import {Provider} from 'react-redux';
-import {store} from '../m2-bll/store';
 import Main from "./main/Main";
+import {useAppDispatch, useAppSelector} from "./hooks";
+import { initializeAppTC } from '../m2-bll/reducers/login-reducer';
+import {CircularProgress} from "@mui/material";
 
 function App() {
+    const dispatch = useAppDispatch();
+    const isInitialized = useAppSelector(state => state.login.isInitialized);
+
+    useEffect(() => {
+        dispatch(initializeAppTC());
+    }, []);
+
+    if (!isInitialized) {
+        return <div
+            style={{ position: 'fixed', top: '30%', textAlign: 'center', width: '100%' }}>
+            <CircularProgress />
+        </div>
+    }
+
     return (
         <div>
             <Main/>

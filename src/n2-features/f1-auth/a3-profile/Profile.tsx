@@ -4,7 +4,7 @@ import SuperButton from "../../../n1-main/m1-ui/common/c2-SuperButton/SuperButto
 import {Navigate, NavLink} from "react-router-dom";
 import {changeNameTC, setProfileAC} from "../../../n1-main/m2-bll/reducers/profile-reducer";
 import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
-import {logoutTC} from "../../../n1-main/m2-bll/reducers/login-reducer";
+import { logoutTC, setProfileTC} from "../../../n1-main/m2-bll/reducers/login-reducer";
 import {LOGIN} from "../../../n1-main/m1-ui/routing/Routing";
 
 const Profile = React.memo(() => {
@@ -14,17 +14,22 @@ const Profile = React.memo(() => {
     const email = useAppSelector(state => state.profile.email);
     const isLoggedIn = useAppSelector(state => state.login.isLoggedIn);
 
+    useEffect( () => {
+        dispatch(setProfileTC())
+    }, [])
+
     const setNewName = useCallback((name: string) => {
         dispatch(changeNameTC(name));
-    }, [name]);
+    }, [dispatch, name]);
 
     const logout = useCallback(() => {
         dispatch(logoutTC());
-    }, [])
+    }, [dispatch])
 
     if (!isLoggedIn) {
         return <Navigate to={LOGIN}/>
     }
+
     return (
         <div style={{display: 'flex', flexDirection: 'column', width: '80%', margin: '0 auto'}}>
             <div style={{border: '1px solid'}}>
