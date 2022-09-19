@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect} from "react";
+import React, {useCallback} from "react";
 import SuperEditableSpan from "../../../n1-main/m1-ui/common/c4-SuperEditableSpan/SuperEditableSpan";
 import SuperButton from "../../../n1-main/m1-ui/common/c2-SuperButton/SuperButton";
 import {Navigate, NavLink} from "react-router-dom";
-import {changeNameTC, setProfileAC} from "../../../n1-main/m2-bll/reducers/profile-reducer";
+import {changeNameTC} from "../../../n1-main/m2-bll/reducers/profile-reducer";
 import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
-import { logoutTC, setProfileTC} from "../../../n1-main/m2-bll/reducers/login-reducer";
+import {logoutTC,} from "../../../n1-main/m2-bll/reducers/login-reducer";
 import {LOGIN} from "../../../n1-main/m1-ui/routing/Routing";
 
 const Profile = React.memo(() => {
@@ -13,10 +13,6 @@ const Profile = React.memo(() => {
     const avatar = useAppSelector(state => state.profile.avatar);
     const email = useAppSelector(state => state.profile.email);
     const isLoggedIn = useAppSelector(state => state.login.isLoggedIn);
-
-    useEffect( () => {
-        dispatch(setProfileTC())
-    }, [])
 
     const setNewName = useCallback((name: string) => {
         dispatch(changeNameTC(name));

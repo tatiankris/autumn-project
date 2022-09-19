@@ -1,5 +1,8 @@
 import {profileAPI} from "../../m3-dal/api/profile-api";
 import {AppDispatch, AppRootStateType} from "../store";
+import {AxiosError} from "axios";
+import {handleServerNetworkError} from "../../m1-ui/common/utils/error-utils";
+import {setAppStatusAC} from "./app-reducer";
 
 //state
 const initialState = {} as ProfileStateType;
@@ -46,12 +49,20 @@ export const changeNameAC = (name: string) => {
 //thunks
 export const changeNameTC = (name: string) =>
     (dispatch: AppDispatch, getState: () => AppRootStateType) => {
+        dispatch(setAppStatusAC("loading"))
     const avatar = getState().profile.avatar;
 
     profileAPI.changeProfile(name, avatar)
         .then(res => {
             dispatch(changeNameAC(res.data.updatedUser.name));
         })
+        .catch((err: AxiosError<{ error: string }>) => {
+            const error = err.response
+                ? err.response.data.error
+                : err.message
+            handleServerNetworkError({message:error},dispatch)
+        })
+        .finally(() => dispatch(setAppStatusAC("idle")))
 };
 
 

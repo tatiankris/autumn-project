@@ -1,8 +1,10 @@
 import {Dispatch} from "redux";
 import {passwordAPI} from "../../m3-dal/api/password-api";
+import {handleServerNetworkError} from "../../m1-ui/common/utils/error-utils";
+import {setAppStatusAC} from "./app-reducer";
 
 let initialState = {
-    recoveryStatus:false,
+    recoveryStatus: false,
     email: ""
 }
 export type StateType = typeof initialState;
@@ -11,7 +13,7 @@ export const passwordRecoveryReducer = (state: StateType = initialState, action:
 
     switch (action.type) {
         case 'PASSWORD/CHANGE-PR-STATUS': {
-            return {...state, recoveryStatus: action.status, email:action.email}
+            return {...state, recoveryStatus: action.status, email: action.email}
         }
         default:
             return state
@@ -19,7 +21,7 @@ export const passwordRecoveryReducer = (state: StateType = initialState, action:
 }
 
 
-export const changePasswordRecoveryStatusAC = (status:boolean, email:string) => {
+export const changePasswordRecoveryStatusAC = (status: boolean, email: string) => {
     return {
         type: 'PASSWORD/CHANGE-PR-STATUS',
         status, email
@@ -28,6 +30,7 @@ export const changePasswordRecoveryStatusAC = (status:boolean, email:string) => 
 
 export const passwordRecoveryTC = (email: { email: string }) => {
     return (dispatch: Dispatch) => {
+        dispatch(setAppStatusAC("loading"))
         const data = {
             ...email, // кому восстанавливать пароль
             from: "Yuhee <YuheePlyuhee@gmail.com>", // можно указать разработчика фронта)
@@ -37,12 +40,16 @@ export const passwordRecoveryTC = (email: { email: string }) => {
             // хтмп-письмо, вместо $token$ бэк вставит токен
         }
         passwordAPI.passwordRecovery(data)
-            .then(res=>{
+            .then(res => {
                 dispatch(changePasswordRecoveryStatusAC(res.data.success, data.email))
-                })
-            .catch(err=>{
-                console.log(err)
             })
+            .catch(err => {
+                const error = err.response
+                    ? err.response.data.error
+                    : err.message
+                handleServerNetworkError({message: error}, dispatch)
+            })
+            .finally(() => dispatch(setAppStatusAC("idle")))
     }
 }
 
