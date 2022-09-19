@@ -1,31 +1,31 @@
 import {instance} from "./autumn-api";
-import {AxiosResponse} from 'axios'
+import {AxiosResponse} from 'axios';
 
-export const authAPI={
-    login(data:LoginDataType){
-        return instance.post<LoginDataType, AxiosResponse<LoginResponseType>>('/auth/login',data)
+export const authAPI = {
+    login(data: LoginDataType) {
+        return instance.post<LoginDataType, AxiosResponse<LoginResponseType>>('/auth/login', data)
     },
-    logout(){
+    logout() {
         return instance.delete('/auth/me')
     },
-    me(){
+    me() {
         return instance.post('/auth/me')
     }
 }
 
-export type LoginDataType={
-    email:string
+export type LoginDataType = {
+    email: string
     password: string
     rememberMe: boolean
 }
 
-export type LoginResponseType={
+export type LoginResponseType = {
     avatar: string
     created: string
-    email:string
+    email: string
     isAdmin: boolean
     name: string
-    publicCardPacksCount:number
+    publicCardPacksCount: number
     rememberMe: boolean
     token: string
     tokenDeathTime: number
