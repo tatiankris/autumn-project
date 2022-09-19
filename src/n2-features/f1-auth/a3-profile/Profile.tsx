@@ -36,32 +36,19 @@ const Profile = React.memo(() => {
     return (
         <div className={s.container}>
             <div className={s.backToPacks}>
-                <NavLink to={'/'} > <KeyboardBackspaceIcon sx={{position: 'relative', top: '6px'}}/>  Back to Packs List</NavLink>
+                <NavLink to={'/'}> <KeyboardBackspaceIcon sx={{position: 'relative', top: '6px'}}/> Back to Packs
+                    List</NavLink>
             </div>
             <Grid container justifyContent={'center'}>
                 <Grid item marginTop={'50px'} textAlign={"center"} width={'400px'}>
                     <Paper elevation={14} style={{padding: "30px"}}>
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            width: '50%',
-                            margin: '0 auto'
-                        }}>
+                        <div className={s.profileBox}>
                             <Typography variant="h5" gutterBottom noWrap sx={{fontWeight: 'bold'}}>
                                 Personal Information
                             </Typography>
-                            <div style={{
-                                backgroundImage: `url(${avatar})`,
-                                backgroundRepeat: 'no-repeat',
-                                backgroundSize: 'cover',
-                                height: '120px',
-                                width: '120px',
-                                borderRadius: '50%',
-                                margin: '10px 0 10px 0'
-                            }}>
+                            <div className={s.avatar} style={{backgroundImage: `url(${avatar})`}}>
                             </div>
-                            <div style={{cursor: 'pointer', fontSize: '20px' }}>
+                            <div style={{cursor: 'pointer', fontSize: '20px'}}>
                                 <SuperEditableSpan value={name} onChange={setNewName}/>
                             </div>
                             <Typography variant="h6" gutterBottom noWrap sx={{color: 'gray', margin: '10px 0 10px 0'}}>
