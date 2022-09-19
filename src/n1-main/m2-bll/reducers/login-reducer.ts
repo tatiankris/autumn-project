@@ -82,7 +82,6 @@ export const logoutTC = () => {
 export const initializeAppTC = () => (dispatch: AppDispatch) => {
     authAPI.me()
         .then(res => {
-            debugger
             dispatch(setIsInitializedAC(true));
             dispatch(loginAC(true));
         })
