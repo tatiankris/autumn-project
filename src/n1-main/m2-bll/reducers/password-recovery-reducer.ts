@@ -1,13 +1,19 @@
-let initialState = {
+import {Dispatch} from "redux";
+import {passwordAPI} from "../../m3-dal/api/password-api";
+import {handleServerNetworkError} from "../../m1-ui/common/utils/error-utils";
+import {setAppStatusAC} from "./app-reducer";
 
+let initialState = {
+    recoveryStatus: false,
+    email: ""
 }
 export type StateType = typeof initialState;
 
 export const passwordRecoveryReducer = (state: StateType = initialState, action: ActionType): StateType => {
 
     switch (action.type) {
-        case 'TEST': {
-            return {...state}
+        case 'PASSWORD/CHANGE-PR-STATUS': {
+            return {...state, recoveryStatus: action.status, email: action.email}
         }
         default:
             return state
@@ -15,9 +21,38 @@ export const passwordRecoveryReducer = (state: StateType = initialState, action:
 }
 
 
-export const testAC = () => {
+export const changePasswordRecoveryStatusAC = (status: boolean, email: string) => {
     return {
-        type: 'TEST'
+        type: 'PASSWORD/CHANGE-PR-STATUS',
+        status, email
     } as const
 }
-export type ActionType = ReturnType<typeof testAC>
+
+export const passwordRecoveryTC = (email: { email: string }) => {
+    return (dispatch: Dispatch) => {
+        dispatch(setAppStatusAC("loading"))
+        const data = {
+            ...email, // кому восстанавливать пароль
+            from: "Yuhee <YuheePlyuhee@gmail.com>", // можно указать разработчика фронта)
+            message: `<div style="background-color: lime; padding: 15px">
+            password recovery link: 
+            Forgot your password? That is okay? it happens! Click on the link bellow to reset yor password:
+            <a href='http://localhost:3000/autumn-project#/new-password/$token$'>link</a></div>`
+            // хтмп-письмо, вместо $token$ бэк вставит токен
+        }
+        passwordAPI.passwordRecovery(data)
+            .then(res => {
+                dispatch(changePasswordRecoveryStatusAC(res.data.success, data.email))
+            })
+            .catch(err => {
+                const error = err.response
+                    ? err.response.data.error
+                    : err.message
+                handleServerNetworkError({message: error}, dispatch)
+            })
+            .finally(() => dispatch(setAppStatusAC("idle")))
+    }
+}
+
+
+export type ActionType = ReturnType<typeof changePasswordRecoveryStatusAC>

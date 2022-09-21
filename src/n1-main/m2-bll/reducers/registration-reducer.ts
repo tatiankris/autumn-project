@@ -1,5 +1,7 @@
 import {ValuesType} from "../../../n2-features/f1-auth/a2-registration/Registration";
 import {authAPI} from "../../m3-dal/api/registration-api";
+import {handleServerNetworkError} from "../../m1-ui/common/utils/error-utils";
+import {setAppStatusAC} from "./app-reducer";
 import {AppDispatch} from "../store";
 
 let initialState = {
@@ -29,19 +31,23 @@ export const registrationAC = (value: boolean) => {
     } as const
 }
 
-export const registrationTC = (values: ValuesType) => async (dispatch: AppDispatch)  => {
-    try {
+export const registrationTC = (values: ValuesType) =>(dispatch: AppDispatch) => {
+    dispatch(setAppStatusAC("loading"))
+    authAPI.createAccount(values.email, values.password)
+        .then(res=>{
+            dispatch(registrationAC(true));
+            alert(`${JSON.stringify(res.addedUser.name)} sign up successfully!`)
+        })
+        .catch (err=> {
+        const error = err.response
+            ? err.response.data.error
+            : err.message
+        handleServerNetworkError({message: error}, dispatch)
+    }).finally(() => dispatch(setAppStatusAC("idle")))
 
-        let data = await authAPI.createAccount(values.email, values.password)
-        dispatch(registrationAC(true));
-        alert(`${JSON.stringify(data.addedUser.name)} sign up succesfully!`)
-
-    } catch (error: any) {
-
-            alert(error.response.data.error);
-    }
 
 }
 
 export type ActionType = ReturnType<typeof registrationAC>
+type ThunkDispatch = ActionType
 

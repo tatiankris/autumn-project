@@ -6,10 +6,10 @@ export const authAPI = {
         return instance.post<LoginDataType, AxiosResponse<LoginResponseType>>('/auth/login', data)
     },
     logout() {
-        return instance.delete('/auth/me')
+        return instance.delete<{},AxiosResponse<{info:string}>>('/auth/me')
     },
     me() {
-        return instance.post('/auth/me')
+        return instance.post<{},AxiosResponse<LoginResponseType>>('/auth/me')
     }
 }
 

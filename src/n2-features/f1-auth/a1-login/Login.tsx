@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {useFormik} from 'formik';
+import { useSelector} from "react-redux";
 import {loginTC} from "../../../n1-main/m2-bll/reducers/login-reducer";
+import {AppRootStateType} from "../../../n1-main/m2-bll/store";
 import {Navigate, NavLink} from 'react-router-dom'
 import {PASSWORD_RECOVERY, PROFILE, REGISTRATION} from "../../../n1-main/m1-ui/routing/Routing";
 import {
@@ -17,8 +19,8 @@ import {
     TextField
 } from "@mui/material";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
-import {registrationAC} from "../../../n1-main/m2-bll/reducers/registration-reducer";
-import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
+import {useAppDispatch} from "../../../n1-main/m1-ui/hooks";
+import {changePasswordRecoveryStatusAC} from "../../../n1-main/m2-bll/reducers/password-recovery-reducer";
 
 
 type FormikErrorType = {
@@ -34,10 +36,10 @@ type FormikValuesType = {
 
 const Login = () => {
     const dispatch = useAppDispatch()
-    useEffect(() => {
-        dispatch(registrationAC(false));
-    }, []);
-    const isLoggedIn = useAppSelector(state => state.login.isLoggedIn)
+    useEffect(()=>{
+        dispatch(changePasswordRecoveryStatusAC(false,""))
+    },[])
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
     const [showPassword, setShowPassword] = useState(false)
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword)

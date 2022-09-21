@@ -1,17 +1,9 @@
-
-import React, {useState} from "react";
+import React from "react";
 import {useFormik} from 'formik';
 import {Navigate, NavLink} from 'react-router-dom'
-import { PROFILE, REGISTRATION} from "../../../n1-main/m1-ui/routing/Routing";
-import {
-    Button,
-    FormControl,
-    FormGroup,
-    FormLabel,
-    Grid,
-    Paper,
-    TextField
-} from "@mui/material";
+import {PASSWORD_RECOVERED, REGISTRATION} from "../../../n1-main/m1-ui/routing/Routing";
+import {Button, FormControl, FormGroup, FormLabel, Grid, Paper, TextField} from "@mui/material";
+import {passwordRecoveryTC} from "../../../n1-main/m2-bll/reducers/password-recovery-reducer";
 import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
 
 type FormikErrorType = {
@@ -22,6 +14,7 @@ type FormikValuesType = {
 }
 
 const PasswordRecovery = () => {
+    const isStatusRecovery = useAppSelector(state => state.passwordRec.recoveryStatus)
     const dispatch = useAppDispatch()
     const isLoggedIn = useAppSelector(state => state.login.isLoggedIn)
     const validate = (values: FormikValuesType) => {
@@ -40,11 +33,11 @@ const PasswordRecovery = () => {
         },
         validate,
         onSubmit: values => {
-            alert(values.email)
+           dispatch(passwordRecoveryTC(values)as any)
         },
     });
-    if (isLoggedIn) {
-        return <Navigate to={PROFILE}/>
+    if (isStatusRecovery) {
+        return <Navigate to={PASSWORD_RECOVERED}/>
     }
     return (
         <Grid container justifyContent={'center'}>

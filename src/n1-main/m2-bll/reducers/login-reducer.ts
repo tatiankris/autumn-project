@@ -2,6 +2,8 @@ import {authAPI, LoginDataType} from "../../m3-dal/api/auth-api";
 import {AxiosError} from 'axios';
 import {setProfileAC} from "./profile-reducer";
 import {AppDispatch} from "../store";
+import {handleServerNetworkError} from "../../m1-ui/common/utils/error-utils";
+import {setAppStatusAC} from "./app-reducer";
 
 let initialState = {
     isLoggedIn: false,
@@ -30,65 +32,64 @@ export const loginAC = (value: boolean) => {
     } as const
 }
 
-export const setIsInitializedAC = (value: boolean) => ({ type: 'LOGIN/SET-IS-INITIALIZED', value } as const);
+export const setIsInitializedAC = (value: boolean) => ({type: 'LOGIN/SET-IS-INITIALIZED', value} as const);
 
 
 export const loginTC = (data: LoginDataType) => {
     return (dispatch: AppDispatch) => {
+        dispatch(setAppStatusAC("loading"))
         authAPI.login(data)
             .then(res => {
+                dispatch(setProfileAC(res.data._id, res.data.name, res.data.email, res.data.avatar))
                 dispatch(loginAC(true))
             })
-            .catch((err: AxiosError<{ error: string }>) => {
+            .catch(err => {
                 const error = err.response
                     ? err.response.data.error
                     : err.message
-                console.log('error: ', error)
+                handleServerNetworkError({message: error}, dispatch)
             })
-    }
-}
-
-export const setProfileTC = () => {
-    return (dispatch: AppDispatch) => {
-        authAPI.me()
-            .then(res => {
-                dispatch(setProfileAC(res.data._id, res.data.name, res.data.email, res.data.avatar))
-            })
-            .catch((err: AxiosError<{ error: string }>) => {
-                const error = err.response
-                    ? err.response.data.error
-                    : err.message
-                console.log('error: ', error)
-            })
+            .finally(() => dispatch(setAppStatusAC("idle")))
     }
 }
 
 
 export const logoutTC = () => {
     return (dispatch: AppDispatch) => {
+        dispatch(setAppStatusAC("loading"))
         authAPI.logout()
-            .then(res => {
+            .then(() => {
                 dispatch(loginAC(false))
             })
-            .catch((err: AxiosError<{ error: string }>) => {
+            .catch(err => {
                 const error = err.response
                     ? err.response.data.error
                     : err.message
-                console.log('error: ', error)
+                handleServerNetworkError({message: error}, dispatch)
             })
+            .finally(() => dispatch(setAppStatusAC("idle")))
     }
 }
 
 export const initializeAppTC = () => (dispatch: AppDispatch) => {
+    dispatch(setAppStatusAC("loading"))
     authAPI.me()
         .then(res => {
-            dispatch(setIsInitializedAC(true));
-            dispatch(loginAC(true));
+            dispatch(loginAC(true))
+            dispatch(setProfileAC(res.data._id, res.data.name, res.data.email, res.data.avatar));
         })
-        .catch((error) => {
-            dispatch(setIsInitializedAC(true));
-            alert('Не авторизован!');
+        .catch(err => {
+            const error = err.response
+                ? err.response.data.error
+                : err.message
+            handleServerNetworkError({message: error}, dispatch)
         })
+        .finally(() => {
+            dispatch(setIsInitializedAC(true))
+            dispatch(setAppStatusAC("idle"))
+        }
+)
+
 }
 
 
