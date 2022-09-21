@@ -8,6 +8,7 @@ import PasswordRecovery from "../../../n2-features/f2-password/a2-recovery/Passw
 import NewPassword from "../../../n2-features/f2-password/a1-new/NewPassword";
 import Error404 from "../../../n2-features/f0-first/a2-Error404/404";
 import PasswordIsRecovery from "../../../n2-features/f2-password/a2-recovery/PasswordIsRecovered";
+import PasswordIsChanged from "../../../n2-features/f2-password/a1-new/PasswordIsChanged";
 
 export const ROOT = '/'
 export const LOGIN = '/login'
@@ -17,6 +18,7 @@ export const PASSWORD_RECOVERY = '/password-recovery'
 export const PASSWORD_RECOVERED = '/password-recovered'
 
 export const NEW_PASSWORD = '/new-password/:token'
+export const PASSWORD_CHANGED = '/password-changed'
 
 export const PROFILE = '/profile'
 
@@ -35,6 +37,7 @@ const Routing = () => {
                 <Route path={PASSWORD_RECOVERY} element={<PasswordRecovery/>}/>
                 <Route path={PASSWORD_RECOVERED} element={<PasswordIsRecovery/>}/>
                 <Route path={NEW_PASSWORD} element={<NewPassword/>}/>
+                <Route path={PASSWORD_CHANGED} element={<PasswordIsChanged/>}/>
                 <Route path={ERROR_404} element={<Error404/>}/>
             </Routes>
         </div>

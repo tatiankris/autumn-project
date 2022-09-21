@@ -2,12 +2,9 @@ import React from "react";
 import {Button, FormControl, FormGroup, FormLabel, Grid, Paper} from "@mui/material";
 import {LOGIN} from "../../../n1-main/m1-ui/routing/Routing";
 import {NavLink} from "react-router-dom";
-import emailImg from "../../../n1-main/m1-ui/common/img/email.png"
-import {useAppSelector} from "../../../n1-main/m1-ui/hooks";
+import successful from "../../../n1-main/m1-ui/common/img/successful.png";
 
-const PasswordIsRecovered = () => {
-    const email = useAppSelector(state => state.passwordRec.email);
-
+const PasswordIsChanged = () => {
     return (
         <Grid container justifyContent={'center'}>
             <Grid item marginTop={'50px'} textAlign={"center"} width={'400px'}>
@@ -15,13 +12,13 @@ const PasswordIsRecovered = () => {
 
                     <FormControl fullWidth>
                         <FormLabel style={{textAlign: "center"}}>
-                            <h2>Check Email</h2>
+                            <h2>Password changed successfully</h2>
                         </FormLabel>
                         <FormGroup>
 
                             <FormLabel>
-                                <img src={emailImg} style={{width:"100px"}} alt={"email"}/>
-                                <div style={{fontSize: "13px"}}>We have sent an Email with instructions to {email}
+                                <img src={successful} style={{width:"130px"}} alt={"password"}/>
+                                <div style={{fontSize: "13px"}}>Go back to the login page and check it out
                                 </div>
                             </FormLabel>
 
@@ -41,5 +38,5 @@ const PasswordIsRecovered = () => {
     )
 }
 
-export default PasswordIsRecovered;
+export default PasswordIsChanged;
 

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useFormik} from 'formik';
 import {Navigate, NavLink, useParams} from 'react-router-dom'
-import {LOGIN} from "../../../n1-main/m1-ui/routing/Routing";
+import {LOGIN, PASSWORD_CHANGED} from "../../../n1-main/m1-ui/routing/Routing";
 import {
     Button,
     FormControl,
@@ -74,7 +74,7 @@ const NewPassword = () => {
     };
 
     if (newPasswordStatus) {
-        return <Navigate to={LOGIN}/>
+        return <Navigate to={PASSWORD_CHANGED}/>
     }
     return (
         <Grid container justifyContent={'center'}>
