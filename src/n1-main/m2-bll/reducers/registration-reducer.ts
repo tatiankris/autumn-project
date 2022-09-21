@@ -1,8 +1,6 @@
 import {ValuesType} from "../../../n2-features/f1-auth/a2-registration/Registration";
-import {Dispatch} from "redux";
 import {authAPI} from "../../m3-dal/api/registration-api";
-import {LOGIN} from "../../m1-ui/routing/Routing";
-import { AxiosError } from "axios";
+import {AppDispatch} from "../store";
 
 let initialState = {
     signUp: false
@@ -31,7 +29,7 @@ export const registrationAC = (value: boolean) => {
     } as const
 }
 
-export const registrationTC = (values: ValuesType) => async (dispatch: Dispatch<ThunkDispatch>)  => {
+export const registrationTC = (values: ValuesType) => async (dispatch: AppDispatch)  => {
     try {
 
         let data = await authAPI.createAccount(values.email, values.password)
@@ -46,5 +44,4 @@ export const registrationTC = (values: ValuesType) => async (dispatch: Dispatch<
 }
 
 export type ActionType = ReturnType<typeof registrationAC>
-type ThunkDispatch = ActionType
 

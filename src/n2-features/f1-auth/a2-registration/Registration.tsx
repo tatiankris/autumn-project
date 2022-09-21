@@ -1,25 +1,20 @@
 import React from "react";
 import {
     Button,
-    Checkbox,
     FormControl,
-    FormControlLabel,
     FormGroup,
     FormLabel,
-    Grid, IconButton, Input, InputAdornment, InputLabel,
+    Grid,
     TextField,
     Toolbar,
     Typography
 } from "@mui/material";
-import {Field, Form, Formik, FormikErrors, FormikHelpers, useFormik} from "formik";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../../n1-main/m2-bll/store";
+import {FormikErrors, useFormik} from "formik";
 import {Navigate, NavLink} from "react-router-dom";
 import {LOGIN} from "../../../n1-main/m1-ui/routing/Routing";
 import {registrationTC} from "../../../n1-main/m2-bll/reducers/registration-reducer";
 import s from './Registration.module.css'
-import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import {Visibility, VisibilityOff} from "@mui/icons-material";
+import { useAppDispatch, useAppSelector } from "../../../n1-main/m1-ui/hooks";
 
 
 export type ValuesType = {
@@ -37,7 +32,7 @@ type FormikErrorType   = {
 
 const Registration = () => {
 
-    const dispatch = useDispatch<any>();
+    const dispatch = useAppDispatch();
 
     const formik = useFormik({
         initialValues: {
@@ -76,7 +71,7 @@ const Registration = () => {
         },
     });
 
-    const signUp = useSelector<AppRootStateType>(state => state.registration.signUp);
+    const signUp = useAppSelector(state => state.registration.signUp);
     if (signUp) {
         return <Navigate to={LOGIN}/>
     }

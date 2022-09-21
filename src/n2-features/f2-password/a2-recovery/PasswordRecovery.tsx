@@ -1,25 +1,18 @@
 
 import React, {useState} from "react";
 import {useFormik} from 'formik';
-import {useDispatch, useSelector} from "react-redux";
-import {loginTC} from "../../../n1-main/m2-bll/reducers/login-reducer";
-import {AppRootStateType} from "../../../n1-main/m2-bll/store";
 import {Navigate, NavLink} from 'react-router-dom'
-import {PASSWORD_RECOVERY, PROFILE, REGISTRATION} from "../../../n1-main/m1-ui/routing/Routing";
+import { PROFILE, REGISTRATION} from "../../../n1-main/m1-ui/routing/Routing";
 import {
     Button,
-    Checkbox,
     FormControl,
-    FormControlLabel,
     FormGroup,
     FormLabel,
     Grid,
-    IconButton,
-    InputAdornment,
     Paper,
     TextField
 } from "@mui/material";
-import {Visibility, VisibilityOff} from "@mui/icons-material";
+import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
 
 type FormikErrorType = {
     email?: string
@@ -29,8 +22,8 @@ type FormikValuesType = {
 }
 
 const PasswordRecovery = () => {
-    const dispatch = useDispatch()
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
+    const dispatch = useAppDispatch()
+    const isLoggedIn = useAppSelector(state => state.login.isLoggedIn)
     const validate = (values: FormikValuesType) => {
         const errors: FormikErrorType = {};
         if (!values.email) {
