@@ -1,7 +1,7 @@
 import React from "react";
 import {useFormik} from 'formik';
 import {Navigate, NavLink} from 'react-router-dom'
-import {PASSWORD_RECOVERED, REGISTRATION} from "../../../n1-main/m1-ui/routing/Routing";
+import {LOGIN, PASSWORD_RECOVERED} from "../../../n1-main/m1-ui/routing/Routing";
 import {Button, FormControl, FormGroup, FormLabel, Grid, Paper, TextField} from "@mui/material";
 import {passwordRecoveryTC} from "../../../n1-main/m2-bll/reducers/password-recovery-reducer";
 import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
@@ -16,7 +16,7 @@ type FormikValuesType = {
 const PasswordRecovery = () => {
     const isStatusRecovery = useAppSelector(state => state.passwordRec.recoveryStatus)
     const dispatch = useAppDispatch()
-    const isLoggedIn = useAppSelector(state => state.login.isLoggedIn)
+
     const validate = (values: FormikValuesType) => {
         const errors: FormikErrorType = {};
         if (!values.email) {
@@ -66,7 +66,7 @@ const PasswordRecovery = () => {
                             </FormGroup>
                             <FormLabel style={{textAlign: "center"}}>
                                 <h6 style={{color: "gray"}}>Did you remember your password?</h6>
-                                <h4><NavLink to={REGISTRATION} style={{color: 'blue'}}>Try logging in</NavLink></h4>
+                                <h4><NavLink to={LOGIN} style={{color: 'blue'}}>Try logging in</NavLink></h4>
                             </FormLabel>
                         </FormControl>
                     </form>

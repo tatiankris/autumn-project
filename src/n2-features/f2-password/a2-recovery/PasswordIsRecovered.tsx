@@ -3,12 +3,10 @@ import {Button, FormControl, FormGroup, FormLabel, Grid, Paper} from "@mui/mater
 import {LOGIN} from "../../../n1-main/m1-ui/routing/Routing";
 import {NavLink} from "react-router-dom";
 import emailImg from "../../../n1-main/m1-ui/common/img/email.png"
-import {useSelector} from "react-redux";
-import {AppRootStateType} from "../../../n1-main/m2-bll/store";
+import {useAppSelector} from "../../../n1-main/m1-ui/hooks";
 
 const PasswordIsRecovered = () => {
-    const email = useSelector<AppRootStateType, string>(state => state.passwordRec.email)
-    debugger
+    const email = useAppSelector(state => state.passwordRec.email)
     return (
         <Grid container justifyContent={'center'}>
             <Grid item marginTop={'50px'} textAlign={"center"} width={'400px'}>

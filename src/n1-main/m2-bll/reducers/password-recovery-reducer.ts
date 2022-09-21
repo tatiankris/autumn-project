@@ -1,7 +1,7 @@
-import {Dispatch} from "redux";
 import {passwordAPI} from "../../m3-dal/api/password-api";
 import {handleServerNetworkError} from "../../m1-ui/common/utils/error-utils";
 import {setAppStatusAC} from "./app-reducer";
+import {AppDispatch} from "../store";
 
 let initialState = {
     recoveryStatus: false,
@@ -29,7 +29,7 @@ export const changePasswordRecoveryStatusAC = (status: boolean, email: string) =
 }
 
 export const passwordRecoveryTC = (email: { email: string }) => {
-    return (dispatch: Dispatch) => {
+    return (dispatch: AppDispatch) => {
         dispatch(setAppStatusAC("loading"))
         const data = {
             ...email, // кому восстанавливать пароль

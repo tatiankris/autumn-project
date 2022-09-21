@@ -1,10 +1,8 @@
-import {Dispatch} from 'redux'
 import {
     setAppErrorAC,
-    SetAppErrorActionType,
     setAppStatusAC,
-    SetAppStatusActionType
 } from '../../../m2-bll/reducers/app-reducer'
+import {AppDispatch} from "../../../m2-bll/store";
 
 /*export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatch<SetAppErrorActionType | SetAppStatusActionType>) => {
     if (data.messages.length) {
@@ -16,7 +14,7 @@ import {
 }*/
 
 
-export const handleServerNetworkError = (error: { message: string }, dispatch: Dispatch<SetAppErrorActionType | SetAppStatusActionType>) => {
+export const handleServerNetworkError = (error: { message: string }, dispatch: AppDispatch) => {
     dispatch(setAppErrorAC(error.message ? error.message : 'Some error occurred'))
     dispatch(setAppStatusAC('failed'))
 }
