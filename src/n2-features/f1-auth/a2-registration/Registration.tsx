@@ -1,20 +1,19 @@
-import React from "react";
+import React, {useState} from "react";
 import {
     Button,
     FormControl,
     FormGroup,
     FormLabel,
-    Grid,
-    TextField,
-    Toolbar,
-    Typography
+    Grid, IconButton, Input, InputAdornment, InputLabel,
+    Paper,
+    TextField
 } from "@mui/material";
 import {FormikErrors, useFormik} from "formik";
 import {Navigate, NavLink} from "react-router-dom";
 import {LOGIN} from "../../../n1-main/m1-ui/routing/Routing";
 import {registrationTC} from "../../../n1-main/m2-bll/reducers/registration-reducer";
-import s from './Registration.module.css'
-import { useAppDispatch, useAppSelector } from "../../../n1-main/m1-ui/hooks";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
+import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
 
 
 export type ValuesType = {
@@ -71,44 +70,80 @@ const Registration = () => {
         },
     });
 
+    let [password, showPassword] = useState<boolean>(false);
+    let [confirmPassword, showConfirmPassword] = useState<boolean>(false);
+    const handleClickShowPassword = () => {
+        showPassword(true);
+    };
+    const handleMouseDownPassword = () => {
+        showPassword(false);
+    };
+    const handleClickShowConfirmPassword = () => {
+        showConfirmPassword(true);
+    };
+    const handleMouseDownConfirmPassword = () => {
+        showConfirmPassword(false);
+    };
+
     const signUp = useAppSelector(state => state.registration.signUp);
     if (signUp) {
         return <Navigate to={LOGIN}/>
     }
 
-    return (
-        <div>
-            <Toolbar className={s.toolbar}>
-                <Typography variant="h6" style={{padding: '6px'}}>
-                    Friday Project
-                </Typography>
-                <Button className={s.button} variant="contained">
-                    <NavLink to={LOGIN}>Log In</NavLink>
-                </Button>
-            </Toolbar>
-        <Grid className={s.form} container justifyContent={'center'} bgcolor={'#ebedf0'}>
-            <Grid style={{padding: "40px"}} item justifyContent={'center'} bgcolor={'white'} minWidth={"400px"}>
-                <form onSubmit={formik.handleSubmit}>
-                    <FormControl text-align={'center'}>
+    return (<Grid container justifyContent={'center'} >
+            <Grid marginTop={'50px'} textAlign={"center"} width={'400px'} >
+                <Paper elevation={14} style={{padding:'30px'}}>
+                <form onSubmit={formik.handleSubmit} >
+                    <FormControl text-align={'center'} fullWidth>
                         <FormLabel>
-                            <h1>Sign Up</h1>
+                            <h2>Sign Up</h2>
                         </FormLabel>
-                        <FormGroup>
-                            <TextField variant={'filled'} fullWidth label="Email"
-                                       margin="normal" {...formik.getFieldProps("email")}
-                                       error={formik.touched.email && formik.errors.email ? true : false}
-                                       helperText={formik.touched.email && formik.errors.email ? formik.errors.email : ''}
+                        <FormGroup >
+                            <TextField
+                                label="Email"
+                                variant="standard"
+                                error={formik.touched.email && !!formik.errors.email ? true : false}
+                                helperText={formik.touched.email && !!formik.errors.email ? formik.errors.email : " "}
+                                {...formik.getFieldProps("email")}
                             />
-                            <TextField variant={'filled'} fullWidth type="password" label="Password"
-                                       margin="normal" {...formik.getFieldProps("password")}
-                                       error={formik.touched.password && formik.errors.password ? true : false}
-                                       helperText={formik.touched.password && formik.errors.password ? formik.errors.password : ''}
+                            <TextField
+                                label="Password"
+                                type={password ? 'text' : 'password'}
+                                variant="standard"
+                                error={formik.touched.password && !!formik.errors.password ? true : false}
+                                helperText={formik.touched.password && formik.errors.password ? formik.errors.password : " "}
+                                InputProps={{endAdornment: <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                        >
+                                            {password ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>,
+                                }}
+                                {...formik.getFieldProps("password")}
                             />
-                            <TextField variant={'filled'} fullWidth type="password" label="Confirm password"
-                                       margin="normal" {...formik.getFieldProps("confirmPassword")}
-                                       error={formik.touched.confirmPassword && formik.errors.confirmPassword ? true : false}
-                                       helperText={formik.touched.confirmPassword && formik.errors.confirmPassword ? formik.errors.confirmPassword : ''}
+                            <TextField
+                                label="Confirm password"
+                                variant="standard"
+                                type={confirmPassword ? 'text' : 'password'}
+                                error={formik.touched.confirmPassword && !!formik.errors.confirmPassword ? true : false}
+                                helperText={formik.touched.confirmPassword && formik.errors.confirmPassword ? formik.errors.confirmPassword : " "}
+                                InputProps={{endAdornment: <InputAdornment position="end">
+                                    <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowConfirmPassword}
+                                    onMouseDown={handleMouseDownConfirmPassword}
+                                    >
+                                {confirmPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                    </InputAdornment>,
+                                    }}
+                                {...formik.getFieldProps("confirmPassword")}
+
                             />
+
                             {JSON.stringify(formik.errors).length === 2 ?
                                 <Button type={'submit'} variant={'contained'} color={'primary'}>
                                     Sign Up
@@ -118,14 +153,14 @@ const Registration = () => {
 
                         </FormGroup>
                         <FormLabel>
-                            <p>Already have an account?</p>
-                            <NavLink to={LOGIN}>Sign In</NavLink>
+                            <h6 style={{color: "gray"}}>Already have an account?</h6>
+                            <h4><NavLink to={LOGIN} style={{color: 'blue'}}>Sign In</NavLink></h4>
                         </FormLabel>
                     </FormControl>
                 </form>
+                </Paper>
             </Grid>
         </Grid>
-        </div>
     )
 }
 
