@@ -16,7 +16,7 @@ export const REGISTRATION = '/registration'
 export const PASSWORD_RECOVERY = '/password-recovery'
 export const PASSWORD_RECOVERED = '/password-recovered'
 
-export const NEW_PASSWORD = '/new-password'
+export const NEW_PASSWORD = '/new-password/:token'
 
 export const PROFILE = '/profile'
 

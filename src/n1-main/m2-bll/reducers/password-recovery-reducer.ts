@@ -36,7 +36,8 @@ export const passwordRecoveryTC = (email: { email: string }) => {
             from: "Yuhee <YuheePlyuhee@gmail.com>", // можно указать разработчика фронта)
             message: `<div style="background-color: lime; padding: 15px">
             password recovery link: 
-            <a href='http://localhost:3000/#/set-new-password/$token$'>link</a></div>`
+            Forgot your password? That is okay? it happens! Click on the link bellow to reset yor password:
+            <a href='http://localhost:3000/autumn-project#/new-password/$token$'>link</a></div>`
             // хтмп-письмо, вместо $token$ бэк вставит токен
         }
         passwordAPI.passwordRecovery(data)
