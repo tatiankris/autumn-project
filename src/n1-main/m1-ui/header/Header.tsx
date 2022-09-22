@@ -26,9 +26,9 @@ const Header = () => {
                 </Typography>
                 {
                 isLoggedIn
-                    ? <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: "200px"}}>
+                    ? <div style={{display: "flex", justifyContent: "center", alignItems: "center", minWidth: "300px"}}>
                         <NavLink style={{textDecoration: 'none', color: 'white'}} to={PROFILE}>{userName}</NavLink>
-                        <Avatar alt={userName} src={userAvatar} />
+                        <Avatar alt={userName} src={userAvatar} style={{marginLeft: '10px'}} />
                 </div>
                     : <Button  variant="contained" color="secondary" style={{
                     borderRadius: 35,
