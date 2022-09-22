@@ -77,8 +77,8 @@ const Login = () => {
     }
     return (
         <Grid container justifyContent={'center'}>
-            <Grid item marginTop={'50px'} textAlign={"center"} width={'400px'}>
-                <Paper elevation={14} style={{padding: "30px"}}>
+            <Grid item marginTop={'50px'} textAlign={"center"} width={"400px"}>
+                <Paper elevation={14} style={{padding: "30px", height:"430px"}} >
                     <form onSubmit={formik.handleSubmit}>
                         <FormControl fullWidth>
                             <FormLabel style={{textAlign: "center"}}>
