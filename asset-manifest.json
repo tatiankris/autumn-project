@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/autumn-project/static/css/main.a94f645c.css",
-    "main.js": "/autumn-project/static/js/main.c0108d57.js",
+    "main.js": "/autumn-project/static/js/main.495f81eb.js",
     "static/js/787.39640ce9.chunk.js": "/autumn-project/static/js/787.39640ce9.chunk.js",
     "index.html": "/autumn-project/index.html",
     "main.a94f645c.css.map": "/autumn-project/static/css/main.a94f645c.css.map",
-    "main.c0108d57.js.map": "/autumn-project/static/js/main.c0108d57.js.map",
+    "main.495f81eb.js.map": "/autumn-project/static/js/main.495f81eb.js.map",
     "787.39640ce9.chunk.js.map": "/autumn-project/static/js/787.39640ce9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.a94f645c.css",
-    "static/js/main.c0108d57.js"
+    "static/js/main.495f81eb.js"
   ]
 }
