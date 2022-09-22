@@ -30,7 +30,7 @@ const Routing = () => {
     return (
         <div>
             <Routes>
-                <Route path={ROOT} element={<TestingComponent/>}/>
+                <Route path={ROOT} element={<Login/>}/>
                 <Route path={PROFILE} element={<Profile/>}/>
                 <Route path={LOGIN} element={<Login/>}/>
                 <Route path={REGISTRATION} element={<Registration/>}/>
