@@ -14,7 +14,7 @@ import {
     TextField
 } from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
-import {setNewPasswordTC} from "../../../n1-main/m2-bll/reducers/new-password-reducer";
+import {setNewPasswordTC} from "../../../n1-main/m2-bll/reducers/auth-reducer";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 
 type FormikErrorType = {
@@ -27,7 +27,7 @@ type FormikValuesType = {
 }
 
 const NewPassword = () => {
-    const newPasswordStatus = useAppSelector(state => state.newPassword.newPasswordStatus);
+    const newPasswordStatus = useAppSelector(state => state.auth.newPasswordStatus);
     const dispatch = useAppDispatch();
 
     const {token} = useParams();

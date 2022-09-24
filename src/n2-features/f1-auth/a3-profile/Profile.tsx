@@ -1,9 +1,9 @@
 import React, {useCallback} from "react";
-import SuperEditableSpan from "../../../n1-main/m1-ui/common/c4-SuperEditableSpan/SuperEditableSpan";
+import SuperEditableSpan from "../../../n1-main/m1-ui/common/SuperEditableSpan/SuperEditableSpan";
 import {Navigate, NavLink} from "react-router-dom";
 import {changeNameTC} from "../../../n1-main/m2-bll/reducers/profile-reducer";
 import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
-import {logoutTC} from "../../../n1-main/m2-bll/reducers/login-reducer";
+import {logoutTC} from "../../../n1-main/m2-bll/reducers/auth-reducer";
 import {LOGIN} from "../../../n1-main/m1-ui/routing/Routing";
 import s from './Profile.module.css';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -15,7 +15,7 @@ const Profile = React.memo(() => {
     const name = useAppSelector(state => state.profile.name);
     const avatar = useAppSelector(state => state.profile.avatar);
     const email = useAppSelector(state => state.profile.email);
-    const isLoggedIn = useAppSelector(state => state.login.isLoggedIn);
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn);
 
     const setNewName = useCallback((name: string) => {
         dispatch(changeNameTC(name));

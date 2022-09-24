@@ -2,12 +2,12 @@ import React, {useEffect} from 'react';
 import './App.css';
 import Main from "./main/Main";
 import {useAppDispatch, useAppSelector} from "./hooks";
-import { initializeAppTC } from '../m2-bll/reducers/login-reducer';
+import { initializeAppTC } from '../m2-bll/reducers/auth-reducer';
 import {CircularProgress} from "@mui/material";
 
 function App() {
     const dispatch = useAppDispatch();
-    const isInitialized = useAppSelector(state => state.login.isInitialized);
+    const isInitialized = useAppSelector(state => state.auth.isInitialized);
 
     useEffect(() => {
         dispatch(initializeAppTC());

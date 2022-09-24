@@ -11,7 +11,7 @@ import {
 import {FormikErrors, useFormik} from "formik";
 import {Navigate, NavLink} from "react-router-dom";
 import {LOGIN} from "../../../n1-main/m1-ui/routing/Routing";
-import {registrationTC} from "../../../n1-main/m2-bll/reducers/registration-reducer";
+import {registrationTC} from "../../../n1-main/m2-bll/reducers/auth-reducer";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
 
@@ -85,7 +85,7 @@ const Registration = () => {
         showConfirmPassword(false);
     };
 
-    const signUp = useAppSelector(state => state.registration.signUp);
+    const signUp = useAppSelector(state => state.auth.signUp);
     if (signUp) {
         return <Navigate to={LOGIN}/>
     }

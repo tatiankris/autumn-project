@@ -1,14 +1,13 @@
 import React from "react";
-import {Route, Routes} from "react-router-dom";
-import TestingComponent from "../../../n2-features/f0-first/a1-TestingComponent/TestingComponent";
+import {Navigate, Route, Routes} from "react-router-dom";
 import Profile from "../../../n2-features/f1-auth/a3-profile/Profile";
 import Login from "../../../n2-features/f1-auth/a1-login/Login";
 import Registration from "../../../n2-features/f1-auth/a2-registration/Registration";
 import PasswordRecovery from "../../../n2-features/f2-password/a2-recovery/PasswordRecovery";
 import NewPassword from "../../../n2-features/f2-password/a1-new/NewPassword";
-import Error404 from "../../../n2-features/f0-first/a2-Error404/404";
 import PasswordIsRecovery from "../../../n2-features/f2-password/a2-recovery/PasswordIsRecovered";
 import PasswordIsChanged from "../../../n2-features/f2-password/a1-new/PasswordIsChanged";
+import Error404 from "../common/Error404/404";
 
 export const ROOT = '/'
 export const LOGIN = '/login'
@@ -39,6 +38,7 @@ const Routing = () => {
                 <Route path={NEW_PASSWORD} element={<NewPassword/>}/>
                 <Route path={PASSWORD_CHANGED} element={<PasswordIsChanged/>}/>
                 <Route path={ERROR_404} element={<Error404/>}/>
+                <Route path="*" element={<Navigate to={"/404"}/>}/>
             </Routes>
         </div>
     )

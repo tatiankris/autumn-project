@@ -1,8 +1,8 @@
-import {profileAPI} from "../../m3-dal/api/profile-api";
 import {AppDispatch, AppRootStateType} from "../store";
 import {AxiosError} from "axios";
 import {handleServerNetworkError} from "../../m1-ui/common/utils/error-utils";
 import {setAppStatusAC} from "./app-reducer";
+import {authAPI} from "../../m3-dal/api/auth-api";
 
 //state
 const initialState = {} as ProfileStateType;
@@ -10,7 +10,7 @@ const initialState = {} as ProfileStateType;
 //reducer
 export const profileReducer = (state: ProfileStateType = initialState, action: ProfileActionsType): ProfileStateType => {
     switch (action.type) {
-        case 'SET-PROFILE': {
+        case 'profile/SET-PROFILE': {
             return {
                 ...state,
                 _id: action.id,
@@ -19,7 +19,7 @@ export const profileReducer = (state: ProfileStateType = initialState, action: P
                 avatar: action.avatar
             };
         }
-        case 'CHANGE-NAME': {
+        case 'profile/CHANGE-NAME': {
             return {...state, name: action.name};
         }
         default:
@@ -31,7 +31,7 @@ export const profileReducer = (state: ProfileStateType = initialState, action: P
 //actions
 export const setProfileAC = (id: string, name: string, email: string, avatar?: string ) => {
     return {
-        type: 'SET-PROFILE',
+        type: 'profile/SET-PROFILE',
         id,
         name,
         email,
@@ -40,7 +40,7 @@ export const setProfileAC = (id: string, name: string, email: string, avatar?: s
 };
 export const changeNameAC = (name: string) => {
     return {
-        type: 'CHANGE-NAME',
+        type: 'profile/CHANGE-NAME',
         name,
     } as const
 };
@@ -52,7 +52,7 @@ export const changeNameTC = (name: string) =>
         dispatch(setAppStatusAC("loading"))
     const avatar = getState().profile.avatar;
 
-    profileAPI.changeProfile(name, avatar)
+    authAPI.changeProfile(name, avatar)
         .then(res => {
             dispatch(changeNameAC(res.data.updatedUser.name));
         })

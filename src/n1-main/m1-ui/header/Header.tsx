@@ -1,12 +1,11 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
 import {LOGIN, NEW_PASSWORD, PASSWORD_RECOVERY, PROFILE, REGISTRATION, ROOT} from "../routing/Routing";
-import s from "../../../n2-features/f1-auth/a2-registration/Registration.module.css";
 import {AppBar, Avatar, Box, Button, Toolbar, Typography} from "@mui/material";
 import {useAppSelector} from "../hooks";
 
 const Header = () => {
-    const isLoggedIn = useAppSelector(state => state.login.isLoggedIn);
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn);
     const userName = useAppSelector(state => state.profile.name);
     const userAvatar = useAppSelector(state => state.profile.avatar);
 

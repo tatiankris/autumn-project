@@ -1,19 +1,13 @@
 import {AnyAction, applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk, { ThunkDispatch } from 'redux-thunk';
-import {loginReducer} from "./reducers/login-reducer";
+import {authReducer} from "./reducers/auth-reducer";
 import {profileReducer} from "./reducers/profile-reducer";
-import {registrationReducer} from "./reducers/registration-reducer";
-import {passwordRecoveryReducer} from "./reducers/password-recovery-reducer";
-import {newPasswordReducer} from "./reducers/new-password-reducer";
 import { appReducer } from './reducers/app-reducer';
 
 const rootReducer = combineReducers({
     app: appReducer,
-    login: loginReducer,
+    auth: authReducer,
     profile: profileReducer,
-    registration: registrationReducer,
-    passwordRec: passwordRecoveryReducer,
-    newPassword: newPasswordReducer
 });
 
 export const store = createStore(rootReducer, applyMiddleware(thunk));

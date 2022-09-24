@@ -3,7 +3,7 @@ import {useFormik} from 'formik';
 import {Navigate, NavLink} from 'react-router-dom'
 import {LOGIN, PASSWORD_RECOVERED} from "../../../n1-main/m1-ui/routing/Routing";
 import {Button, FormControl, FormGroup, FormLabel, Grid, Paper, TextField} from "@mui/material";
-import {passwordRecoveryTC} from "../../../n1-main/m2-bll/reducers/password-recovery-reducer";
+import {passwordRecoveryTC} from "../../../n1-main/m2-bll/reducers/auth-reducer";
 import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
 
 type FormikErrorType = {
@@ -14,7 +14,7 @@ type FormikValuesType = {
 }
 
 const PasswordRecovery = () => {
-    const isStatusRecovery = useAppSelector(state => state.passwordRec.recoveryStatus)
+    const isStatusRecovery = useAppSelector(state => state.auth.recoveryStatus)
     const dispatch = useAppDispatch()
 
     const validate = (values: FormikValuesType) => {

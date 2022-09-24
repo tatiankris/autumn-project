@@ -6,7 +6,7 @@ import emailImg from "../../../n1-main/m1-ui/common/img/email.png"
 import {useAppSelector} from "../../../n1-main/m1-ui/hooks";
 
 const PasswordIsRecovered = () => {
-    const email = useAppSelector(state => state.passwordRec.email);
+    const email = useAppSelector(state => state.auth.email);
 
     return (
         <Grid container justifyContent={'center'}>
