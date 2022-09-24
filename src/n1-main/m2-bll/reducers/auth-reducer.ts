@@ -153,7 +153,7 @@ export const passwordRecoveryTC = (email: { email: string }) => {
             message: `<div style="background-color: lime; padding: 15px">
             password recovery link: 
             Forgot your password? That is okay? it happens! Click on the link bellow to reset yor password:
-            <a href='http://localhost:3000/autumn-project#/new-password/$token$'>link</a></div>`
+            <a href='https://tatiankris.github.io/autumn-project/#/new-password/$token$'>link</a></div>`
             // хтмп-письмо, вместо $token$ бэк вставит токен
         }
         authAPI.passwordRecovery(data)
