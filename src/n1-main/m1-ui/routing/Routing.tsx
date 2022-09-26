@@ -8,6 +8,7 @@ import NewPassword from "../../../n2-features/f2-password/a1-new/NewPassword";
 import PasswordIsRecovery from "../../../n2-features/f2-password/a2-recovery/PasswordIsRecovered";
 import PasswordIsChanged from "../../../n2-features/f2-password/a1-new/PasswordIsChanged";
 import Error404 from "../common/Error404/404";
+import {CardsPage} from "../../../n2-features/f4-cards/CardsPage";
 import Packs from "../../../n2-features/f3-packs/packs/Packs";
 
 export const ROOT = '/'
@@ -21,6 +22,8 @@ export const NEW_PASSWORD = '/new-password/:token'
 export const PASSWORD_CHANGED = '/password-changed'
 
 export const PROFILE = '/profile'
+
+export const CARDS = '/cards'
 
 export const ERROR_404 = '/404'
 export const PACKS = '/cards/pack'
@@ -40,6 +43,7 @@ const Routing = () => {
                 <Route path={NEW_PASSWORD} element={<NewPassword/>}/>
                 <Route path={PASSWORD_CHANGED} element={<PasswordIsChanged/>}/>
                 <Route path={PACKS} element={<Packs/>}/>
+                <Route path={CARDS} element={<CardsPage/>}/>
                 <Route path={ERROR_404} element={<Error404/>}/>
                 <Route path="*" element={<Navigate to={"/404"}/>}/>
             </Routes>

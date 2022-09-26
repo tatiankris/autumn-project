@@ -1,6 +1,6 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
-import {LOGIN, NEW_PASSWORD, PASSWORD_RECOVERY, PROFILE, REGISTRATION, ROOT} from "../routing/Routing";
+import {LOGIN, PROFILE} from "../routing/Routing";
 import {AppBar, Avatar, Box, Button, Toolbar, Typography} from "@mui/material";
 import {useAppSelector} from "../hooks";
 
