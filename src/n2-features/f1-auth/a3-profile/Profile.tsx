@@ -4,13 +4,14 @@ import {Navigate, NavLink} from "react-router-dom";
 import {changeNameTC} from "../../../n1-main/m2-bll/reducers/profile-reducer";
 import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
 import {logoutTC} from "../../../n1-main/m2-bll/reducers/auth-reducer";
-import {LOGIN} from "../../../n1-main/m1-ui/routing/Routing";
+import {LOGIN, PACKS} from "../../../n1-main/m1-ui/routing/Routing";
 import s from './Profile.module.css';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import {Button, Grid, Paper, Typography} from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 
 const Profile = React.memo(() => {
+
     const dispatch = useAppDispatch();
     const name = useAppSelector(state => state.profile.name);
     const avatar = useAppSelector(state => state.profile.avatar);
@@ -32,7 +33,7 @@ const Profile = React.memo(() => {
     return (
         <div className={s.container}>
             <div className={s.backToPacks}>
-                <NavLink to={'/'}> <KeyboardBackspaceIcon sx={{position: 'relative', top: '6px'}}/> Back to Packs
+                <NavLink to={PACKS}> <KeyboardBackspaceIcon sx={{position: 'relative', top: '6px'}}/> Back to Packs
                     List</NavLink>
             </div>
             <Grid container justifyContent={'center'}>
