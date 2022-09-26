@@ -1,13 +1,7 @@
 import {instance} from "./autumn-api";
-import {AxiosResponse} from 'axios';
 
 export const cardsAPI = {
-    getPaks(){
-      return instance.get("cards/pack?min=110")
-    },
-    postPack(){
-        return instance.post("cards/pack", {cardsPack: {name: "test pack2"}})
-    },
+
     getCards(params:GetCardsParamsType) {
         return instance.get<GetCardsResponseType>("cards/card", {params})
     },
