@@ -1,0 +1,20 @@
+
+.button :active {
+    background: white;
+    color: black;
+}
+
+.packName{
+    font-size: 30px;
+}
+
+.backToPacks{
+    margin-top: 20px;
+}
+.backToPacks a{
+    color: black;
+    text-decoration: none;
+}
+.search{
+    margin: 30px 0;
+}

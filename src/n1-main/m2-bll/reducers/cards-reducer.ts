@@ -11,7 +11,7 @@ let initialState = {
     minGrade: 0,
     page: 1,
     pageCount: 4,
-    packUserId: ""
+    packUserId: "",
 }
 
 export type StateType = typeof initialState;
@@ -28,7 +28,7 @@ export const cardsReducer = (state: StateType = initialState, action: ActionsTyp
                 page: action.cards.page,
                 maxGrade: action.cards.maxGrade,
                 minGrade: action.cards.maxGrade,
-                packUserId: action.cards.packUserId
+                packUserId: action.cards.packUserId,
             }
         }
         default:

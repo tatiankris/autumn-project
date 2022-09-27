@@ -1,5 +1,5 @@
 import {AnyAction, applyMiddleware, combineReducers, createStore } from 'redux';
-import thunk, { ThunkDispatch } from 'redux-thunk';
+import thunk, {ThunkAction, ThunkDispatch } from 'redux-thunk';
 import {authReducer} from "./reducers/auth-reducer";
 import {profileReducer} from "./reducers/profile-reducer";
 import { appReducer } from './reducers/app-reducer';

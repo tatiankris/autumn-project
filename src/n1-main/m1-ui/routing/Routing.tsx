@@ -8,8 +8,9 @@ import NewPassword from "../../../n2-features/f2-password/a1-new/NewPassword";
 import PasswordIsRecovery from "../../../n2-features/f2-password/a2-recovery/PasswordIsRecovered";
 import PasswordIsChanged from "../../../n2-features/f2-password/a1-new/PasswordIsChanged";
 import Error404 from "../common/Error404/404";
-import {CardsPage} from "../../../n2-features/f4-cards/CardsPage";
 import Packs from "../../../n2-features/f3-packs/packs/Packs";
+import { CardsPage } from "../../../n2-features/f4-cards/CardsPage";
+
 
 export const ROOT = '/'
 export const LOGIN = '/login'
@@ -26,7 +27,7 @@ export const PROFILE = '/profile'
 export const CARDS = '/cards'
 
 export const ERROR_404 = '/404'
-export const PACKS = '/cards/pack'
+export const PACKS = '/packs'
 
 
 
