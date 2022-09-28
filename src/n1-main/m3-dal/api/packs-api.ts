@@ -46,11 +46,11 @@ export type GetPacksParamsType = {
     packName?: string
     min?: number
     max?: number
-    sortPacks?: number
+    sortPacks?: string
     page?: number
     pageCount?: number
-    user_id?: number
-    block?: number
+    user_id?: string
+    block?: boolean
 }
 export type GetPacksResponseType = {
     cardPacks: Array<PackType>

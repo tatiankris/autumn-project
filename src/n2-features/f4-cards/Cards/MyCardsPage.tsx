@@ -1,5 +1,5 @@
 import React from 'react';
-import {useAppSelector} from "../../../n1-main/m1-ui/hooks";
+import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
 import {createData} from "../CardsPage";
 import {Container, Grid, IconButton, Pagination, Stack} from "@mui/material";
 import {BackToPackList} from "../CommonCardsPageComponents/BackToPackList";
@@ -14,12 +14,14 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import {deleteCardTC, updateCardTC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
 
 
 export const MyCardsPage = () => {
+    const dispatch = useAppDispatch()
     const cards = useAppSelector(state => state.cards)
     const rows = cards.cards.map(el => {
-        return createData(el.question, el.answer, el.updated.slice(0, 10), el.grade)
+        return createData(el.question, el.answer, el.updated.slice(0, 10), el.grade, el._id)
     })
     return (
         <Container maxWidth="lg">
@@ -41,24 +43,32 @@ export const MyCardsPage = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
-                            <TableRow
-                                hover
-                                key={row.lastUpdated}
-                                sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                            >
-                                <TableCell align="left" width={"39%"}>{row.question}</TableCell>
-                                <TableCell align="left" width={"39%"}>{row.answer}</TableCell>
-                                <TableCell align="left" width={"10%"}>{row.lastUpdated}</TableCell>
-                                <TableCell align="left" width={"9%"}>{row.grade}</TableCell>
-                                <TableCell align="left" width={"2%"}>
-                                    <Stack direction={"row"} spacing={0}>
-                                        <IconButton><BorderColorIcon fontSize={"small"}/></IconButton>
-                                        <IconButton><DeleteOutlineIcon fontSize={"small"}/></IconButton>
-                                    </Stack>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        {rows.map((row) => {
+                            const deleteCardHandler=()=>{
+                                dispatch(deleteCardTC(row._id))
+                            }
+                            const updateCardHandler=()=>{
+                                dispatch(updateCardTC(row._id))
+                            }
+                            return <TableRow
+                                    hover
+                                    key={row.lastUpdated}
+                                    sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                >
+                                    <TableCell align="left" width={"39%"}>{row.question}</TableCell>
+                                    <TableCell align="left" width={"39%"}>{row.answer}</TableCell>
+                                    <TableCell align="left" width={"10%"}>{row.lastUpdated}</TableCell>
+                                    <TableCell align="left" width={"9%"}>{row.grade}</TableCell>
+                                    <TableCell align="left" width={"2%"}>
+                                        <Stack direction={"row"} spacing={0}>
+                                            <IconButton onClick={updateCardHandler}><BorderColorIcon fontSize={"small"}/></IconButton>
+                                            <IconButton onClick={deleteCardHandler}><DeleteOutlineIcon
+                                                fontSize={"small"}/></IconButton>
+                                        </Stack>
+                                    </TableCell>
+                                </TableRow>
+                            }
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>

@@ -24,7 +24,7 @@ export const PASSWORD_CHANGED = '/password-changed'
 
 export const PROFILE = '/profile'
 
-export const CARDS = '/cards'
+export const CARDS = '/cards/:packId'
 
 export const ERROR_404 = '/404'
 export const PACKS = '/packs'

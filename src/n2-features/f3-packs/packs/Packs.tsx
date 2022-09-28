@@ -25,9 +25,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import s from './Packs.module.css';
 import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
 import {setPacksTC} from "../../../n1-main/m2-bll/reducers/packs-reducer";
-import {useNavigate} from "react-router-dom";
-import {CARDS} from "../../../n1-main/m1-ui/routing/Routing";
-import {getCardsTC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
+import {NavLink} from "react-router-dom";
 
 function valuetext(value: number) {
     return `${value}°C`;
@@ -39,20 +37,14 @@ const Packs = () => {
 
 
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
     useEffect(() => {
-        dispatch(setPacksTC())
+        dispatch(setPacksTC({user_id: "63276c0a9db0ab00041c87a4"}))
     }, [])
 
 
     const [searchValue, setSearchValue] = useState<string>('');
 
     const [value2, setValue2] = React.useState<number[]>([20, 37]);
-
-    const checkPack=(packId:string)=>{
-        dispatch(getCardsTC({cardsPack_id:packId, pageCount:10}))
-        navigate(CARDS)
-    }
     const handleChange2 = (
         event: Event,
         newValue: number | number[],
@@ -166,18 +158,16 @@ const Packs = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => {
-                            const onClickHandler = () => {
-                                checkPack(row.packId)
-                            }
                             return (
                                 <TableRow
-                                    onClick={onClickHandler}
                                     hover
                                     key={row.name}
                                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                 >
                                     <TableCell component="th" scope="row">
-                                        {row.name}
+                                        <NavLink className={s.nav} to={`/cards/${row.packId}`}>
+                                            {row.name}
+                                        </NavLink>
                                     </TableCell>
                                     <TableCell align="right">{row.cards}</TableCell>
                                     <TableCell align="right">{row.lastUpdated}</TableCell>

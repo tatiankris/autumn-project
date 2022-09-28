@@ -3,3 +3,7 @@
     background: white;
     color: black;
 }
+.nav{
+    text-decoration:none;
+    color:inherit
+}

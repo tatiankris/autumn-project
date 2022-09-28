@@ -16,7 +16,7 @@ import {createData} from "../CardsPage";
 export const FriendsCardsPage = () => {
     const cards = useAppSelector(state => state.cards)
     const rows = cards.cards.map(el => {
-        return createData(el.question, el.answer, el.updated.slice(0, 10), el.grade)
+        return createData(el.question, el.answer, el.updated.slice(0, 10), el.grade, el._id)
     })
     return (
         <Container maxWidth="lg">

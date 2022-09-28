@@ -5,8 +5,8 @@ export const cardsAPI = {
     getCards(params:GetCardsParamsType) {
         return instance.get<GetCardsResponseType>("cards/card", {params})
     },
-    postCards() {
-        return instance.post("cards/card", {card:{cardsPack_id: "632efe6a22d1d4000415be20", question: "who are you warrior?" }})
+    postCards(card:PostCardType) {
+        return instance.post("cards/card", {card})
     },
     deleteCard(id:string){
         return instance.delete(`cards/card?id=${id}`)
@@ -19,8 +19,8 @@ export const cardsAPI = {
 
 export type PostCardType = {
     cardsPack_id: string
-    question?: string // если не отправить будет таким
-    answer?: string // если не отправить будет таким
+    question?: string
+    answer?: string
     grade?: number // 0..5, не обязателен
     shots?: number // не обязателен
     answerImg?: string // не обязателен
@@ -29,7 +29,10 @@ export type PostCardType = {
     answerVideo?: string // не обязателен
 }
 
-export type UpdateCardType=PostCardType & {
+export type UpdateCardType= {
+    _id:string
+    question?: string
+    answer?: string
     comments?:string
 }
 

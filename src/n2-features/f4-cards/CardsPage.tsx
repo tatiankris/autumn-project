@@ -1,8 +1,11 @@
-import React from 'react';
-import {useAppSelector} from "../../n1-main/m1-ui/hooks";
+import React, {useEffect} from 'react';
+import {useAppDispatch, useAppSelector} from "../../n1-main/m1-ui/hooks";
 import {MyEmptyPack} from "./EmptyPackPage/MyEmptyPack";
 import {FriendsEmptyPack} from "./EmptyPackPage/FriendsEmptyPack";
 import {MyCardsPage} from "./Cards/MyCardsPage";
+import {FriendsCardsPage} from "./Cards/FriendsCardsPage";
+import {getCardsTC} from "../../n1-main/m2-bll/reducers/cards-reducer";
+import {useParams} from "react-router-dom";
 
 
 export interface Data {
@@ -10,6 +13,7 @@ export interface Data {
     answer: string;
     lastUpdated: string;
     grade: number;
+    _id:string
 }
 
 export function createData(
@@ -17,16 +21,19 @@ export function createData(
     answer: string,
     lastUpdated: string,
     grade: number,
+    _id:string
 ): Data {
-    return {
-        question,
-        answer,
-        lastUpdated,
-        grade,
-    };
+    return {question, answer, lastUpdated, grade, _id};
 }
 
 export function CardsPage() {
+    const {packId}=useParams()
+    const dispatch = useAppDispatch();
+    useEffect(()=>{
+        if (packId != null) {
+            dispatch(getCardsTC({cardsPack_id: packId}))
+        }
+    },[])
     const cards = useAppSelector(state => state.cards)
     const userId=useAppSelector(state => state.profile._id)
 
@@ -40,6 +47,6 @@ export function CardsPage() {
         return <MyCardsPage/>
     }
 
-        return <MyCardsPage/>
+        return <FriendsCardsPage/>
 
 }
