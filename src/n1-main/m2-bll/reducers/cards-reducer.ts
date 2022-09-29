@@ -1,7 +1,7 @@
-import {AppDispatch, AppThunk} from "../store";
+import {AppThunk} from "../store";
 import {handleServerNetworkError} from "../../m1-ui/common/utils/error-utils";
 import {setAppStatusAC} from "./app-reducer";
-import {cardsAPI, CardType, GetCardsParamsType, GetCardsResponseType, PostCardType} from "../../m3-dal/api/cards-api";
+import {cardsAPI, CardType, GetCardsResponseType, PostCardType} from "../../m3-dal/api/cards-api";
 
 
 let initialState = {
@@ -10,10 +10,12 @@ let initialState = {
     maxGrade: 0,
     minGrade: 0,
     page: 1,
-    pageCount: 4,
+    pageCount: 10,
     packUserId: "",
-    packName:"",
-    cardsPackId:""
+    packName: "",
+    cardsPackId: "",
+    sort: "0updated",
+    search: "",
 }
 
 export type StateType = typeof initialState;
@@ -35,27 +37,69 @@ export const cardsReducer = (state: StateType = initialState, action: ActionsTyp
                 cardsPackId: action.cardsPackId
             }
         }
+        case "CARDS/SEARCH_CARDS": {
+            return {...state, search: action.search}
+        }
+        case "CARDS/SET-PAGE": {
+            return {...state, page: action.page}
+        }
+        case "CARDS/SET-PAGE-COUNT": {
+            return {...state, pageCount: action.pageCount}
+        }
+        case "CARDS/SET-SORT": {
+            return {...state, sort: action.sort}
+        }
+
         default:
             return state
     }
 }
 
 //actions
-export const getCardsAC = (cards: GetCardsResponseType, cardsPackId:string) => {
+export const getCardsAC = (cards: GetCardsResponseType, cardsPackId: string) => {
     return {
         type: 'CARDS/GET-CARDS',
         cards, cardsPackId
     } as const
 }
 
+export const searchCardsAC = (search: string) => {
+    return {
+        type: 'CARDS/SEARCH_CARDS',
+        search
+    } as const
+}
+
+export const setPageCountAC = (pageCount: number) => {
+    return {
+        type: 'CARDS/SET-PAGE-COUNT',
+        pageCount
+    } as const
+}
+
+export const setPageAC = (page: number) => {
+    return {
+        type: 'CARDS/SET-PAGE',
+        page
+    } as const
+}
+
+export const setSortAC = (sort: string) => {
+    return {
+        type: 'CARDS/SET-SORT',
+        sort
+    } as const
+}
+
 
 //thunks
-export const getCardsTC = (params: GetCardsParamsType) => {
-    return (dispatch: AppDispatch) => {
+export const getCardsTC = (packId:string): AppThunk => {
+    return (dispatch, getState) => {
+        const {pageCount, page, sort, search} = getState().cards
         dispatch(setAppStatusAC("loading"))
-        cardsAPI.getCards(params)
+        cardsAPI.getCards({pageCount,page,sortCards:sort, cardQuestion:search, cardsPack_id:packId})
             .then(res => {
-                dispatch(getCardsAC(res.data, params.cardsPack_id))
+                dispatch(getCardsAC(res.data, packId))
             })
             .catch(err => {
                 const error = err.response
@@ -67,12 +111,12 @@ export const getCardsTC = (params: GetCardsParamsType) => {
     }
 }
 
-export const addCardTC = (cards: PostCardType) :AppThunk=> {
-    return (dispatch,getState) => {
-        const packId=getState().cards.cardsPackId
+export const addCardTC = (cards: PostCardType): AppThunk => {
+    return (dispatch, getState) => {
+        const packId = getState().cards.cardsPackId
         dispatch(setAppStatusAC("loading"))
         cardsAPI.postCards(cards)
-            .then(()=>dispatch(getCardsTC({cardsPack_id:packId})))
+            .then(() => dispatch(getCardsTC(packId)))
             .catch(err => {
                 const error = err.response
                     ? err.response.data.error
@@ -83,12 +127,12 @@ export const addCardTC = (cards: PostCardType) :AppThunk=> {
     }
 }
 
-export const deleteCardTC = (cardId:string) :AppThunk=> {
-    return (dispatch,getState) => {
-        const packId=getState().cards.cardsPackId
+export const deleteCardTC = (cardId: string): AppThunk => {
+    return (dispatch, getState) => {
+        const packId = getState().cards.cardsPackId
         dispatch(setAppStatusAC("loading"))
         cardsAPI.deleteCard(cardId)
-            .then(()=>dispatch(getCardsTC({cardsPack_id:packId})))
+            .then(() => dispatch(getCardsTC(packId)))
             .catch(err => {
                 const error = err.response
                     ? err.response.data.error
@@ -99,12 +143,12 @@ export const deleteCardTC = (cardId:string) :AppThunk=> {
     }
 }
 
-export const updateCardTC = (cardId:string) :AppThunk=> {
-    return (dispatch,getState) => {
-        const packId=getState().cards.cardsPackId
+export const updateCardTC = (cardId: string): AppThunk => {
+    return (dispatch, getState) => {
+        const packId = getState().cards.cardsPackId
         dispatch(setAppStatusAC("loading"))
-        cardsAPI.updateCard({_id:cardId, question:"What?"})
-            .then(()=>dispatch(getCardsTC({cardsPack_id:packId})))
+        cardsAPI.updateCard({_id: cardId, question: "What?"})
+            .then(() => dispatch(getCardsTC(packId)))
             .catch(err => {
                 const error = err.response
                     ? err.response.data.error
@@ -116,6 +160,11 @@ export const updateCardTC = (cardId:string) :AppThunk=> {
 }
 
 //types
-export type ActionsType = ReturnType<typeof getCardsAC>
+export type ActionsType =
+    ReturnType<typeof getCardsAC> |
+    ReturnType<typeof searchCardsAC> |
+    ReturnType<typeof setPageAC> |
+    ReturnType<typeof setSortAC> |
+    ReturnType<typeof setPageCountAC>
 
 

@@ -43,7 +43,7 @@ export const MyCardsPage = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => {
+                        {rows.map((row,index) => {
                             const deleteCardHandler=()=>{
                                 dispatch(deleteCardTC(row._id))
                             }
@@ -52,7 +52,7 @@ export const MyCardsPage = () => {
                             }
                             return <TableRow
                                     hover
-                                    key={row.lastUpdated}
+                                    key={index}
                                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                 >
                                     <TableCell align="left" width={"39%"}>{row.question}</TableCell>

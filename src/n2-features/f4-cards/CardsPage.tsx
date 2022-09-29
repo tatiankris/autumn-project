@@ -29,11 +29,18 @@ export function createData(
 export function CardsPage() {
     const {packId}=useParams()
     const dispatch = useAppDispatch();
+
+    const page=useAppSelector(state => state.cards.page)
+    const pageCount=useAppSelector(state => state.cards.pageCount)
+    const search=useAppSelector(state => state.cards.search)
+    const sort=useAppSelector(state => state.cards.sort)
+
     useEffect(()=>{
         if (packId != null) {
-            dispatch(getCardsTC({cardsPack_id: packId}))
+            dispatch(getCardsTC(packId))
         }
-    },[])
+    },[page,pageCount,sort,search])
+
     const cards = useAppSelector(state => state.cards)
     const userId=useAppSelector(state => state.profile._id)
 
