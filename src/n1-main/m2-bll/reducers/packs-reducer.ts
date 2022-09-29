@@ -1,46 +1,47 @@
-import {changeNameAC, ProfileActionsType, ProfileStateType} from "./profile-reducer";
-import {GetPacksParamsType, GetPacksResponseType, packsAPI, UpdatePackDataType} from "../../m3-dal/api/packs-api";
-import {AppDispatch, AppRootStateType, AppThunk} from "../store";
+import {
+    GetPacksResponseType,
+    packsAPI,
+    PackType,
+    UpdatePackDataType
+} from "../../m3-dal/api/packs-api";
+import {AppRootStateType, AppThunk} from "../store";
 import {setAppStatusAC} from "./app-reducer";
-import {authAPI} from "../../m3-dal/api/auth-api";
 import {AxiosError} from "axios";
 import {handleServerNetworkError} from "../../m1-ui/common/utils/error-utils";
-import { Dispatch } from "redux";
 
 const initialState = {
-    cardPacks: [
-        // {
-        //     _id: "5eb6cef840b7bf1cf0d8122d",
-        //     user_id: "5eb543f6bea3ad21480f1ee7",
-        //     name: "no Name",
-        //     cardsCount: 25,
-        //     created: "2020-05-09T15:40:40.339Z",
-        //     updated: "2020-05-09T15:40:40.339Z",
-        // },
-    ],
-    cardPacksTotalCount: 14, // количество колод
-    maxCardsCount: 4,
+    cardPacks: [] as Array<PackType>,
+    cardPacksTotalCount: 0, // количество колод
+    maxCardsCount: 100,
     minCardsCount: 0,
-    page: 3, // выбранная страница
+    search: '',
+    page: 1, // выбранная страница
     pageCount: 8,
-} as PacksStateType
-
-export type PacksStateType = GetPacksResponseType
-
-
+    isMyId: false
+}
 
 export const packsReducer = (state: PacksStateType = initialState, action: PacksActionsType): PacksStateType => {
     switch (action.type) {
         case 'packs/SET-PACKS': {
-            return {...state,
+            return {
+                ...state,
                 cardPacks: action.data.cardPacks,
                 cardPacksTotalCount: action.data.cardPacksTotalCount,
                 maxCardsCount: action.data.maxCardsCount,
                 minCardsCount: action.data.minCardsCount,
                 page: action.data.page,
-                pageCount: action.data.pageCount}
+                pageCount: action.data.pageCount
+            }
         }
-
+        case 'packs/SEARCH-PACKS': {
+            return ({...state, search: action.search})
+        }
+        case 'packs/CHANGE-PACKS-PAGE': {
+            return {...state, page: action.page}
+        }
+        case 'packs/SET-MY-PACKS-TO-PAGE': {
+            return {...state, isMyId: action.isMyId}
+        }
         default:
             return state;
     }
@@ -52,10 +53,32 @@ export const setPacksAC = (data: GetPacksResponseType) => {
         data
     } as const
 }
+export const searchPacksAC = (search: string) => {
+    return {
+        type: 'packs/SEARCH-PACKS',
+        search
+    } as const
+}
+export const changePacksPageAC = (page: number) => {
+    return {
+        type: 'packs/CHANGE-PACKS-PAGE',
+        page
+    } as const
+}
+export const setMyPacksToPageAC = (isMyId: boolean) => {
+    return {
+        type: 'packs/SET-MY-PACKS-TO-PAGE',
+        isMyId
+    } as const
+}
 
-export const setPacksTC = (params?: GetPacksParamsType) => (dispatch: Dispatch) => {
+export const setPacksTC = (): AppThunk => (dispatch, getState: () => AppRootStateType) => {
+    dispatch(setAppStatusAC("loading"))
 
-    packsAPI.getPacks(params || {page: 1, pageCount: 8})
+    const {search, page, pageCount, isMyId} = getState().packs;
+    const _id = getState().profile._id;
+
+    packsAPI.getPacks({packName: search, user_id: isMyId ? _id : '', page, pageCount})
         .then(res => {
             dispatch(setPacksAC(res.data))
         })
@@ -65,14 +88,15 @@ export const setPacksTC = (params?: GetPacksParamsType) => (dispatch: Dispatch) 
                 : err.message
             handleServerNetworkError({message: error}, dispatch)
         })
+        .finally(() => dispatch(setAppStatusAC("idle")))
 }
 
-export const createPackTC = (cardsPack: {name?: string, deckCover?: string, private_?: boolean}, setPacksParams: GetPacksParamsType): AppThunk => (dispatch) => {
-
+export const createPackTC = (cardsPack: { name?: string, deckCover?: string, private_?: boolean }): AppThunk => (dispatch) => {
     dispatch(setAppStatusAC("loading"))
+
     packsAPI.createPack({cardsPack})
         .then(res => {
-            dispatch(setPacksTC(setPacksParams));
+            dispatch(setPacksTC());
         })
         .catch((err: AxiosError<{ error: string }>) => {
             const error = err.response
@@ -83,12 +107,12 @@ export const createPackTC = (cardsPack: {name?: string, deckCover?: string, priv
         .finally(() => dispatch(setAppStatusAC("idle")))
 };
 
-export const deletePackTC = (id: string, setPacksParams: GetPacksParamsType): AppThunk => (dispatch) => {
+export const deletePackTC = (id: string): AppThunk => (dispatch) => {
     dispatch(setAppStatusAC("loading"))
 
     packsAPI.deletePack(id)
         .then(res => {
-            dispatch(setPacksTC(setPacksParams));
+            dispatch(setPacksTC());
         })
         .catch((err: AxiosError<{ error: string }>) => {
             const error = err.response
@@ -99,12 +123,12 @@ export const deletePackTC = (id: string, setPacksParams: GetPacksParamsType): Ap
         .finally(() => dispatch(setAppStatusAC("idle")))
 };
 
-export const updatePackTC = (data: UpdatePackDataType, setPacksParams: GetPacksParamsType): AppThunk => (dispatch) => {
+export const updatePackTC = (data: UpdatePackDataType): AppThunk => (dispatch) => {
     dispatch(setAppStatusAC("loading"))
 
     packsAPI.updatePack(data)
         .then(res => {
-            dispatch(setPacksTC(setPacksParams));
+            dispatch(setPacksTC());
         })
         .catch((err: AxiosError<{ error: string }>) => {
             const error = err.response
@@ -115,8 +139,8 @@ export const updatePackTC = (data: UpdatePackDataType, setPacksParams: GetPacksP
         .finally(() => dispatch(setAppStatusAC("idle")))
 };
 
-
-
-
-
+export type PacksStateType = typeof initialState;
 export type PacksActionsType = ReturnType<typeof setPacksAC>
+    | ReturnType<typeof searchPacksAC>
+    | ReturnType<typeof changePacksPageAC>
+    | ReturnType<typeof setMyPacksToPageAC>;
