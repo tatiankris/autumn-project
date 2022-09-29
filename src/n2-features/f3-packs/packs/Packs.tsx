@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {
     Button,
     ButtonGroup,
@@ -22,15 +22,13 @@ import {
 } from "@mui/material";
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import SearchIcon from '@mui/icons-material/Search';
-import {useNavigate} from "react-router-dom";
-import {CARDS} from "../../../n1-main/m1-ui/routing/Routing";
-import {getCardsTC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
+import {NavLink} from "react-router-dom";
 import {useAppDispatch, useAppSelector, useDebounce} from "../../../n1-main/m1-ui/hooks";
 import {
     changePacksPageAC,
     createPackTC,
-    deletePackTC,
-    searchPacksAC, setMyPacksToPageAC,
+    searchPacksAC,
+    setMyPacksToPageAC,
     setPacksTC,
     updatePackTC
 } from "../../../n1-main/m2-bll/reducers/packs-reducer";
@@ -38,7 +36,6 @@ import SchoolIcon from '@mui/icons-material/School';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import s from './Packs.module.css';
-import {NavLink} from "react-router-dom";
 
 function valuetext(value: number) {
     return `${value}°C`;
@@ -48,7 +45,7 @@ const minDistance = 1;
 
 const Packs = () => {
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
+
 
     const myId = useAppSelector(state => state.profile._id);
     const isMyId = useAppSelector(state => state.packs.isMyId);
@@ -103,10 +100,6 @@ const Packs = () => {
         return createData(m._id, m.name, m.user_id, m.user_name, m.cardsCount, m.updated, m.created)
     })
 
-    const checkPack = (packId: string) => {
-        dispatch(getCardsTC({cardsPack_id: packId, pageCount: 10}))
-        navigate(CARDS)
-    }
     const updatePack = (packId: string, name: string) => {
         dispatch(updatePackTC({_id: packId, name}))
     }
@@ -213,7 +206,7 @@ const Packs = () => {
                                     <TableCell align="right">{row.user_name}</TableCell>
                                     <TableCell align="right">
                                         <IconButton
-                                            onClick={() => checkPack(row.packId)}>
+                                            >
                                             <SchoolIcon
                                                 fontSize="small"/>
                                         </IconButton>
@@ -224,7 +217,6 @@ const Packs = () => {
                                                 fontSize="small"/>
                                         </IconButton>
                                         <IconButton
-                                            onClick={() => dispatch(deletePackTC(row.packId))}
                                             sx={{visibility: (row.user_id !== myId) ? 'hidden' : 'visible'}}>
                                             <DeleteIcon
                                                 fontSize="small"/>
