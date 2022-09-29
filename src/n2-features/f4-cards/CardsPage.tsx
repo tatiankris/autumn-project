@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {useAppDispatch, useAppSelector} from "../../n1-main/m1-ui/hooks";
+import {useAppDispatch, useAppSelector, useDebounce} from "../../n1-main/m1-ui/hooks";
 import {MyEmptyPack} from "./EmptyPackPage/MyEmptyPack";
 import {FriendsEmptyPack} from "./EmptyPackPage/FriendsEmptyPack";
 import {MyCardsPage} from "./Cards/MyCardsPage";
@@ -33,25 +33,27 @@ export function CardsPage() {
     const page=useAppSelector(state => state.cards.page)
     const pageCount=useAppSelector(state => state.cards.pageCount)
     const search=useAppSelector(state => state.cards.search)
+    const debounceSearchValue = useDebounce<string>(search, 1000)
     const sort=useAppSelector(state => state.cards.sort)
 
     useEffect(()=>{
         if (packId != null) {
             dispatch(getCardsTC(packId))
         }
-    },[page,pageCount,sort,search])
+    },[page,pageCount,sort,debounceSearchValue])
 
     const cards = useAppSelector(state => state.cards)
     const userId=useAppSelector(state => state.profile._id)
 
-    if(!cards.cards.length && userId===cards.packUserId){
-        return <MyEmptyPack/>
-    }
-    if(!cards.cards.length && userId!==cards.packUserId){
+
+    if(!cards.cards.length && userId!==cards.packUserId && !search.length){
         return <FriendsEmptyPack/>
     }
     if(cards.cards.length && userId===cards.packUserId){
         return <MyCardsPage/>
+    }
+    if(!cards.cards.length && userId===cards.packUserId && !search.length){
+        return <MyEmptyPack/>
     }
 
         return <FriendsCardsPage/>

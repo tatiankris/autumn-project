@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container, Grid, Pagination, Stack} from "@mui/material";
+import {Container, Grid} from "@mui/material";
 import {BackToPackList} from "../CommonCardsPageComponents/BackToPackList";
 import {CardsPageHead} from "../CommonCardsPageComponents/CardsPageHead";
 import {CardSearch} from "../CommonCardsPageComponents/CardSearch";
@@ -12,6 +12,7 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import {useAppSelector} from "../../../n1-main/m1-ui/hooks";
 import {createData} from "../CardsPage";
+import {MyPagination} from "../CommonCardsPageComponents/MyPagination";
 
 export const FriendsCardsPage = () => {
     const cards = useAppSelector(state => state.cards)
@@ -53,9 +54,7 @@ export const FriendsCardsPage = () => {
                 </Table>
             </TableContainer>
             <Grid container spacing={1} marginTop={'28px'} marginBottom={'46px'}>
-                <Stack spacing={1}>
-                    <Pagination count={10} shape="rounded"/>
-                </Stack>
+                    <MyPagination/>
             </Grid>
         </Container>
     );

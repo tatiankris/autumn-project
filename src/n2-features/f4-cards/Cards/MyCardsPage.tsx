@@ -1,7 +1,7 @@
 import React from 'react';
 import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
 import {createData} from "../CardsPage";
-import {Container, Grid, IconButton, Pagination, Stack} from "@mui/material";
+import {Container, Grid, IconButton, Stack} from "@mui/material";
 import {BackToPackList} from "../CommonCardsPageComponents/BackToPackList";
 import {CardsPageHead} from "../CommonCardsPageComponents/CardsPageHead";
 import {CardSearch} from "../CommonCardsPageComponents/CardSearch";
@@ -15,6 +15,7 @@ import TableBody from "@mui/material/TableBody";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {deleteCardTC, updateCardTC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
+import {MyPagination} from "../CommonCardsPageComponents/MyPagination";
 
 
 export const MyCardsPage = () => {
@@ -73,9 +74,7 @@ export const MyCardsPage = () => {
                 </Table>
             </TableContainer>
             <Grid container spacing={1} marginTop={'28px'} marginBottom={'46px'}>
-                <Stack spacing={1}>
-                    <Pagination count={10} shape="rounded"/>
-                </Stack>
+                <MyPagination/>
             </Grid>
         </Container>
     );

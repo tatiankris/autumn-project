@@ -6,11 +6,11 @@ import {cardsAPI, CardType, GetCardsResponseType, PostCardType} from "../../m3-d
 
 let initialState = {
     cards: [] as CardType[],
-    cardsTotalCount: 3,
+    cardsTotalCount: 0,
     maxGrade: 0,
     minGrade: 0,
     page: 1,
-    pageCount: 10,
+    pageCount: 5,
     packUserId: "",
     packName: "",
     cardsPackId: "",
@@ -44,6 +44,7 @@ export const cardsReducer = (state: StateType = initialState, action: ActionsTyp
             return {...state, page: action.page}
         }
         case "CARDS/SET-PAGE-COUNT": {
+            debugger
             return {...state, pageCount: action.pageCount}
         }
         case "CARDS/SET-SORT": {
