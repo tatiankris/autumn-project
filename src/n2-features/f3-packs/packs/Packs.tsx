@@ -22,9 +22,22 @@ import {
 } from "@mui/material";
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import SearchIcon from '@mui/icons-material/Search';
+import {useNavigate} from "react-router-dom";
+import {CARDS} from "../../../n1-main/m1-ui/routing/Routing";
+import {getCardsTC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
+import {useAppDispatch, useAppSelector, useDebounce} from "../../../n1-main/m1-ui/hooks";
+import {
+    changePacksPageAC,
+    createPackTC,
+    deletePackTC,
+    searchPacksAC, setMyPacksToPageAC,
+    setPacksTC,
+    updatePackTC
+} from "../../../n1-main/m2-bll/reducers/packs-reducer";
+import SchoolIcon from '@mui/icons-material/School';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
 import s from './Packs.module.css';
-import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
-import {setPacksTC} from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import {NavLink} from "react-router-dom";
 
 function valuetext(value: number) {
@@ -34,18 +47,24 @@ function valuetext(value: number) {
 const minDistance = 1;
 
 const Packs = () => {
-
-
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
+    const myId = useAppSelector(state => state.profile._id);
+    const isMyId = useAppSelector(state => state.packs.isMyId);
+    const cardPacksTotalCount = useAppSelector(state => state.packs.cardPacksTotalCount);
+    const page = useAppSelector(state => state.packs.page)
+    const search = useAppSelector(state => state.packs.search);
+    const debounceSearchValue = useDebounce<string>(search, 700);
+    const [sliderValue, setSliderValue] = useState<number[]>([0, 100]);
+    const debounceSliderValue = useDebounce<Array<number>>(sliderValue, 700);
+
     useEffect(() => {
-        dispatch(setPacksTC({user_id: "63276c0a9db0ab00041c87a4"}))
-    }, [])
+        dispatch(setPacksTC())
+    }, [debounceSearchValue, page, isMyId, debounceSliderValue])
 
 
-    const [searchValue, setSearchValue] = useState<string>('');
-
-    const [value2, setValue2] = React.useState<number[]>([20, 37]);
-    const handleChange2 = (
+    const handleChange = (
         event: Event,
         newValue: number | number[],
         activeThumb: number,
@@ -57,33 +76,49 @@ const Packs = () => {
         if (newValue[1] - newValue[0] < minDistance) {
             if (activeThumb === 0) {
                 const clamped = Math.min(newValue[0], 100 - minDistance);
-                setValue2([clamped, clamped + minDistance]);
+                setSliderValue([clamped, clamped + minDistance]);
             } else {
                 const clamped = Math.max(newValue[1], minDistance);
-                setValue2([clamped - minDistance, clamped]);
+                setSliderValue([clamped - minDistance, clamped]);
             }
         } else {
-            setValue2(newValue as number[]);
+            setSliderValue(newValue as number[]);
         }
     };
 
     function createData(
         packId: string,
         name: string,
+        user_id: string,
+        user_name: string,
         cards: number,
         lastUpdated: string,
         createdBy: string,
-        actions: { learn: boolean, update?: boolean, delete?: boolean },
     ) {
-        return {packId, name, cards, lastUpdated, createdBy, actions};
+        return {packId, name, user_id, user_name, cards, lastUpdated, createdBy};
     }
 
     let packs = useAppSelector(state => state.packs.cardPacks)
     const rows = packs.map(m => {
-        return createData(m._id, m.name, m.cardsCount, m.updated, m.created,
-            m.user_id ? {learn: true, update: true, delete: true} : {learn: true})
+        return createData(m._id, m.name, m.user_id, m.user_name, m.cardsCount, m.updated, m.created)
     })
 
+    const checkPack = (packId: string) => {
+        dispatch(getCardsTC({cardsPack_id: packId, pageCount: 10}))
+        navigate(CARDS)
+    }
+    const updatePack = (packId: string, name: string) => {
+        dispatch(updatePackTC({_id: packId, name}))
+    }
+    const searchPacksHandler = (search: string) => {
+        dispatch(searchPacksAC(search))
+    }
+    const changePageHandler = (event: ChangeEvent<unknown>, page: number) => {
+        dispatch(changePacksPageAC(page))
+    }
+    const setMyPacksHandler = (isMyPack: boolean) => {
+        dispatch(setMyPacksToPageAC(isMyPack))
+    }
 
     return <Container maxWidth="lg">
         <Grid container spacing={2} marginTop={'8px'}>
@@ -91,7 +126,9 @@ const Packs = () => {
                 <h2>Packs list</h2>
             </Grid>
             <Grid item xs={3}>
-                <Button variant="contained">Add new pack</Button>
+                <Button variant="contained" onClick={() => dispatch(createPackTC({name: 'new pack from Minsk'}))}>
+                    Add new pack
+                </Button>
             </Grid>
         </Grid>
         <Grid container spacing={4}>
@@ -102,9 +139,9 @@ const Packs = () => {
 
                     <OutlinedInput
                         id="input-search"
-                        value={searchValue}
+                        value={search}
                         onChange={(e) => {
-                            setSearchValue((e.currentTarget.value))
+                            searchPacksHandler((e.currentTarget.value))
                         }}
                         startAdornment={<InputAdornment position="start"><SearchIcon
                             color="disabled"/></InputAdornment>}
@@ -120,10 +157,12 @@ const Packs = () => {
                     // aria-label="Disabled elevation buttons"
                 >
                     <Button
-                        style={{background: 'white', color: 'black'}}
+                        onClick={() => setMyPacksHandler(true)}
+                        color={isMyId ? 'primary' : 'inherit'}
                     >My</Button>
                     <Button
-                        className={s.button}
+                        onClick={() => setMyPacksHandler(false)}
+                        color={!isMyId ? 'primary' : 'inherit'}
                     >All</Button>
                 </ButtonGroup>
             </Grid>
@@ -131,8 +170,8 @@ const Packs = () => {
                 <div><b>Number of cards</b></div>
                 <Slider
                     getAriaLabel={() => 'Minimum distance shift'}
-                    value={value2}
-                    onChange={handleChange2}
+                    value={sliderValue}
+                    onChange={handleChange}
                     valueLabelDisplay="auto"
                     getAriaValueText={valuetext}
                     disableSwap
@@ -161,8 +200,8 @@ const Packs = () => {
                             return (
                                 <TableRow
                                     hover
-                                    key={row.name}
-                                    sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                    key={row.packId}
+                                    sx={{'&:last-child td, &:last-child th': {border: 0}, cursor: 'pointer'}}
                                 >
                                     <TableCell component="th" scope="row">
                                         <NavLink className={s.nav} to={`/cards/${row.packId}`}>
@@ -171,8 +210,26 @@ const Packs = () => {
                                     </TableCell>
                                     <TableCell align="right">{row.cards}</TableCell>
                                     <TableCell align="right">{row.lastUpdated}</TableCell>
-                                    <TableCell align="right">{row.createdBy}</TableCell>
-                                    <TableCell align="right">l u d</TableCell>
+                                    <TableCell align="right">{row.user_name}</TableCell>
+                                    <TableCell align="right">
+                                        <IconButton
+                                            onClick={() => checkPack(row.packId)}>
+                                            <SchoolIcon
+                                                fontSize="small"/>
+                                        </IconButton>
+                                        <IconButton
+                                            onClick={() => updatePack(row.packId, 'rename pack from Minsk')}
+                                            sx={{visibility: (row.user_id !== myId) ? 'hidden' : 'visible'}}>
+                                            <DriveFileRenameOutlineIcon
+                                                fontSize="small"/>
+                                        </IconButton>
+                                        <IconButton
+                                            onClick={() => dispatch(deletePackTC(row.packId))}
+                                            sx={{visibility: (row.user_id !== myId) ? 'hidden' : 'visible'}}>
+                                            <DeleteIcon
+                                                fontSize="small"/>
+                                        </IconButton>
+                                    </TableCell>
                                 </TableRow>
                             )
                         })}
@@ -182,10 +239,12 @@ const Packs = () => {
         </Grid>
         <Grid container spacing={1} marginTop={'28px'} marginBottom={'46px'}>
             <Stack spacing={1}>
-                <Pagination count={10} shape="rounded"/>
+                <Pagination
+                    count={Math.ceil(cardPacksTotalCount / 8)}
+                    onChange={changePageHandler}
+                    shape="rounded"/>
             </Stack>
         </Grid>
-
     </Container>
 }
 

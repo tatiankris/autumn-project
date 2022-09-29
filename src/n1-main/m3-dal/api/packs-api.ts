@@ -3,26 +3,35 @@ import {AxiosResponse} from "axios";
 
 
 export const packsAPI = {
-    getPacks (params: GetPacksParamsType) {
+    getPacks(params: GetPacksParamsType) {
         return instance.get<GetPacksParamsType, AxiosResponse<GetPacksResponseType>>('/cards/pack', {params})
     },
     ///про private пишет, что это зарезервированное слово
-    createPack ({cardsPack: {name = 'no Name', deckCover = 'url or base64', private_ = false}} : CreatePackDataType) {
-        return instance.post<CreatePackDataType, AxiosResponse<{ newCardsPack: any }>>('/cards/pack', {cardsPack: {name, deckCover, private_}})
+    createPack({cardsPack: {name = 'no Name', deckCover = 'url or base64', private_ = false}}: CreatePackDataType) {
+        return instance.post<CreatePackDataType, AxiosResponse<{ newCardsPack: any }>>('/cards/pack', {
+            cardsPack: {
+                name,
+                deckCover,
+                private_
+            }
+        })
     },
-    deletePack (id: string) {
-        return instance.delete<{id: string}, AxiosResponse<{ deletedCardsPack: any}>>(`/cards/pack?id=${id}`)
+    deletePack(id: string) {
+        return instance.delete<{ id: string }, AxiosResponse<{ deletedCardsPack: any }>>(`/cards/pack?id=${id}`)
     },
-    updatePack (data: UpdatePackDataType) {
-        return instance.put<UpdatePackDataType, AxiosResponse<{updatedCardsPack: any}>>('/cards/pack', data)
+    updatePack(data: UpdatePackDataType) {
+        return instance.put<UpdatePackDataType, AxiosResponse<{ updatedCardsPack: any }>>('/cards/pack', {
+                cardsPack: data
+            }
+        )
     }
 }
-
 
 export type PackType = {
     _id: string
     user_id: string
     name: string
+    user_name: string
     cardsCount: number
     created: string
     updated: string
@@ -38,8 +47,7 @@ export type CreatePackDataType = {
         name?: string // если не отправить будет таким
         deckCover?: string // не обязателен
         private_?: boolean // если не отправить будет такой
-}
-
+    }
 }
 
 export type GetPacksParamsType = {
@@ -52,6 +60,7 @@ export type GetPacksParamsType = {
     user_id?: string
     block?: boolean
 }
+
 export type GetPacksResponseType = {
     cardPacks: Array<PackType>
     cardPacksTotalCount: number
