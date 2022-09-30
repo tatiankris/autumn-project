@@ -42,6 +42,18 @@ export const packsReducer = (state: PacksStateType = initialState, action: Packs
         case 'packs/SET-MY-PACKS-TO-PAGE': {
             return {...state, isMyId: action.isMyId}
         }
+        case 'packs/SET-PACKS-COUNT': {
+            return {...state, minCardsCount: action.sliderValue[0], maxCardsCount: action.sliderValue[1] }
+        }
+        case 'packs/RESET-ALL-PACKS-FILTER': {
+            return {
+                ...state,
+                search: action.search,
+                isMyId: action.isMyId,
+                minCardsCount: action.cardsCount[0],
+                maxCardsCount: action.cardsCount[1],
+            }
+        }
         default:
             return state;
     }
@@ -71,14 +83,27 @@ export const setMyPacksToPageAC = (isMyId: boolean) => {
         isMyId
     } as const
 }
+export const setPacksCountAC = (sliderValue: Array<number>) => {
+    return {
+        type: 'packs/SET-PACKS-COUNT',
+        sliderValue
+    } as const
+}
+export const resetAllPacksFilterAC = () => {
+    return {
+        type: 'packs/RESET-ALL-PACKS-FILTER',
+        search: '',
+        isMyId: false,
+        cardsCount: [0, 110]
+    } as const
+}
 
 export const setPacksTC = (): AppThunk => (dispatch, getState: () => AppRootStateType) => {
     dispatch(setAppStatusAC("loading"))
-
-    const {search, page, pageCount, isMyId} = getState().packs;
+    const {search, page, pageCount, isMyId, minCardsCount, maxCardsCount} = getState().packs;
     const _id = getState().profile._id;
 
-    packsAPI.getPacks({packName: search, user_id: isMyId ? _id : '', page, pageCount})
+    packsAPI.getPacks({packName: search, user_id: isMyId ? _id : '', page, pageCount, min: minCardsCount, max: maxCardsCount})
         .then(res => {
             dispatch(setPacksAC(res.data))
         })
@@ -143,4 +168,6 @@ export type PacksStateType = typeof initialState;
 export type PacksActionsType = ReturnType<typeof setPacksAC>
     | ReturnType<typeof searchPacksAC>
     | ReturnType<typeof changePacksPageAC>
-    | ReturnType<typeof setMyPacksToPageAC>;
+    | ReturnType<typeof setMyPacksToPageAC>
+    | ReturnType<typeof setPacksCountAC>
+    | ReturnType<typeof resetAllPacksFilterAC>;
