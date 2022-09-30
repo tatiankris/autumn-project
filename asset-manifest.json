@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/autumn-project/static/css/main.6a89657a.css",
-    "main.js": "/autumn-project/static/js/main.c269a94f.js",
+    "main.css": "/autumn-project/static/css/main.b19106da.css",
+    "main.js": "/autumn-project/static/js/main.737023b7.js",
     "static/js/787.39640ce9.chunk.js": "/autumn-project/static/js/787.39640ce9.chunk.js",
     "static/media/successful.png": "/autumn-project/static/media/successful.bf58657d648fff6c8cb8.png",
     "index.html": "/autumn-project/index.html",
-    "main.6a89657a.css.map": "/autumn-project/static/css/main.6a89657a.css.map",
-    "main.c269a94f.js.map": "/autumn-project/static/js/main.c269a94f.js.map",
+    "main.b19106da.css.map": "/autumn-project/static/css/main.b19106da.css.map",
+    "main.737023b7.js.map": "/autumn-project/static/js/main.737023b7.js.map",
     "787.39640ce9.chunk.js.map": "/autumn-project/static/js/787.39640ce9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.6a89657a.css",
-    "static/js/main.c269a94f.js"
+    "static/css/main.b19106da.css",
+    "static/js/main.737023b7.js"
   ]
 }
