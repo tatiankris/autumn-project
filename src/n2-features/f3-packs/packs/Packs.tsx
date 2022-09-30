@@ -1,4 +1,4 @@
-import React, {useEffect, useState, ChangeEvent} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {
     Button,
     ButtonGroup,
@@ -188,6 +188,11 @@ const Packs = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => {
+
+                            let day = row.lastUpdated.slice(8, 10)
+                            let month = row.lastUpdated.slice(5, 7)
+                            let year = row.lastUpdated.slice(0, 4)
+
                             return (
                                 <TableRow
                                     hover
@@ -199,7 +204,7 @@ const Packs = () => {
                                         </NavLink>
                                     </TableCell>
                                     <TableCell align="right">{row.cards}</TableCell>
-                                    <TableCell align="right">{row.lastUpdated}</TableCell>
+                                    <TableCell align="right">{day + '.' + month + '.' + year}</TableCell>
                                     <TableCell align="right">{row.user_name}</TableCell>
                                     <TableCell align="right">
                                         <IconButton>
@@ -225,6 +230,8 @@ const Packs = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            { search && rows.length < 1 && <div style={{marginTop: '20px'}}><span>There are no packs with this name...</span></div>}
+            { !search && rows.length < 1 && <div style={{marginTop: '20px'}}><span>Packs not found...</span></div>}
         </Grid>
         <Grid container spacing={1} marginTop={'28px'} marginBottom={'46px'}>
             <Stack spacing={1}>
