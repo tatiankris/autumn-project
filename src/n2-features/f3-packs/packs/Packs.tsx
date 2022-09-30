@@ -22,13 +22,15 @@ import {
 } from "@mui/material";
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import SearchIcon from '@mui/icons-material/Search';
-import {NavLink} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import {CARDS} from "../../../n1-main/m1-ui/routing/Routing";
+import {getCardsTC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
 import {useAppDispatch, useAppSelector, useDebounce} from "../../../n1-main/m1-ui/hooks";
 import {
     changePacksPageAC,
     createPackTC,
-    searchPacksAC,
-    setMyPacksToPageAC,
+    deletePackTC,
+    searchPacksAC, setMyPacksToPageAC,
     setPacksTC,
     updatePackTC
 } from "../../../n1-main/m2-bll/reducers/packs-reducer";
@@ -36,6 +38,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import s from './Packs.module.css';
+import {NavLink} from "react-router-dom";
 
 function valuetext(value: number) {
     return `${value}°C`;
@@ -45,7 +48,7 @@ const minDistance = 1;
 
 const Packs = () => {
     const dispatch = useAppDispatch();
-
+    const navigate = useNavigate();
 
     const myId = useAppSelector(state => state.profile._id);
     const isMyId = useAppSelector(state => state.packs.isMyId);
@@ -190,6 +193,11 @@ const Packs = () => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => {
+
+                            let day = row.lastUpdated.slice(8, 10)
+                            let month = row.lastUpdated.slice(5, 7)
+                            let year = row.lastUpdated.slice(0, 4)
+
                             return (
                                 <TableRow
                                     hover
@@ -202,11 +210,10 @@ const Packs = () => {
                                         </NavLink>
                                     </TableCell>
                                     <TableCell align="right">{row.cards}</TableCell>
-                                    <TableCell align="right">{row.lastUpdated}</TableCell>
+                                    <TableCell align="right">{day + '.' + month + '.' + year}</TableCell>
                                     <TableCell align="right">{row.user_name}</TableCell>
                                     <TableCell align="right">
-                                        <IconButton
-                                            >
+                                        <IconButton>
                                             <SchoolIcon
                                                 fontSize="small"/>
                                         </IconButton>
@@ -217,6 +224,7 @@ const Packs = () => {
                                                 fontSize="small"/>
                                         </IconButton>
                                         <IconButton
+                                            onClick={() => dispatch(deletePackTC(row.packId))}
                                             sx={{visibility: (row.user_id !== myId) ? 'hidden' : 'visible'}}>
                                             <DeleteIcon
                                                 fontSize="small"/>
@@ -228,6 +236,8 @@ const Packs = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            { search && rows.length < 1 && <div style={{marginTop: '20px'}}><span>There are no packs with this name...</span></div>}
+            { !search && rows.length < 1 && <div style={{marginTop: '20px'}}><span>Packs not found...</span></div>}
         </Grid>
         <Grid container spacing={1} marginTop={'28px'} marginBottom={'46px'}>
             <Stack spacing={1}>
