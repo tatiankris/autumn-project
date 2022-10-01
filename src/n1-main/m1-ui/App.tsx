@@ -2,9 +2,9 @@ import React, {useEffect} from 'react';
 import './App.css';
 import Main from "./main/Main";
 import {useAppDispatch, useAppSelector} from "./hooks";
-import { initializeAppTC } from '../m2-bll/reducers/auth-reducer';
+import {initializeAppTC} from '../m2-bll/reducers/auth-reducer';
 import {CircularProgress} from "@mui/material";
-import {CardsPage} from "../../n2-features/f4-cards/CardsPage";
+
 
 function App() {
     const dispatch = useAppDispatch();

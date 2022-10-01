@@ -45,7 +45,7 @@ export const MyPagination = () => {
     const changePageHandler=(e: ChangeEvent<unknown>, page: number)=>{
         dispatch(setPageAC(page))
     }
-    const handleChange=(event: SelectChangeEvent<any>)=>{
+    const handleChange = (event: SelectChangeEvent<any>) => {
         dispatch(setPageCountAC(event.target.value))
     }
     return (

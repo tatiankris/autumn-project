@@ -6,13 +6,13 @@ import {
     FormControl,
     Grid,
     IconButton,
-    InputAdornment,
-    InputLabel,
+    InputAdornment, InputBase,
+    InputLabel, MenuItem,
     OutlinedInput,
     Pagination,
-    Paper,
+    Paper, Select, SelectChangeEvent,
     Slider,
-    Stack,
+    Stack, styled,
     Table,
     TableBody,
     TableCell,
@@ -27,15 +27,49 @@ import {
     changePacksPageAC,
     createPackTC,
     deletePackTC, resetAllPacksFilterAC,
-    searchPacksAC, setMyPacksToPageAC, setPacksCountAC,
-    setPacksTC,
+    searchPacksAC, setMyPacksToPageAC, setPacksCountAC, setPacksPageCountAC,
+    setPacksTC, setSortPacksAC,
     updatePackTC
 } from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import SchoolIcon from '@mui/icons-material/School';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import s from './Packs.module.css';
 import {NavLink} from "react-router-dom";
+
+const BootstrapInput = styled(InputBase)(({ theme }) => ({
+    'label + &': {
+        marginTop: theme.spacing(3),
+    },
+    '& .MuiInputBase-input': {
+        borderRadius: 4,
+        position: 'relative',
+        backgroundColor: theme.palette.background.paper,
+        border: '1px solid #ced4da',
+        fontSize: 15,
+        padding: '2px 2px 2px 5px',
+        transition: theme.transitions.create(['border-color', 'box-shadow']),
+        // Use the system font instead of the default Roboto font.
+        fontFamily: [
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join(','),
+        '&:focus': {
+            borderRadius: 4,
+            borderColor: '#80bdff',
+            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+        },
+    },
+}));
 
 const Packs = () => {
     const dispatch = useAppDispatch();
@@ -107,6 +141,25 @@ const Packs = () => {
     const resetAllFilter = () => {
         dispatch(resetAllPacksFilterAC())
     }
+
+    const [sort, setSort] = useState<string>('')
+    const onSortHandler = () => {
+        if (sort === '') {
+            setSort('1updated')
+        } else {
+            setSort('')
+        }
+        dispatch(setSortPacksAC(sort))
+        dispatch(setPacksTC())
+    }
+
+    const pageCount = useAppSelector(state => state.packs.pageCount)
+
+    const handleChangePageCount = (event: SelectChangeEvent<any>) => {
+        dispatch(setPacksPageCountAC(event.target.value));
+        dispatch(setPacksTC());
+
+    };
 
     return <Container maxWidth="lg">
         <Grid container spacing={2} marginTop={'8px'}>
@@ -181,7 +234,7 @@ const Packs = () => {
                         <TableRow>
                             <TableCell>Name</TableCell>
                             <TableCell align="right">Cards</TableCell>
-                            <TableCell align="right">Last Updated</TableCell>
+                            <TableCell align="right">Last Updated<IconButton onClick={onSortHandler}><ArrowDropDownIcon/></IconButton></TableCell>
                             <TableCell align="right">Created by</TableCell>
                             <TableCell align="right">Actions</TableCell>
                         </TableRow>
@@ -234,11 +287,29 @@ const Packs = () => {
             { !search && rows.length < 1 && <div style={{marginTop: '20px'}}><span>Packs not found...</span></div>}
         </Grid>
         <Grid container spacing={1} marginTop={'28px'} marginBottom={'46px'}>
-            <Stack spacing={1}>
+            <Stack direction="row" spacing={2} alignItems="center" textAlign={'center'}>
                 <Pagination
                     count={Math.ceil(cardPacksTotalCount / 8)}
                     onChange={changePageHandler}
                     shape="rounded"/>
+                <div>
+                    Show
+                        <Select
+                            id="page-count-select"
+                            value={pageCount}
+                            onChange={handleChangePageCount}
+                            size={"small"}
+                            style={{marginLeft:"6px", marginRight: "6px"}}
+                            input={<BootstrapInput />}
+                        >
+                            <MenuItem value={5}>5</MenuItem>
+                            <MenuItem value={8}>8</MenuItem>
+                            <MenuItem value={10}>10</MenuItem>
+                            <MenuItem value={14}>14</MenuItem>
+                            <MenuItem value={16}>16</MenuItem>
+                        </Select>
+                Cards per Page
+                </div>
             </Stack>
         </Grid>
     </Container>

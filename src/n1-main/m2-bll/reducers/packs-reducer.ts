@@ -17,7 +17,8 @@ const initialState = {
     search: '',
     page: 1, // выбранная страница
     pageCount: 8,
-    isMyId: false
+    isMyId: false,
+    sortPacks: ''
 }
 
 export const packsReducer = (state: PacksStateType = initialState, action: PacksActionsType): PacksStateType => {
@@ -52,6 +53,19 @@ export const packsReducer = (state: PacksStateType = initialState, action: Packs
                 isMyId: action.isMyId,
                 minCardsCount: action.cardsCount[0],
                 maxCardsCount: action.cardsCount[1],
+            }
+        }
+        case 'packs/SET-PACKS-PAGE-COUNT': {
+            return {
+                ...state,
+                pageCount: action.pageCount
+            }
+        }
+        case 'packs/SET-PACKS-SORT': {
+
+            return  {
+                ...state,
+                sortPacks: action.value
             }
         }
         default:
@@ -97,13 +111,28 @@ export const resetAllPacksFilterAC = () => {
         cardsCount: [0, 110]
     } as const
 }
+export const setPacksPageCountAC = (pageCount: number) => {
+    return {
+        type: 'packs/SET-PACKS-PAGE-COUNT',
+        pageCount
+    } as const
+}
+export const setSortPacksAC = (value: string) => {
+    return {
+        type: 'packs/SET-PACKS-SORT',
+        value
+    } as const
+}
 
 export const setPacksTC = (): AppThunk => (dispatch, getState: () => AppRootStateType) => {
     dispatch(setAppStatusAC("loading"))
-    const {search, page, pageCount, isMyId, minCardsCount, maxCardsCount} = getState().packs;
+    const {search, page, pageCount, isMyId, minCardsCount, maxCardsCount, sortPacks} = getState().packs;
     const _id = getState().profile._id;
+    const sortLength = getState().packs.sortPacks.length
 
-    packsAPI.getPacks({packName: search, user_id: isMyId ? _id : '', page, pageCount, min: minCardsCount, max: maxCardsCount})
+    packsAPI.getPacks(sortLength < 0 ? {packName: search, user_id: isMyId ? _id : '', page, pageCount, min: minCardsCount, max: maxCardsCount}
+    : {packName: search, user_id: isMyId ? _id : '', page, pageCount, min: minCardsCount, max: maxCardsCount, sortPacks}
+    )
         .then(res => {
             dispatch(setPacksAC(res.data))
         })
@@ -170,4 +199,7 @@ export type PacksActionsType = ReturnType<typeof setPacksAC>
     | ReturnType<typeof changePacksPageAC>
     | ReturnType<typeof setMyPacksToPageAC>
     | ReturnType<typeof setPacksCountAC>
-    | ReturnType<typeof resetAllPacksFilterAC>;
+    | ReturnType<typeof resetAllPacksFilterAC>
+    | ReturnType<typeof setPacksPageCountAC>
+    | ReturnType<typeof setSortPacksAC>
+    ;

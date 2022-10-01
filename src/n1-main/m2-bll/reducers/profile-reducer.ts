@@ -29,7 +29,7 @@ export const profileReducer = (state: ProfileStateType = initialState, action: P
 
 
 //actions
-export const setProfileAC = (id: string, name: string, email: string, avatar?: string ) => {
+export const setProfileAC = (id: string, email: string, name: string, avatar?: string ) => {
     return {
         type: 'profile/SET-PROFILE',
         id,
