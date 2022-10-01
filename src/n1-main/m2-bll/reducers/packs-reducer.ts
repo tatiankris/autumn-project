@@ -8,6 +8,7 @@ import {AppRootStateType, AppThunk} from "../store";
 import {setAppStatusAC} from "./app-reducer";
 import {AxiosError} from "axios";
 import {handleServerNetworkError} from "../../m1-ui/common/utils/error-utils";
+import {setPackNameAC} from "./cards-reducer";
 
 const initialState = {
     cardPacks: [] as Array<PackType>,
@@ -120,7 +121,7 @@ export const createPackTC = (cardsPack: { name?: string, deckCover?: string, pri
     dispatch(setAppStatusAC("loading"))
 
     packsAPI.createPack({cardsPack})
-        .then(res => {
+        .then(( )=> {
             dispatch(setPacksTC());
         })
         .catch((err: AxiosError<{ error: string }>) => {
@@ -136,7 +137,7 @@ export const deletePackTC = (id: string): AppThunk => (dispatch) => {
     dispatch(setAppStatusAC("loading"))
 
     packsAPI.deletePack(id)
-        .then(res => {
+        .then(() => {
             dispatch(setPacksTC());
         })
         .catch((err: AxiosError<{ error: string }>) => {
@@ -152,8 +153,9 @@ export const updatePackTC = (data: UpdatePackDataType): AppThunk => (dispatch) =
     dispatch(setAppStatusAC("loading"))
 
     packsAPI.updatePack(data)
-        .then(res => {
+        .then(() => {
             dispatch(setPacksTC());
+            dispatch(setPackNameAC(data.name))
         })
         .catch((err: AxiosError<{ error: string }>) => {
             const error = err.response

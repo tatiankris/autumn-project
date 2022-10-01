@@ -1,5 +1,5 @@
 import React from 'react';
-import s from "../CardsPage.module.css";
+import s from "../Cards.module.css";
 import {NavLink} from "react-router-dom";
 import {PACKS} from "../../../n1-main/m1-ui/routing/Routing";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";

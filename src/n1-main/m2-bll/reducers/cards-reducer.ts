@@ -16,6 +16,7 @@ let initialState = {
     cardsPackId: "",
     sort: "0updated",
     search: "",
+    isMyPack:false
 }
 
 export type StateType = typeof initialState;
@@ -51,6 +52,12 @@ export const cardsReducer = (state: StateType = initialState, action: ActionsTyp
             return {...state,
                 sort: state.sort==="0updated"? "1updated" : "0updated"}
         }
+        case "CARDS/SET-IS-MY-PACK":{
+            return {...state, isMyPack: action.isMyPack}
+        }
+        case "CARDS/SET-PACK-NAME":{
+            return {...state, packName: action.name}
+        }
 
         default:
             return state
@@ -62,6 +69,13 @@ export const getCardsAC = (cards: GetCardsResponseType, cardsPackId: string) => 
     return {
         type: 'CARDS/GET-CARDS',
         cards, cardsPackId
+    } as const
+}
+
+export const setIsMyPackAC = (isMyPack:boolean) => {
+    return {
+        type: 'CARDS/SET-IS-MY-PACK',
+        isMyPack
     } as const
 }
 
@@ -93,14 +107,26 @@ export const setSortAC = () => {
 }
 
 
+export const setPackNameAC = (name:string) => {
+    return {
+        type: 'CARDS/SET-PACK-NAME',
+        name,
+    } as const
+}
+
+
+
 //thunks
 export const getCardsTC = (packId:string): AppThunk => {
     return (dispatch, getState) => {
         const {pageCount, page, sort, search} = getState().cards
+        const packUserId=getState().profile._id
         dispatch(setAppStatusAC("loading"))
         cardsAPI.getCards({pageCount,page,sortCards:sort, cardQuestion:search, cardsPack_id:packId})
             .then(res => {
                 dispatch(getCardsAC(res.data, packId))
+                const isMyPack=res.data.packUserId===packUserId
+                dispatch(setIsMyPackAC(isMyPack))
             })
             .catch(err => {
                 const error = err.response
@@ -166,6 +192,8 @@ export type ActionsType =
     ReturnType<typeof searchCardsAC> |
     ReturnType<typeof setPageAC> |
     ReturnType<typeof setSortAC> |
-    ReturnType<typeof setPageCountAC>
+    ReturnType<typeof setPageCountAC> |
+    ReturnType<typeof setIsMyPackAC>|
+    ReturnType<typeof setPackNameAC>
 
 

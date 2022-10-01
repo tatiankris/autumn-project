@@ -1,5 +1,5 @@
 import React from 'react';
-import s from "../CardsPage.module.css";
+import s from "../Cards.module.css";
 import {FormControl, Grid, InputAdornment, InputLabel, OutlinedInput} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";

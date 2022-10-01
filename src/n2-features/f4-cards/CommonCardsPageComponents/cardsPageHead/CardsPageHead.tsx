@@ -1,8 +1,9 @@
 import React from 'react';
-import {Button, Grid} from "@mui/material";
-import s from "../CardsPage.module.css";
-import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
-import {addCardTC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
+import {Button, Grid, Stack} from "@mui/material";
+import s from "../../Cards.module.css";
+import {useAppDispatch, useAppSelector} from "../../../../n1-main/m1-ui/hooks";
+import {addCardTC} from "../../../../n1-main/m2-bll/reducers/cards-reducer";
+import {Menushka} from "./Menushka";
 
 
 export const CardsPageHead = () => {
@@ -15,7 +16,7 @@ export const CardsPageHead = () => {
     return (
         <>
             <Grid item xs={10}>
-                <div className={s.packName}>{cards.packName}</div>
+                <Stack className={s.packName} direction={"row"}>{cards.packName}<Menushka/></Stack>
             </Grid>
             <Grid item xs={2}>
                 {userId !== cards.packUserId && cards.cards.length

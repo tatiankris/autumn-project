@@ -9,7 +9,7 @@ import PasswordIsRecovery from "../../../n2-features/f2-password/a2-recovery/Pas
 import PasswordIsChanged from "../../../n2-features/f2-password/a1-new/PasswordIsChanged";
 import Error404 from "../common/Error404/404";
 import Packs from "../../../n2-features/f3-packs/packs/Packs";
-import { CardsPage } from "../../../n2-features/f4-cards/CardsPage";
+import {Cards} from "../../../n2-features/f4-cards/Cards";
 
 
 export const ROOT = '/'
@@ -44,7 +44,7 @@ const Routing = () => {
                 <Route path={NEW_PASSWORD} element={<NewPassword/>}/>
                 <Route path={PASSWORD_CHANGED} element={<PasswordIsChanged/>}/>
                 <Route path={PACKS} element={<Packs/>}/>
-                <Route path={CARDS} element={<CardsPage/>}/>
+                <Route path={CARDS} element={<Cards/>}/>
                 <Route path={ERROR_404} element={<Error404/>}/>
                 <Route path="*" element={<Navigate to={"/404"}/>}/>
             </Routes>
