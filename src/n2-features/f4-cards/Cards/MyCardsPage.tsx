@@ -14,16 +14,22 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import {deleteCardTC, updateCardTC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
+import {deleteCardTC, setSortAC, updateCardTC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
 import {MyPagination} from "../CommonCardsPageComponents/MyPagination";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 
 export const MyCardsPage = () => {
+    const sort= useAppSelector(state => state.cards.sort)
     const dispatch = useAppDispatch()
     const cards = useAppSelector(state => state.cards)
     const rows = cards.cards.map(el => {
         return createData(el.question, el.answer, el.updated.slice(0, 10), el.grade, el._id)
     })
+    const sortHandler = () => {
+        dispatch(setSortAC())
+    }
     return (
         <Container maxWidth="lg">
             <BackToPackList/>
@@ -38,31 +44,33 @@ export const MyCardsPage = () => {
                         <TableRow>
                             <TableCell align="left">Questions</TableCell>
                             <TableCell align="left">Answers</TableCell>
-                            <TableCell align="left">Last updated</TableCell>
+                            <TableCell align="left" onClick={sortHandler}><IconButton>{sort === "0updated" ?
+                                <ArrowDownwardIcon/> : <ArrowUpwardIcon/>}</IconButton>updated</TableCell>
                             <TableCell align="left">grade</TableCell>
                             <TableCell align="left"/>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row,index) => {
-                            const deleteCardHandler=()=>{
-                                dispatch(deleteCardTC(row._id))
-                            }
-                            const updateCardHandler=()=>{
-                                dispatch(updateCardTC(row._id))
-                            }
-                            return <TableRow
+                        {rows.map((row, index) => {
+                                const deleteCardHandler = () => {
+                                    dispatch(deleteCardTC(row._id))
+                                }
+                                const updateCardHandler = () => {
+                                    dispatch(updateCardTC(row._id))
+                                }
+                                return <TableRow
                                     hover
                                     key={index}
                                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                 >
                                     <TableCell align="left" width={"39%"}>{row.question}</TableCell>
-                                    <TableCell align="left" width={"39%"}>{row.answer}</TableCell>
-                                    <TableCell align="left" width={"10%"}>{row.lastUpdated}</TableCell>
+                                    <TableCell align="left" width={"36%"}>{row.answer}</TableCell>
+                                    <TableCell align="center" width={"13%"}>{row.lastUpdated}</TableCell>
                                     <TableCell align="left" width={"9%"}>{row.grade}</TableCell>
                                     <TableCell align="left" width={"2%"}>
                                         <Stack direction={"row"} spacing={0}>
-                                            <IconButton onClick={updateCardHandler}><BorderColorIcon fontSize={"small"}/></IconButton>
+                                            <IconButton onClick={updateCardHandler}><BorderColorIcon
+                                                fontSize={"small"}/></IconButton>
                                             <IconButton onClick={deleteCardHandler}><DeleteOutlineIcon
                                                 fontSize={"small"}/></IconButton>
                                         </Stack>

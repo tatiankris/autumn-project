@@ -48,7 +48,8 @@ export const cardsReducer = (state: StateType = initialState, action: ActionsTyp
             return {...state, pageCount: action.pageCount}
         }
         case "CARDS/SET-SORT": {
-            return {...state, sort: action.sort}
+            return {...state,
+                sort: state.sort==="0updated"? "1updated" : "0updated"}
         }
 
         default:
@@ -85,10 +86,9 @@ export const setPageAC = (page: number) => {
     } as const
 }
 
-export const setSortAC = (sort: string) => {
+export const setSortAC = () => {
     return {
         type: 'CARDS/SET-SORT',
-        sort
     } as const
 }
 
