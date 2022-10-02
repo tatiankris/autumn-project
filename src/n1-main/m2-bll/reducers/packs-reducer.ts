@@ -15,6 +15,8 @@ const initialState = {
     cardPacksTotalCount: 0, // количество колод
     maxCardsCount: 100,
     minCardsCount: 0,
+    min: 0,
+    max: 110,
     search: '',
     page: 1, // выбранная страница
     pageCount: 8,
@@ -44,15 +46,22 @@ export const packsReducer = (state: PacksStateType = initialState, action: Packs
             return {...state, isMyId: action.isMyId}
         }
         case 'packs/SET-PACKS-COUNT': {
-            return {...state, minCardsCount: action.sliderValue[0], maxCardsCount: action.sliderValue[1] }
+            return {...state, minCardsCount: action.sliderValue[0], maxCardsCount: action.sliderValue[1]}
         }
         case 'packs/RESET-ALL-PACKS-FILTER': {
             return {
                 ...state,
                 search: action.search,
                 isMyId: action.isMyId,
-                minCardsCount: action.cardsCount[0],
-                maxCardsCount: action.cardsCount[1],
+                min: state.minCardsCount,
+                max: state.maxCardsCount,
+            }
+        }
+        case 'packs/SET-CARDS-RANGE': {
+            return {
+                ...state,
+                min: action.min,
+                max: action.max,
             }
         }
         default:
@@ -95,16 +104,29 @@ export const resetAllPacksFilterAC = () => {
         type: 'packs/RESET-ALL-PACKS-FILTER',
         search: '',
         isMyId: false,
-        cardsCount: [0, 110]
+    } as const
+}
+export const setCardsRangeAC = (min: number, max: number) => {
+    return {
+        type: 'packs/SET-CARDS-RANGE',
+        min,
+        max
     } as const
 }
 
 export const setPacksTC = (): AppThunk => (dispatch, getState: () => AppRootStateType) => {
     dispatch(setAppStatusAC("loading"))
-    const {search, page, pageCount, isMyId, minCardsCount, maxCardsCount} = getState().packs;
+    const {search, page, pageCount, isMyId, min, max} = getState().packs;
     const _id = getState().profile._id;
 
-    packsAPI.getPacks({packName: search, user_id: isMyId ? _id : '', page, pageCount, min: minCardsCount, max: maxCardsCount})
+    packsAPI.getPacks({
+        packName: search,
+        user_id: isMyId ? _id : '',
+        page,
+        pageCount,
+        min: min,
+        max: max
+    })
         .then(res => {
             dispatch(setPacksAC(res.data))
         })
@@ -112,6 +134,10 @@ export const setPacksTC = (): AppThunk => (dispatch, getState: () => AppRootStat
             const error = err.response
                 ? err.response.data.error
                 : err.message
+
+            if (error === "you are not authorized /ᐠ-ꞈ-ᐟ\\")
+                return
+
             handleServerNetworkError({message: error}, dispatch)
         })
         .finally(() => dispatch(setAppStatusAC("idle")))
@@ -166,10 +192,21 @@ export const updatePackTC = (data: UpdatePackDataType): AppThunk => (dispatch) =
         .finally(() => dispatch(setAppStatusAC("idle")))
 };
 
+export const setCardsRangeTC = (range: { min: number; max: number }): AppThunk => (dispatch) => {
+    dispatch(setCardsRangeAC(range.min, range.max))
+    dispatch(setPacksTC())
+}
+
+export const resetAllPacksFilterTC = (): AppThunk => (dispatch) => {
+    dispatch(resetAllPacksFilterAC())
+    dispatch(setPacksTC())
+}
+
 export type PacksStateType = typeof initialState;
 export type PacksActionsType = ReturnType<typeof setPacksAC>
     | ReturnType<typeof searchPacksAC>
     | ReturnType<typeof changePacksPageAC>
     | ReturnType<typeof setMyPacksToPageAC>
     | ReturnType<typeof setPacksCountAC>
-    | ReturnType<typeof resetAllPacksFilterAC>;
+    | ReturnType<typeof resetAllPacksFilterAC>
+    | ReturnType<typeof setCardsRangeAC>;

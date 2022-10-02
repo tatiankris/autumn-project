@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect} from "react";
 import {
     Button,
     ButtonGroup,
@@ -11,7 +11,6 @@ import {
     OutlinedInput,
     Pagination,
     Paper,
-    Slider,
     Stack,
     Table,
     TableBody,
@@ -26,8 +25,8 @@ import {useAppDispatch, useAppSelector, useDebounce} from "../../../n1-main/m1-u
 import {
     changePacksPageAC,
     createPackTC,
-    deletePackTC, resetAllPacksFilterAC,
-    searchPacksAC, setMyPacksToPageAC, setPacksCountAC,
+    deletePackTC, resetAllPacksFilterTC,
+    searchPacksAC, setMyPacksToPageAC,
     setPacksTC,
     updatePackTC
 } from "../../../n1-main/m2-bll/reducers/packs-reducer";
@@ -36,6 +35,7 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import DeleteIcon from '@mui/icons-material/Delete';
 import s from './Packs.module.css';
 import {NavLink} from "react-router-dom";
+import {NumberOfCards} from "./NumberOfCards/NumberOfCards";
 
 const Packs = () => {
     const dispatch = useAppDispatch();
@@ -46,34 +46,10 @@ const Packs = () => {
     const page = useAppSelector(state => state.packs.page)
     const search = useAppSelector(state => state.packs.search);
     const debounceSearchValue = useDebounce<string>(search, 700);
-    const [value, setValue] = useState<number[]>([0, 110]);
-    const debounceValue = useDebounce(value, 700);
 
     useEffect(() => {
-        dispatch(setPacksCountAC(value))
         dispatch(setPacksTC())
-    }, [debounceSearchValue, page, isMyId, debounceValue])
-
-
-    const handleChange = (
-        event: Event,
-        newValue: number | number[],
-        activeThumb: number,
-    ) => {
-        if (!Array.isArray(newValue)) {
-            return;
-        }
-
-        if (activeThumb === 0) {
-            setValue([Math.min(newValue[0], value[1] - 1), value[1]]);
-        } else {
-            setValue([value[0], Math.max(newValue[1], value[0] + 1)]);
-        }
-    };
-
-    function valuetext(value: number) {
-        return `${value}°C`;
-    }
+    }, [debounceSearchValue, page, isMyId])
 
     function createData(
         packId: string,
@@ -105,7 +81,7 @@ const Packs = () => {
         dispatch(setMyPacksToPageAC(isMyPack))
     }
     const resetAllFilter = () => {
-        dispatch(resetAllPacksFilterAC())
+        dispatch(resetAllPacksFilterTC())
     }
 
     return <Container maxWidth="lg">
@@ -156,15 +132,7 @@ const Packs = () => {
             </Grid>
             <Grid item xs={3}>
                 <div><b>Number of cards</b></div>
-                <Slider
-                    getAriaLabel={() => 'Minimum distance shift'}
-                    value={value}
-                    max={110}
-                    onChange={handleChange}
-                    valueLabelDisplay="auto"
-                    getAriaValueText={valuetext}
-                    disableSwap
-                />
+                <NumberOfCards/>
             </Grid>
             <Grid item xs={1}>
                 <IconButton
@@ -197,7 +165,7 @@ const Packs = () => {
                                 <TableRow
                                     hover
                                     key={row.packId}
-                                    sx={{'&:last-child td, &:last-child th': {border: 0}, cursor: 'pointer'}}>
+                                    sx={{'&:last-child td, &:last-child th': {border: 0}}}>
                                     <TableCell component="th" scope="row">
                                         <NavLink className={s.nav} to={`/cards/${row.packId}`}>
                                             {row.name}
@@ -213,13 +181,13 @@ const Packs = () => {
                                         </IconButton>
                                         <IconButton
                                             onClick={() => updatePack(row.packId, 'rename pack from Minsk')}
-                                            sx={{visibility: (row.user_id !== myId) ? 'hidden' : 'visible'}}>
+                                            disabled={row.user_id !== myId}>
                                             <DriveFileRenameOutlineIcon
                                                 fontSize="small"/>
                                         </IconButton>
                                         <IconButton
                                             onClick={() => dispatch(deletePackTC(row.packId))}
-                                            sx={{visibility: (row.user_id !== myId) ? 'hidden' : 'visible'}}>
+                                            disabled={row.user_id !== myId}>
                                             <DeleteIcon
                                                 fontSize="small"/>
                                         </IconButton>
@@ -230,8 +198,9 @@ const Packs = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            { search && rows.length < 1 && <div style={{marginTop: '20px'}}><span>There are no packs with this name...</span></div>}
-            { !search && rows.length < 1 && <div style={{marginTop: '20px'}}><span>Packs not found...</span></div>}
+            {search && rows.length < 1 &&
+                <div style={{marginTop: '20px'}}><span>There are no packs with this name...</span></div>}
+            {!search && rows.length < 1 && <div style={{marginTop: '20px'}}><span>Packs not found...</span></div>}
         </Grid>
         <Grid container spacing={1} marginTop={'28px'} marginBottom={'46px'}>
             <Stack spacing={1}>
