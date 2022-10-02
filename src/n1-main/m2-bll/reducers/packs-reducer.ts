@@ -234,4 +234,5 @@ export type PacksActionsType = ReturnType<typeof setPacksAC>
     | ReturnType<typeof resetAllPacksFilterAC>
     | ReturnType<typeof setCardsRangeAC>
     | ReturnType<typeof setSortPacksAC>
+    | ReturnType<typeof setPacksPageCountAC>
     ;

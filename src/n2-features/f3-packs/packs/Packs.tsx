@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {
     Button,
     ButtonGroup,
@@ -9,12 +9,9 @@ import {
     InputAdornment, InputBase,
     InputLabel, MenuItem,
     OutlinedInput,
-    Pagination,
-    Paper,
-    Stack,
-    Paper, Select, SelectChangeEvent,
-    Slider,
-    Stack, styled,
+    Pagination, Paper,
+    Select, SelectChangeEvent, Stack,
+    styled,
     Table,
     TableBody,
     TableCell,
@@ -27,13 +24,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import {useAppDispatch, useAppSelector, useDebounce} from "../../../n1-main/m1-ui/hooks";
 import {
     changePacksPageAC,
-    createPackTC,
-    deletePackTC, resetAllPacksFilterTC,
-    searchPacksAC, setMyPacksToPageAC,
-    setPacksTC,
-    deletePackTC, resetAllPacksFilterAC,
-    searchPacksAC, setMyPacksToPageAC, setPacksCountAC, setPacksPageCountAC,
-    setPacksTC, setSortPacksAC,
+    createPackTC, deletePackTC,
+    resetAllPacksFilterTC, searchPacksAC, setMyPacksToPageAC,
+    setPacksPageCountAC, setPacksTC,
+    setSortPacksAC,
     updatePackTC
 } from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import SchoolIcon from '@mui/icons-material/School';
@@ -277,7 +271,7 @@ const Packs = () => {
         <Grid container spacing={1} marginTop={'28px'} marginBottom={'46px'}>
             <Stack direction="row" spacing={2} alignItems="center" textAlign={'center'}>
                 <Pagination
-                    count={Math.ceil(cardPacksTotalCount / 8)}
+                    count={Math.ceil(cardPacksTotalCount / pageCount)}
                     onChange={changePageHandler}
                     shape="rounded"/>
                 <div>
