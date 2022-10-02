@@ -37,6 +37,7 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import DeleteIcon from '@mui/icons-material/Delete';
 import s from './Packs.module.css';
 import {NavLink} from "react-router-dom";
+import {BasicModal} from "../../../n1-main/m1-ui/common/BasicModal/BasicModal";
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
@@ -167,9 +168,21 @@ const Packs = () => {
                 <h2>Packs list</h2>
             </Grid>
             <Grid item xs={3}>
-                <Button variant="contained" onClick={() => dispatch(createPackTC({name: 'new pack from Minsk'}))}>
-                    Add new pack
-                </Button>
+                <BasicModal title={'Add new pack'}
+                            button={<Button variant="contained"
+                                            onClick={() => dispatch(createPackTC({name: 'new pack from Minsk'}))}
+                            >
+                                Add new pack
+                </Button>}>
+                    <div>
+                        Name
+                        <Stack direction="row" spacing={2}>
+                            <Button>Add</Button>
+                            <Button>Cancel</Button>
+                        </Stack>
+                    </div>
+                </BasicModal>
+
             </Grid>
         </Grid>
         <Grid container spacing={4}>
