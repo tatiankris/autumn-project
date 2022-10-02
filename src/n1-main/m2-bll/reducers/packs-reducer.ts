@@ -20,7 +20,8 @@ const initialState = {
     search: '',
     page: 1, // выбранная страница
     pageCount: 8,
-    isMyId: false
+    isMyId: false,
+    sortPacks: ''
 }
 
 export const packsReducer = (state: PacksStateType = initialState, action: PacksActionsType): PacksStateType => {
@@ -62,6 +63,19 @@ export const packsReducer = (state: PacksStateType = initialState, action: Packs
                 ...state,
                 min: action.min,
                 max: action.max,
+            }
+        }
+        case 'packs/SET-PACKS-PAGE-COUNT': {
+            return {
+                ...state,
+                pageCount: action.pageCount
+            }
+        }
+        case 'packs/SET-PACKS-SORT': {
+
+            return  {
+                ...state,
+                sortPacks: action.value
             }
         }
         default:
@@ -113,20 +127,29 @@ export const setCardsRangeAC = (min: number, max: number) => {
         max
     } as const
 }
+export const setPacksPageCountAC = (pageCount: number) => {
+    return {
+        type: 'packs/SET-PACKS-PAGE-COUNT',
+        pageCount
+    } as const
+}
+export const setSortPacksAC = (value: string) => {
+    return {
+        type: 'packs/SET-PACKS-SORT',
+        value
+    } as const
+}
 
 export const setPacksTC = (): AppThunk => (dispatch, getState: () => AppRootStateType) => {
     dispatch(setAppStatusAC("loading"))
-    const {search, page, pageCount, isMyId, min, max} = getState().packs;
+    const {search, page, pageCount, isMyId, min, max, sortPacks} = getState().packs;
     const _id = getState().profile._id;
+    const sortLength = getState().packs.sortPacks.length
 
     packsAPI.getPacks({
-        packName: search,
-        user_id: isMyId ? _id : '',
-        page,
-        pageCount,
-        min: min,
-        max: max
-    })
+        packName: search, user_id: isMyId ? _id : '',
+        page, pageCount,
+        min: min, max: max, sortPacks: sortLength > 0 ? sortPacks : '0updated'})
         .then(res => {
             dispatch(setPacksAC(res.data))
         })
@@ -209,4 +232,6 @@ export type PacksActionsType = ReturnType<typeof setPacksAC>
     | ReturnType<typeof setMyPacksToPageAC>
     | ReturnType<typeof setPacksCountAC>
     | ReturnType<typeof resetAllPacksFilterAC>
-    | ReturnType<typeof setCardsRangeAC>;
+    | ReturnType<typeof setCardsRangeAC>
+    | ReturnType<typeof setSortPacksAC>
+    ;

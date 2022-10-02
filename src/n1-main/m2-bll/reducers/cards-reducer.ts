@@ -45,7 +45,6 @@ export const cardsReducer = (state: StateType = initialState, action: ActionsTyp
             return {...state, page: action.page}
         }
         case "CARDS/SET-PAGE-COUNT": {
-            debugger
             return {...state, pageCount: action.pageCount}
         }
         case "CARDS/SET-SORT": {
