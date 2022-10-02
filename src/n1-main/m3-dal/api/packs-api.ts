@@ -35,11 +35,13 @@ export type PackType = {
     cardsCount: number
     created: string
     updated: string
+    private: boolean
 }
 
 export type UpdatePackDataType = {
     _id: string
     name: string
+    private?: boolean
 }
 
 export type CreatePackDataType = {

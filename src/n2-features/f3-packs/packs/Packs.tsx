@@ -23,21 +23,18 @@ import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import SearchIcon from '@mui/icons-material/Search';
 import {useAppDispatch, useAppSelector, useDebounce} from "../../../n1-main/m1-ui/hooks";
 import {
-    changePacksPageAC,
-    createPackTC, deletePackTC,
-    resetAllPacksFilterTC, searchPacksAC, setMyPacksToPageAC,
-    setPacksPageCountAC, setPacksTC,
-    setSortPacksAC,
-    updatePackTC
+    changePacksPageAC, resetAllPacksFilterTC, searchPacksAC,
+    setMyPacksToPageAC, setPacksPageCountAC, setPacksTC,
+    setSortPacksAC
 } from "../../../n1-main/m2-bll/reducers/packs-reducer";
 import SchoolIcon from '@mui/icons-material/School';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import DeleteIcon from '@mui/icons-material/Delete';
 import s from './Packs.module.css';
 import {NavLink} from "react-router-dom";
 import {NumberOfCards} from "./NumberOfCards/NumberOfCards";
-import {BasicModal} from "../../../n1-main/m1-ui/common/BasicModal/BasicModal";
+import {AddNewPackModal} from "./PackModals/AddNewPackModal";
+import {EditPackModal} from "./PackModals/EditPackModal";
+import {DeletePackModal} from "./PackModals/DeletePackModal";
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
@@ -51,7 +48,6 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
         fontSize: 15,
         padding: '2px 2px 2px 5px',
         transition: theme.transitions.create(['border-color', 'box-shadow']),
-        // Use the system font instead of the default Roboto font.
         fontFamily: [
             '-apple-system',
             'BlinkMacSystemFont',
@@ -94,18 +90,14 @@ const Packs = () => {
         cards: number,
         lastUpdated: string,
         createdBy: string,
+        private_: boolean
     ) {
-        return {packId, name, user_id, user_name, cards, lastUpdated, createdBy};
+        return {packId, name, user_id, user_name, cards, lastUpdated, createdBy, private_};
     }
-
     let packs = useAppSelector(state => state.packs.cardPacks)
     const rows = packs.map(m => {
-        return createData(m._id, m.name, m.user_id, m.user_name, m.cardsCount, m.updated, m.created)
+        return createData(m._id, m.name, m.user_id, m.user_name, m.cardsCount, m.updated, m.created, m.private)
     })
-
-    const updatePack = (packId: string, name: string) => {
-        dispatch(updatePackTC({_id: packId, name}))
-    }
     const searchPacksHandler = (search: string) => {
         dispatch(searchPacksAC(search))
     }
@@ -118,7 +110,6 @@ const Packs = () => {
     const resetAllFilter = () => {
         dispatch(resetAllPacksFilterTC())
     }
-
     const [sort, setSort] = useState<string>('')
     const onSortHandler = () => {
         if (sort === '') {
@@ -144,21 +135,7 @@ const Packs = () => {
                 <h2>Packs list</h2>
             </Grid>
             <Grid item xs={3}>
-                <BasicModal title={'Add new pack'}
-                            button={<Button variant="contained"
-                                            onClick={() => dispatch(createPackTC({name: 'new pack from Minsk'}))}
-                            >
-                                Add new pack
-                </Button>}>
-                    <div>
-                        Name
-                        <Stack direction="row" spacing={2}>
-                            <Button>Add</Button>
-                            <Button>Cancel</Button>
-                        </Stack>
-                    </div>
-                </BasicModal>
-
+                <AddNewPackModal />
             </Grid>
         </Grid>
         <Grid container spacing={4}>
@@ -182,9 +159,7 @@ const Packs = () => {
             <Grid item xs={3}>
                 <div><b>Show packs cards</b></div>
                 <ButtonGroup
-                    // disableElevation
                     variant="contained"
-                    // aria-label="Disabled elevation buttons"
                 >
                     <Button
                         onClick={() => setMyPacksHandler(true)}
@@ -245,18 +220,19 @@ const Packs = () => {
                                             <SchoolIcon
                                                 fontSize="small"/>
                                         </IconButton>
-                                        <IconButton
-                                            onClick={() => updatePack(row.packId, 'rename pack from Minsk')}
-                                            disabled={row.user_id !== myId}>
-                                            <DriveFileRenameOutlineIcon
-                                                fontSize="small"/>
-                                        </IconButton>
-                                        <IconButton
-                                            onClick={() => dispatch(deletePackTC(row.packId))}
-                                            disabled={row.user_id !== myId}>
-                                            <DeleteIcon
-                                                fontSize="small"/>
-                                        </IconButton>
+                                        {row.user_id === myId &&
+                                            <div style={{display: 'inline-block'}}>
+                                                <EditPackModal id={row.packId} name={row.name} private_={row.private_}/>
+                                            </div>
+                                        }
+                                        {row.user_id === myId &&
+                                            <div style={{display: 'inline-block'}}>
+                                                <DeletePackModal id={row.packId} name={row.name}/>
+                                            </div>
+                                        }
+                                        {row.user_id !== myId &&
+                                            <div style={{display: 'inline-block', width: '72px', height: '20px'}}></div>
+                                        }
                                     </TableCell>
                                 </TableRow>
                             )

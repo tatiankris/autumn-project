@@ -10,6 +10,9 @@ type PropsType = {
     title: string
     children: ReactNode
     button: ReactNode
+    open: boolean,
+    handleOpen: () => void
+    handleClose: () => void
 }
 
 const style = {
@@ -24,19 +27,17 @@ const style = {
     padding: 'none',
 }
 
-export const BasicModal = ({title, children, button}: PropsType) => {
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+export const BasicModal = ({title, children, button, open, ...props}: PropsType) => {
+
 
     return (
         <div>
-            <button style={{background: 'none', border: 'none'}} onClick={handleOpen}>
+            <button style={{background: 'none', border: 'none', margin: '0px', padding: '0px'}} onClick={props.handleOpen}>
                 {button}
             </button>
             <Modal
                 open={open}
-                onClose={handleClose}
+                onClose={props.handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
                 style={{position: 'relative'}}
@@ -49,7 +50,7 @@ export const BasicModal = ({title, children, button}: PropsType) => {
                                     justifyContent={'center'} marginLeft={'8px'}>
                             {title}
                         </Typography>
-                        <IconButton onClick={handleClose} style={{padding: 'none'}}>
+                        <IconButton onClick={props.handleClose} style={{padding: 'none'}}>
                             <CloseIcon/>
                         </IconButton>
                     </Stack>
