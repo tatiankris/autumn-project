@@ -37,7 +37,8 @@ export const Cards = () => {
     if (!cards.length && !search.length) {return <EmptyPack/>}
 
     return (
-        <Container maxWidth="lg">
+        <><Container maxWidth="lg">
+
             <BackToPackList/>
             <Grid container spacing={3} marginTop={'8px'}>
                 <CardsPageHead/>
@@ -47,14 +48,14 @@ export const Cards = () => {
                 <Table sx={{minWidth: 650}}>
                     <CardsTableHead/>
                     <TableBody>
-                        {cards.map((card) => <CardsTableBody card={card}/>)}
+                        {cards.map((card) => <CardsTableBody key={card._id} card={card}/>)}
                     </TableBody>
                 </Table>
             </TableContainer>
             <Grid container spacing={1} marginTop={'28px'} marginBottom={'46px'}>
                 <MyPagination/>
             </Grid>
-        </Container>
+        </Container></>
     );
 };
 

@@ -1,26 +1,20 @@
 import React from 'react';
 import TableCell from "@mui/material/TableCell";
-import {IconButton, Stack} from "@mui/material";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import {Stack} from "@mui/material";
 import TableRow from "@mui/material/TableRow";
-import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
+import {useAppSelector} from "../../../n1-main/m1-ui/hooks";
 import {CardType} from "../../../n1-main/m3-dal/api/cards-api";
-import {deleteCardTC, updateCardTC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
+import {DeleteCardModal} from "../../f5-modals/DeleteCard.Modal";
+import {EditCardModal} from "../../f5-modals/EditCardModal";
 
 type PropsType={
     card:CardType
 }
 
 export const CardsTableBody = ({card}:PropsType) => {
-    const dispatch = useAppDispatch()
+
     const isMyPack=useAppSelector(state =>state.cards.isMyPack)
-    const deleteCardHandler = () => {
-        dispatch(deleteCardTC(card._id))
-    }
-    const updateCardHandler = () => {
-        dispatch(updateCardTC(card._id))
-    }
+
     return (
             <TableRow
                 hover
@@ -33,10 +27,8 @@ export const CardsTableBody = ({card}:PropsType) => {
                 <TableCell align="left" width={"9%"}>{card.grade}</TableCell>
                 {isMyPack && <TableCell align="left" width={"2%"}>
                     <Stack direction={"row"} spacing={0}>
-                        <IconButton onClick={updateCardHandler}><BorderColorIcon
-                            fontSize={"small"}/></IconButton>
-                        <IconButton onClick={deleteCardHandler}><DeleteOutlineIcon
-                            fontSize={"small"}/></IconButton>
+                        <EditCardModal card={card}/>
+                        <DeleteCardModal card={card}/>
                     </Stack>
                 </TableCell>}
             </TableRow>

@@ -69,7 +69,7 @@ const Login = () => {
         },
         validate,
         onSubmit: values => {
-            dispatch(loginTC(values) as any)
+            dispatch(loginTC(values))
         },
     });
     if (isLoggedIn) {

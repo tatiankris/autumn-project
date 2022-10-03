@@ -1,18 +1,16 @@
 import React from 'react';
 import {Button, Grid, Stack} from "@mui/material";
 import s from "../../Cards.module.css";
-import {useAppDispatch, useAppSelector} from "../../../../n1-main/m1-ui/hooks";
-import {addCardTC} from "../../../../n1-main/m2-bll/reducers/cards-reducer";
+import {useAppSelector} from "../../../../n1-main/m1-ui/hooks";
 import {Menushka} from "./Menushka";
+import {AddNewCardModal} from "../../../f5-modals/AddNewCardModal";
 
 
 export const CardsPageHead = () => {
-    const dispatch = useAppDispatch()
+
     const cards = useAppSelector(state => state.cards)
     const userId = useAppSelector(state => state.profile._id)
-    const addCard = () => {
-        dispatch(addCardTC({cardsPack_id:cards.cardsPackId, question:"Who are you, warrior?"}))
-    }
+
     return (
         <>
             <Grid item xs={10}>
@@ -22,7 +20,7 @@ export const CardsPageHead = () => {
                 {userId !== cards.packUserId && cards.cards.length
                     ? <Button variant="contained">Learn pack</Button> : null}
                 {userId === cards.packUserId && cards.cards.length
-                    ? <Button onClick={addCard} variant="contained"> Add new card </Button> : null}
+                    ? <AddNewCardModal cardsPackId={cards.cardsPackId}/> : null}
             </Grid>
         </>
     );
