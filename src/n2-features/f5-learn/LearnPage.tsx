@@ -56,19 +56,19 @@ const LearnPage = () => {
 
     useEffect(() => {
         if (first) {
-            dispatch(getCardsTC(packId || ''));
+            dispatch(getCardsTC(packId || '', true));
             setFirst(false);
         }
 
         if (cards.length > 0) setCard(getCard(cards));
     }, [dispatch, packId, cards, first]);
 
+
     const onNext = () => {
         setIsChecked(false);
 
         if (cards.length > 0) {
             dispatch(updateCardGradeTC(value, packId || '', card._id))
-            setCard(getCard(cards));
         }
     }
 
@@ -83,6 +83,9 @@ const LearnPage = () => {
                     <div>
                         <div className={s.question}>
                             <p><b>Question:</b> {card.question}</p>
+                        </div>
+                        <div className={s.attemptsNumber}>
+                            <span>Number of attempts to answer a question: {card.shots}</span>
                         </div>
 
                         {isChecked && (

@@ -47,7 +47,7 @@ export const Cards = () => {
                 <Table sx={{minWidth: 650}}>
                     <CardsTableHead/>
                     <TableBody>
-                        {cards.map((card) => <CardsTableBody card={card}/>)}
+                        {cards.map((card, i) => <CardsTableBody key={i} card={card}/>)}
                     </TableBody>
                 </Table>
             </TableContainer>

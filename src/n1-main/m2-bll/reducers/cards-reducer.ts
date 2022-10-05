@@ -16,7 +16,7 @@ let initialState = {
     cardsPackId: "",
     sort: "0updated",
     search: "",
-    isMyPack:false
+    isMyPack: false
 }
 
 export type StateType = typeof initialState;
@@ -48,13 +48,15 @@ export const cardsReducer = (state: StateType = initialState, action: ActionsTyp
             return {...state, pageCount: action.pageCount}
         }
         case "CARDS/SET-SORT": {
-            return {...state,
-                sort: state.sort==="0updated"? "1updated" : "0updated"}
+            return {
+                ...state,
+                sort: state.sort === "0updated" ? "1updated" : "0updated"
+            }
         }
-        case "CARDS/SET-IS-MY-PACK":{
+        case "CARDS/SET-IS-MY-PACK": {
             return {...state, isMyPack: action.isMyPack}
         }
-        case "CARDS/SET-PACK-NAME":{
+        case "CARDS/SET-PACK-NAME": {
             return {...state, packName: action.name}
         }
 
@@ -71,7 +73,7 @@ export const getCardsAC = (cards: GetCardsResponseType, cardsPackId: string) => 
     } as const
 }
 
-export const setIsMyPackAC = (isMyPack:boolean) => {
+export const setIsMyPackAC = (isMyPack: boolean) => {
     return {
         type: 'CARDS/SET-IS-MY-PACK',
         isMyPack
@@ -106,7 +108,7 @@ export const setSortAC = () => {
 }
 
 
-export const setPackNameAC = (name:string) => {
+export const setPackNameAC = (name: string) => {
     return {
         type: 'CARDS/SET-PACK-NAME',
         name,
@@ -114,17 +116,22 @@ export const setPackNameAC = (name:string) => {
 }
 
 
-
 //thunks
-export const getCardsTC = (packId:string): AppThunk => {
+export const getCardsTC = (packId: string, all?: boolean): AppThunk => {
     return (dispatch, getState) => {
-        const {pageCount, page, sort, search} = getState().cards
-        const packUserId=getState().profile._id
+        const {pageCount, page, sort, search, cardsTotalCount} = getState().cards
+        const packUserId = getState().profile._id
         dispatch(setAppStatusAC("loading"))
-        cardsAPI.getCards({pageCount,page,sortCards:sort, cardQuestion:search, cardsPack_id:packId})
+        cardsAPI.getCards({
+            pageCount: all ? cardsTotalCount : pageCount,
+            page,
+            sortCards: sort,
+            cardQuestion: search,
+            cardsPack_id: packId
+        })
             .then(res => {
                 dispatch(getCardsAC(res.data, packId))
-                const isMyPack=res.data.packUserId===packUserId
+                const isMyPack = res.data.packUserId === packUserId
                 dispatch(setIsMyPackAC(isMyPack))
             })
             .catch(err => {
@@ -188,7 +195,7 @@ export const updateCardTC = (cardId: string): AppThunk => {
 export const updateCardGradeTC = (stringGrade: string, packId: string, cardId: string): AppThunk => {
     let grade: number;
 
-    switch(stringGrade){
+    switch (stringGrade) {
         case "Did not know": {
             grade = 1;
             break;
@@ -235,7 +242,7 @@ export type ActionsType =
     ReturnType<typeof setPageAC> |
     ReturnType<typeof setSortAC> |
     ReturnType<typeof setPageCountAC> |
-    ReturnType<typeof setIsMyPackAC>|
+    ReturnType<typeof setIsMyPackAC> |
     ReturnType<typeof setPackNameAC>
 
 
