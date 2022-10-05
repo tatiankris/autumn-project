@@ -30,7 +30,7 @@ import {
 import SchoolIcon from '@mui/icons-material/School';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import s from './Packs.module.css';
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {NumberOfCards} from "./NumberOfCards/NumberOfCards";
 import {AddNewPackModal} from "./PackModals/AddNewPackModal";
 import {EditPackModal} from "./PackModals/EditPackModal";
@@ -70,6 +70,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 
 const Packs = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const myId = useAppSelector(state => state.profile._id);
     const isMyId = useAppSelector(state => state.packs.isMyId);
@@ -126,8 +127,11 @@ const Packs = () => {
     const handleChangePageCount = (event: SelectChangeEvent<any>) => {
         dispatch(setPacksPageCountAC(event.target.value));
         dispatch(setPacksTC());
-
     };
+
+    const learnPackHandler = (packId: string) => {
+        navigate(`/learn/${packId}`)
+    }
 
     return <Container maxWidth="lg">
         <Grid container spacing={2} marginTop={'8px'}>
@@ -190,7 +194,8 @@ const Packs = () => {
                         <TableRow>
                             <TableCell>Name</TableCell>
                             <TableCell align="right">Cards</TableCell>
-                            <TableCell align="right">Last Updated<IconButton onClick={onSortHandler}><ArrowDropDownIcon/></IconButton></TableCell>
+                            <TableCell align="right">Last Updated<IconButton
+                                onClick={onSortHandler}><ArrowDropDownIcon/></IconButton></TableCell>
                             <TableCell align="right">Created by</TableCell>
                             <TableCell align="right">Actions</TableCell>
                         </TableRow>
@@ -216,7 +221,9 @@ const Packs = () => {
                                     <TableCell align="right">{day + '.' + month + '.' + year}</TableCell>
                                     <TableCell align="right">{row.user_name}</TableCell>
                                     <TableCell align="right">
-                                        <IconButton>
+                                        <IconButton
+                                            onClick={() => learnPackHandler(row.packId)}
+                                            disabled={row.cards === 0}>
                                             <SchoolIcon
                                                 fontSize="small"/>
                                         </IconButton>

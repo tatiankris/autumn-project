@@ -15,20 +15,27 @@ import {useNavigate} from "react-router-dom";
 import {PACKS} from "../../../../n1-main/m1-ui/routing/Routing";
 
 export const Menushka = () => {
-    const navigate=useNavigate()
+    const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const cards = useAppSelector(state => state.cards)
-    const isMyPack=useAppSelector(state =>state.cards.isMyPack)
+    const isMyPack = useAppSelector(state => state.cards.isMyPack)
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {setAnchorEl(event.currentTarget);};
-    const handleClose = () => {setAnchorEl(null)}
-    const updatePack=()=>{
-        dispatch(updatePackTC({_id:cards.cardsPackId, name:"The best of the best"}))
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null)
     }
-    const deletePack=()=>{
+    const updatePack = () => {
+        dispatch(updatePackTC({_id: cards.cardsPackId, name: "The best of the best"}))
+    }
+    const deletePack = () => {
         dispatch(deletePackTC(cards.cardsPackId))
         navigate(PACKS)
+    }
+    const learnPackHandler = (packId: string) => {
+        navigate(`/learn/${packId}`)
     }
 
     return (
@@ -83,24 +90,28 @@ export const Menushka = () => {
                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             >
                 <div key={"jjj"}>
-                    {isMyPack && <><MenuItem onClick={updatePack}>
+                {isMyPack && <><MenuItem
+                    onClick={updatePack}>
+                    <ListItemIcon>
+                        <BorderColorIcon fontSize="small"/>
+                    </ListItemIcon>
+                    Edit
+                </MenuItem>
+                    <MenuItem
+                        onClick={deletePack}>
                         <ListItemIcon>
-                            <BorderColorIcon fontSize="small"/>
+                            <DeleteOutlineIcon fontSize="small"/>
                         </ListItemIcon>
-                        Edit
-                    </MenuItem>
-                        <MenuItem onClick={deletePack}>
-                            <ListItemIcon>
-                                <DeleteOutlineIcon fontSize="small"/>
-                            </ListItemIcon>
-                            Delete
-                        </MenuItem></>}
-                    {!!cards.cards.length && <MenuItem>
-                        <ListItemIcon>
-                            <SchoolIcon fontSize="small"/>
-                        </ListItemIcon>
-                        Learn
-                    </MenuItem>}</div>
+                        Delete
+                    </MenuItem></>}
+                {!!cards.cards.length && <MenuItem
+                    onClick={() => learnPackHandler(cards.cardsPackId)}>
+                    <ListItemIcon>
+                        <SchoolIcon fontSize="small"/>
+                    </ListItemIcon>
+                    Learn
+                </MenuItem>}
+                </div>
             </Menu>
         </React.Fragment>
     );

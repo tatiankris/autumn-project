@@ -2,17 +2,20 @@ import {instance} from "./autumn-api";
 
 export const cardsAPI = {
 
-    getCards(params:GetCardsParamsType) {
+    getCards(params: GetCardsParamsType) {
         return instance.get<GetCardsResponseType>("cards/card", {params})
     },
-    postCard(card:PostCardType) {
+    postCard(card: PostCardType) {
         return instance.post("cards/card", {card})
     },
-    deleteCard(id:string){
+    deleteCard(id: string) {
         return instance.delete(`cards/card?id=${id}`)
     },
-    updateCard(card:UpdateCardType){
-        return instance.put("cards/card",{card})
+    updateCard(card: UpdateCardType) {
+        return instance.put("cards/card", {card})
+    },
+    updateCardGrade(grade: number, card_id: string){
+        return instance.put('cards/grade', {grade, card_id})
     }
 }
 
@@ -29,21 +32,21 @@ export type PostCardType = {
     answerVideo?: string // не обязателен
 }
 
-export type UpdateCardType= {
-    _id:string
+export type UpdateCardType = {
+    _id: string
     question?: string
     answer?: string
-    comments?:string
+    comments?: string
 }
 
-export type GetCardsParamsType={
+export type GetCardsParamsType = {
     cardAnswer?: string,
     cardQuestion?: string,
     cardsPack_id: string,
     min?: number,
     max?: number,
     sortCards?: string,
-    page?:number,
+    page?: number,
     pageCount?: number
 }
 
@@ -64,12 +67,14 @@ export type GetCardsResponseType = {
     tokenDeathTime: number;
 }
 
-export type CardType={
+export type CardType = {
     answer: string
     question: string
     cardsPack_id: string
-    grade:number
+    grade: number
+    type: string
     shots: number
+    rating: number
     user_id: string
     created: string
     updated: string

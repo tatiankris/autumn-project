@@ -1,6 +1,6 @@
 import React from 'react';
 import TableCell from "@mui/material/TableCell";
-import {Stack} from "@mui/material";
+import {Rating, Stack} from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import {useAppSelector} from "../../../n1-main/m1-ui/hooks";
 import {CardType} from "../../../n1-main/m3-dal/api/cards-api";
@@ -24,7 +24,9 @@ export const CardsTableBody = ({card}:PropsType) => {
                 <TableCell align="left" width={"39%"}>{card.question}</TableCell>
                 <TableCell align="left" width={"36%"}>{card.answer}</TableCell>
                 <TableCell align="center" width={"13%"}>{card.updated.slice(0, 10)}</TableCell>
-                <TableCell align="left" width={"9%"}>{card.grade}</TableCell>
+                <TableCell align="left" width={"9%"}>
+                    <Rating name="grade" value={card.grade} readOnly />
+                </TableCell>
                 {isMyPack && <TableCell align="left" width={"2%"}>
                     <Stack direction={"row"} spacing={0}>
                         <EditCardModal card={card}/>
