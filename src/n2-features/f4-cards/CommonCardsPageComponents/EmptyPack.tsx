@@ -1,18 +1,16 @@
 import React from 'react';
-import {Button, Container, Grid} from "@mui/material";
+import {Container, Grid} from "@mui/material";
 import {BackToPackList} from "./BackToPackList";
 import {CardsPageHead} from "./cardsPageHead/CardsPageHead";
 import s from "../Cards.module.css";
-import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
-import {addCardTC} from "../../../n1-main/m2-bll/reducers/cards-reducer";
+import {useAppSelector} from "../../../n1-main/m1-ui/hooks";
+import {AddNewCardModal} from "../../f5-modals/AddNewCardModal";
 
 export const EmptyPack = () => {
-    const dispatch = useAppDispatch()
+
     const cards = useAppSelector(state => state.cards)
     const isMyPack = useAppSelector(state => state.cards.isMyPack)
-    const addCard = () => {
-        dispatch(addCardTC({cardsPack_id: cards.cardsPackId, question: "Who are you, warrior?"}))
-    }
+
     return (
         <Container maxWidth="lg">
             <BackToPackList/>
@@ -22,7 +20,7 @@ export const EmptyPack = () => {
             {isMyPack
                 ? <div className={s.emptyPack}>
                     <div>This pack is empty. Click add new card to fill this pack</div>
-                    <Button onClick={addCard} variant="contained"> Add new card </Button>
+                    <AddNewCardModal cardsPackId={cards.cardsPackId}/>
                 </div>
                 : <div className={s.emptyPack}>
                     This pack is empty. Back to Pack List and change another Pack

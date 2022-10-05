@@ -82,25 +82,25 @@ export const Menushka = () => {
                 transformOrigin={{horizontal: 'right', vertical: 'top'}}
                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             >
-
-                {isMyPack && <><MenuItem onClick={updatePack}>
-                    <ListItemIcon>
-                        <BorderColorIcon fontSize="small"/>
-                    </ListItemIcon>
-                    Edit
-                </MenuItem>
-                    <MenuItem onClick={deletePack}>
+                <div key={"jjj"}>
+                    {isMyPack && <><MenuItem onClick={updatePack}>
                         <ListItemIcon>
-                            <DeleteOutlineIcon fontSize="small"/>
+                            <BorderColorIcon fontSize="small"/>
                         </ListItemIcon>
-                        Delete
-                    </MenuItem></>}
-                {!!cards.cards.length && <MenuItem>
-                    <ListItemIcon>
-                        <SchoolIcon fontSize="small"/>
-                    </ListItemIcon>
-                    Learn
-                </MenuItem>}
+                        Edit
+                    </MenuItem>
+                        <MenuItem onClick={deletePack}>
+                            <ListItemIcon>
+                                <DeleteOutlineIcon fontSize="small"/>
+                            </ListItemIcon>
+                            Delete
+                        </MenuItem></>}
+                    {!!cards.cards.length && <MenuItem>
+                        <ListItemIcon>
+                            <SchoolIcon fontSize="small"/>
+                        </ListItemIcon>
+                        Learn
+                    </MenuItem>}</div>
             </Menu>
         </React.Fragment>
     );

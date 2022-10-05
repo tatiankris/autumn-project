@@ -5,7 +5,7 @@ export const cardsAPI = {
     getCards(params:GetCardsParamsType) {
         return instance.get<GetCardsResponseType>("cards/card", {params})
     },
-    postCards(card:PostCardType) {
+    postCard(card:PostCardType) {
         return instance.post("cards/card", {card})
     },
     deleteCard(id:string){

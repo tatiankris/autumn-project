@@ -1,7 +1,7 @@
 import {AppThunk} from "../store";
 import {handleServerNetworkError} from "../../m1-ui/common/utils/error-utils";
 import {setAppStatusAC} from "./app-reducer";
-import {cardsAPI, CardType, GetCardsResponseType, PostCardType} from "../../m3-dal/api/cards-api";
+import {cardsAPI, CardType, GetCardsResponseType, PostCardType, UpdateCardType} from "../../m3-dal/api/cards-api";
 
 
 let initialState = {
@@ -141,7 +141,7 @@ export const addCardTC = (cards: PostCardType): AppThunk => {
     return (dispatch, getState) => {
         const packId = getState().cards.cardsPackId
         dispatch(setAppStatusAC("loading"))
-        cardsAPI.postCards(cards)
+        cardsAPI.postCard(cards)
             .then(() => dispatch(getCardsTC(packId)))
             .catch(err => {
                 const error = err.response
@@ -169,11 +169,11 @@ export const deleteCardTC = (cardId: string): AppThunk => {
     }
 }
 
-export const updateCardTC = (cardId: string): AppThunk => {
+export const updateCardTC = (card:UpdateCardType): AppThunk => {
     return (dispatch, getState) => {
         const packId = getState().cards.cardsPackId
         dispatch(setAppStatusAC("loading"))
-        cardsAPI.updateCard({_id: cardId, question: "What?"})
+        cardsAPI.updateCard(card)
             .then(() => dispatch(getCardsTC(packId)))
             .catch(err => {
                 const error = err.response
