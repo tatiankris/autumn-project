@@ -34,8 +34,8 @@ export const Menushka = () => {
         dispatch(deletePackTC(cards.cardsPackId))
         navigate(PACKS)
     }
-    const learnPackHandler = () => {
-        navigate('/learn')
+    const learnPackHandler = (packId: string) => {
+        navigate(`/learn/${packId}`)
     }
 
     return (
@@ -105,7 +105,7 @@ export const Menushka = () => {
                         Delete
                     </MenuItem></>}
                 {!!cards.cards.length && <MenuItem
-                    onClick={learnPackHandler}>
+                    onClick={() => learnPackHandler(cards.cardsPackId)}>
                     <ListItemIcon>
                         <SchoolIcon fontSize="small"/>
                     </ListItemIcon>

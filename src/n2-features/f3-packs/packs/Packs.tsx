@@ -138,8 +138,8 @@ const Packs = () => {
         dispatch(setPacksTC());
     };
 
-    const learnPackHandler = () => {
-        navigate(`/learn`)
+    const learnPackHandler = (packId: string) => {
+        navigate(`/learn/${packId}`)
     }
 
     return <Container maxWidth="lg">
@@ -247,7 +247,8 @@ const Packs = () => {
                                     <TableCell align="right">{row.user_name}</TableCell>
                                     <TableCell align="right">
                                         <IconButton
-                                            onClick={learnPackHandler}>
+                                            onClick={() => learnPackHandler(row.packId)}
+                                            disabled={row.cards === 0}>
                                             <SchoolIcon
                                                 fontSize="small"/>
                                         </IconButton>

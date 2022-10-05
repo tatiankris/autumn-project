@@ -17,8 +17,8 @@ export const CardsPageHead = () => {
         dispatch(addCardTC({cardsPack_id: cards.cardsPackId, question: "Who are you, warrior?"}))
     }
 
-    const learnPackHandler = () => {
-        navigate('/learn')
+    const learnPackHandler = (packId: string) => {
+        navigate(`/learn/${packId}`)
     }
 
     return (
@@ -29,7 +29,7 @@ export const CardsPageHead = () => {
             <Grid item xs={2}>
                 {userId !== cards.packUserId && cards.cards.length
                     ? <Button variant="contained"
-                              onClick={learnPackHandler}>Learn pack</Button> : null}
+                              onClick={() => learnPackHandler(cards.cardsPackId)}>Learn pack</Button> : null}
                 {userId === cards.packUserId && cards.cards.length
                     ? <Button onClick={addCard} variant="contained"> Add new card </Button> : null}
             </Grid>

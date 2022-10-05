@@ -12,6 +12,7 @@ import {useAppDispatch, useAppSelector} from "../../n1-main/m1-ui/hooks";
 import {CardType} from "../../n1-main/m3-dal/api/cards-api";
 import {BackToPackList} from "../f4-cards/CommonCardsPageComponents/BackToPackList";
 import s from './LearnPage.module.css';
+import {useParams} from "react-router-dom";
 
 const grades = ['Did not know', 'Forgot', 'A lot of thought', 'Confused', 'Knew the answer'];
 
@@ -34,13 +35,14 @@ const LearnPage = () => {
     const [first, setFirst] = useState<boolean>(true);
     const cards = useAppSelector(state => state.cards.cards);
     const packName = useAppSelector(state => state.cards.packName);
+    const {packId} = useParams();
 
     const [card, setCard] = useState<CardType>({
-        _id: 'fake',
+        _id: '',
         cardsPack_id: '',
 
-        answer: 'answer fake',
-        question: 'question fake',
+        answer: '',
+        question: '',
         grade: 0,
         shots: 0,
 
@@ -52,15 +54,15 @@ const LearnPage = () => {
         updated: '',
     });
     const [value, setValue] = useState<string>('');
+
     useEffect(() => {
         if (first) {
-            dispatch(getCardsTC(cards[0].cardsPack_id));
+            dispatch(getCardsTC(packId || ''));
             setFirst(false);
         }
 
-        console.log('cards', cards)
         if (cards.length > 0) setCard(getCard(cards));
-    }, [dispatch, cards[0].cardsPack_id, cards, first]);
+    }, [dispatch, packId, cards, first]);
 
     const onNext = () => {
         setIsChecked(false);
@@ -75,60 +77,60 @@ const LearnPage = () => {
         <Container maxWidth="lg">
             <BackToPackList/>
             <div className={s.learnContainer}>
-                    <div className={s.packTitleContainer}>
-                        <span>Learn "{packName}"</span>
-                    </div>
-                    <Paper elevation={14} style={{padding: "30px", width: '350px'}}>
-                        <div>
-                            <div className={s.question}>
-                                <p><b>Question:</b> {card.question}</p>
-                            </div>
-
-                            {isChecked && (
-                                <>
-                                    <div>
-                                        <p><b>Answer:</b> {card.answer}</p>
-                                    </div>
-
-                                    <FormControl>
-                                        <FormLabel>Rate yourself:</FormLabel>
-                                        <RadioGroup
-                                            aria-labelledby="demo-radio-buttons-group-label"
-                                            defaultValue="female"
-                                            name="radio-buttons-group"
-                                            value={value}
-                                            onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.currentTarget.value)}
-                                        >
-                                            {grades.map((g, i) => (
-                                                <FormControlLabel
-                                                    key={'grade-' + i}
-                                                    value={g}
-                                                    control={<Radio/>}
-                                                    label={g}/>
-                                            ))}
-                                        </RadioGroup>
-                                    </FormControl>
-                                </>
-                            )}
-                            <div className={s.buttonsContainer}>
-                                {!isChecked
-                                    ? <Button
-                                        variant={'contained'}
-                                        onClick={() => setIsChecked(true)}
-                                        fullWidth>
-                                        Show answer
-                                    </Button>
-                                    : <Button
-                                        variant={'contained'}
-                                        onClick={onNext}
-                                        fullWidth>
-                                        Next question
-                                    </Button>
-                                }
-                            </div>
-                        </div>
-                    </Paper>
+                <div className={s.packTitleContainer}>
+                    <span>Learn "{packName}"</span>
                 </div>
+                <Paper elevation={14} style={{padding: "30px", width: '350px'}}>
+                    <div>
+                        <div className={s.question}>
+                            <p><b>Question:</b> {card.question}</p>
+                        </div>
+
+                        {isChecked && (
+                            <>
+                                <div>
+                                    <p><b>Answer:</b> {card.answer}</p>
+                                </div>
+
+                                <FormControl>
+                                    <FormLabel>Rate yourself:</FormLabel>
+                                    <RadioGroup
+                                        aria-labelledby="demo-radio-buttons-group-label"
+                                        defaultValue="female"
+                                        name="radio-buttons-group"
+                                        value={value}
+                                        onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.currentTarget.value)}
+                                    >
+                                        {grades.map((g, i) => (
+                                            <FormControlLabel
+                                                key={'grade-' + i}
+                                                value={g}
+                                                control={<Radio/>}
+                                                label={g}/>
+                                        ))}
+                                    </RadioGroup>
+                                </FormControl>
+                            </>
+                        )}
+                        <div className={s.buttonsContainer}>
+                            {!isChecked
+                                ? <Button
+                                    variant={'contained'}
+                                    onClick={() => setIsChecked(true)}
+                                    fullWidth>
+                                    Show answer
+                                </Button>
+                                : <Button
+                                    variant={'contained'}
+                                    onClick={onNext}
+                                    fullWidth>
+                                    Next question
+                                </Button>
+                            }
+                        </div>
+                    </div>
+                </Paper>
+            </div>
         </Container>
     );
 };
