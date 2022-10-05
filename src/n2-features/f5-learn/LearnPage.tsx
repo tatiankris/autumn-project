@@ -24,7 +24,6 @@ const getCard = (cards: CardType[]) => {
             return {sum: newSum, id: newSum < rand ? i : acc.id}
         }
         , {sum: 0, id: -1});
-    console.log('test: ', sum, rand, res)
 
     return cards[res.id + 1];
 }
@@ -68,7 +67,7 @@ const LearnPage = () => {
         setIsChecked(false);
 
         if (cards.length > 0) {
-            dispatch(updateCardGradeTC(value, cards[0].cardsPack_id, card._id))
+            dispatch(updateCardGradeTC(value, packId || '', card._id))
             setCard(getCard(cards));
         }
     }
