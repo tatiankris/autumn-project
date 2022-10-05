@@ -185,6 +185,49 @@ export const updateCardTC = (cardId: string): AppThunk => {
     }
 }
 
+export const updateCardGradeTC = (stringGrade: string, packId: string, cardId: string): AppThunk => {
+    let grade: number;
+
+    switch(stringGrade){
+        case "Did not know": {
+            grade = 1;
+            break;
+        }
+        case 'Forgot': {
+            grade = 2;
+            break;
+        }
+        case "A lot of thought": {
+            grade = 3;
+            break;
+        }
+        case 'Confused': {
+            grade = 4;
+            break;
+        }
+        case "Knew the answer": {
+            grade = 5;
+            break;
+        }
+        default: {
+            grade = 1;
+        }
+    }
+
+    return (dispatch) => {
+        dispatch(setAppStatusAC("loading"))
+        cardsAPI.updateCardGrade(grade, cardId)
+            .then(() => dispatch(getCardsTC(packId)))
+            .catch(err => {
+                const error = err.response
+                    ? err.response.data.error
+                    : err.message
+                handleServerNetworkError({message: error}, dispatch)
+            })
+            .finally(() => dispatch(setAppStatusAC("idle")))
+    }
+}
+
 //types
 export type ActionsType =
     ReturnType<typeof getCardsAC> |

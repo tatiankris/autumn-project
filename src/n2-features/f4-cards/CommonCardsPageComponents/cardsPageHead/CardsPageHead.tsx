@@ -4,15 +4,23 @@ import s from "../../Cards.module.css";
 import {useAppDispatch, useAppSelector} from "../../../../n1-main/m1-ui/hooks";
 import {addCardTC} from "../../../../n1-main/m2-bll/reducers/cards-reducer";
 import {Menushka} from "./Menushka";
+import {useNavigate} from "react-router-dom";
 
 
 export const CardsPageHead = () => {
     const dispatch = useAppDispatch()
     const cards = useAppSelector(state => state.cards)
     const userId = useAppSelector(state => state.profile._id)
+    const navigate = useNavigate()
+
     const addCard = () => {
-        dispatch(addCardTC({cardsPack_id:cards.cardsPackId, question:"Who are you, warrior?"}))
+        dispatch(addCardTC({cardsPack_id: cards.cardsPackId, question: "Who are you, warrior?"}))
     }
+
+    const learnPackHandler = () => {
+        navigate('/learn')
+    }
+
     return (
         <>
             <Grid item xs={10}>
@@ -20,7 +28,8 @@ export const CardsPageHead = () => {
             </Grid>
             <Grid item xs={2}>
                 {userId !== cards.packUserId && cards.cards.length
-                    ? <Button variant="contained">Learn pack</Button> : null}
+                    ? <Button variant="contained"
+                              onClick={learnPackHandler}>Learn pack</Button> : null}
                 {userId === cards.packUserId && cards.cards.length
                     ? <Button onClick={addCard} variant="contained"> Add new card </Button> : null}
             </Grid>

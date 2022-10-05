@@ -35,11 +35,11 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import s from './Packs.module.css';
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {NumberOfCards} from "./NumberOfCards/NumberOfCards";
 import {BasicModal} from "../../../n1-main/m1-ui/common/BasicModal/BasicModal";
 
-const BootstrapInput = styled(InputBase)(({ theme }) => ({
+const BootstrapInput = styled(InputBase)(({theme}) => ({
     'label + &': {
         marginTop: theme.spacing(3),
     },
@@ -74,6 +74,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 
 const Packs = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const myId = useAppSelector(state => state.profile._id);
     const isMyId = useAppSelector(state => state.packs.isMyId);
@@ -135,8 +136,11 @@ const Packs = () => {
     const handleChangePageCount = (event: SelectChangeEvent<any>) => {
         dispatch(setPacksPageCountAC(event.target.value));
         dispatch(setPacksTC());
-
     };
+
+    const learnPackHandler = () => {
+        navigate(`/learn`)
+    }
 
     return <Container maxWidth="lg">
         <Grid container spacing={2} marginTop={'8px'}>
@@ -149,7 +153,7 @@ const Packs = () => {
                                             onClick={() => dispatch(createPackTC({name: 'new pack from Minsk'}))}
                             >
                                 Add new pack
-                </Button>}>
+                            </Button>}>
                     <div>
                         Name
                         <Stack direction="row" spacing={2}>
@@ -215,7 +219,8 @@ const Packs = () => {
                         <TableRow>
                             <TableCell>Name</TableCell>
                             <TableCell align="right">Cards</TableCell>
-                            <TableCell align="right">Last Updated<IconButton onClick={onSortHandler}><ArrowDropDownIcon/></IconButton></TableCell>
+                            <TableCell align="right">Last Updated<IconButton
+                                onClick={onSortHandler}><ArrowDropDownIcon/></IconButton></TableCell>
                             <TableCell align="right">Created by</TableCell>
                             <TableCell align="right">Actions</TableCell>
                         </TableRow>
@@ -241,7 +246,8 @@ const Packs = () => {
                                     <TableCell align="right">{day + '.' + month + '.' + year}</TableCell>
                                     <TableCell align="right">{row.user_name}</TableCell>
                                     <TableCell align="right">
-                                        <IconButton>
+                                        <IconButton
+                                            onClick={learnPackHandler}>
                                             <SchoolIcon
                                                 fontSize="small"/>
                                         </IconButton>
@@ -276,21 +282,21 @@ const Packs = () => {
                     shape="rounded"/>
                 <div>
                     Show
-                        <Select
-                            id="page-count-select"
-                            value={pageCount}
-                            onChange={handleChangePageCount}
-                            size={"small"}
-                            style={{marginLeft:"6px", marginRight: "6px"}}
-                            input={<BootstrapInput />}
-                        >
-                            <MenuItem value={5}>5</MenuItem>
-                            <MenuItem value={8}>8</MenuItem>
-                            <MenuItem value={10}>10</MenuItem>
-                            <MenuItem value={14}>14</MenuItem>
-                            <MenuItem value={16}>16</MenuItem>
-                        </Select>
-                Cards per Page
+                    <Select
+                        id="page-count-select"
+                        value={pageCount}
+                        onChange={handleChangePageCount}
+                        size={"small"}
+                        style={{marginLeft: "6px", marginRight: "6px"}}
+                        input={<BootstrapInput/>}
+                    >
+                        <MenuItem value={5}>5</MenuItem>
+                        <MenuItem value={8}>8</MenuItem>
+                        <MenuItem value={10}>10</MenuItem>
+                        <MenuItem value={14}>14</MenuItem>
+                        <MenuItem value={16}>16</MenuItem>
+                    </Select>
+                    Cards per Page
                 </div>
             </Stack>
         </Grid>

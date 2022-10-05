@@ -1,6 +1,6 @@
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import type { AppRootStateType, AppDispatch } from '../m2-bll/store'
-import { useEffect, useState } from 'react'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import type { AppRootStateType, AppDispatch } from '../m2-bll/store';
+import { useEffect, useState } from 'react';
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch: () => AppDispatch = useDispatch

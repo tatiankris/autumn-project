@@ -1,14 +1,14 @@
 import React, {useCallback} from "react";
 import SuperEditableSpan from "../../../n1-main/m1-ui/common/SuperEditableSpan/SuperEditableSpan";
-import {Navigate, NavLink} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import {changeNameTC} from "../../../n1-main/m2-bll/reducers/profile-reducer";
 import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
 import {logoutTC} from "../../../n1-main/m2-bll/reducers/auth-reducer";
-import {LOGIN, PACKS} from "../../../n1-main/m1-ui/routing/Routing";
+import {LOGIN} from "../../../n1-main/m1-ui/routing/Routing";
 import s from './Profile.module.css';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import {Button, Grid, Paper, Typography} from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
+import { BackToPackList } from "../../f4-cards/CommonCardsPageComponents/BackToPackList";
 
 const Profile = React.memo(() => {
 
@@ -32,10 +32,7 @@ const Profile = React.memo(() => {
 
     return (
         <div className={s.container}>
-            <div className={s.backToPacks}>
-                <NavLink to={PACKS}> <KeyboardBackspaceIcon sx={{position: 'relative', top: '6px'}}/> Back to Packs
-                    List</NavLink>
-            </div>
+            <BackToPackList/>
             <Grid container justifyContent={'center'}>
                 <Grid item marginTop={'50px'} textAlign={"center"} width={'400px'}>
                     <Paper elevation={14} style={{padding: "30px"}}>

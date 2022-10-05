@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useFormik} from 'formik';
 import {loginTC} from "../../../n1-main/m2-bll/reducers/auth-reducer";
-import {Navigate, NavLink} from 'react-router-dom'
+import {Navigate, NavLink} from 'react-router-dom';
 import {PASSWORD_RECOVERY, PROFILE, REGISTRATION} from "../../../n1-main/m1-ui/routing/Routing";
 import {
     Button,
