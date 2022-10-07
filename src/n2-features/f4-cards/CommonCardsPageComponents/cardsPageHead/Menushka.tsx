@@ -11,14 +11,22 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SchoolIcon from '@mui/icons-material/School';
 import {useAppDispatch, useAppSelector} from "../../../../n1-main/m1-ui/hooks";
 import {deletePackTC, updatePackTC} from "../../../../n1-main/m2-bll/reducers/packs-reducer";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {PACKS} from "../../../../n1-main/m1-ui/routing/Routing";
+import {EditPackModal} from "../../../f3-packs/packs/PackModals/EditPackModal";
+import {DeletePackModal} from "../../../f3-packs/packs/PackModals/DeletePackModal";
 
 export const Menushka = () => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const cards = useAppSelector(state => state.cards)
     const isMyPack = useAppSelector(state => state.cards.isMyPack)
+    const packName = useAppSelector(state => state.cards.packName)
+    const packUserId = useAppSelector(state => state.cards.packUserId)
+
+    const { packId } = useParams()
+    // const pack = useAppSelector(state => state.packs.cardPacks.find(p => p._id === packID))
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -27,9 +35,9 @@ export const Menushka = () => {
     const handleClose = () => {
         setAnchorEl(null)
     }
-    const updatePack = () => {
-        dispatch(updatePackTC({_id: cards.cardsPackId, name: "The best of the best"}))
-    }
+    // const updatePack = () => {
+    //     dispatch(updatePackTC({_id: cards.cardsPackId, name: "The best of the best"}))
+    // }
     const deletePack = () => {
         dispatch(deletePackTC(cards.cardsPackId))
         navigate(PACKS)
@@ -37,6 +45,8 @@ export const Menushka = () => {
     const learnPackHandler = (packId: string) => {
         navigate(`/learn/${packId}`)
     }
+
+
 
     return (
         <React.Fragment>
@@ -59,7 +69,7 @@ export const Menushka = () => {
                 id="account-menu"
                 open={open}
                 onClose={handleClose}
-                onClick={handleClose}
+                // onClick={handleClose}
                 PaperProps={{
                     elevation: 0,
                     sx: {
@@ -90,26 +100,25 @@ export const Menushka = () => {
                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             >
                 <div key={"jjj"}>
-                {isMyPack && <><MenuItem
-                    onClick={updatePack}>
-                    <ListItemIcon>
-                        <BorderColorIcon fontSize="small"/>
-                    </ListItemIcon>
-                    Edit
-                </MenuItem>
-                    <MenuItem
-                        onClick={deletePack}>
-                        <ListItemIcon>
-                            <DeleteOutlineIcon fontSize="small"/>
-                        </ListItemIcon>
-                        Delete
+                {isMyPack && packId && <>
+                    <MenuItem>
+                        <EditPackModal page={'cards'} userId={packUserId} id={packId} name={packName}
+                        cardsMenuClose={handleClose}/>
+                        {/*Edit*/}
+                    </MenuItem>
+                    <MenuItem>
+                        <DeletePackModal id={packId} name={packName} userId={packUserId} page={'cards'}/>
+                        {/*<ListItemIcon>*/}
+                        {/*    <DeleteOutlineIcon fontSize="small"/>*/}
+                        {/*</ListItemIcon>*/}
+                        {/*Delete*/}
                     </MenuItem></>}
                 {!!cards.cards.length && <MenuItem
                     onClick={() => learnPackHandler(cards.cardsPackId)}>
                     <ListItemIcon>
                         <SchoolIcon fontSize="small"/>
                     </ListItemIcon>
-                    Learn
+                    {/*Learn*/}
                 </MenuItem>}
                 </div>
             </Menu>

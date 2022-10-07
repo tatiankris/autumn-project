@@ -16,7 +16,8 @@ let initialState = {
     cardsPackId: "",
     sort: "0updated",
     search: "",
-    isMyPack: false
+    isMyPack: false,
+    cardsAdded: false
 }
 
 export type StateType = typeof initialState;
@@ -37,6 +38,10 @@ export const cardsReducer = (state: StateType = initialState, action: ActionsTyp
                 packName: action.cards.packName,
                 cardsPackId: action.cardsPackId
             }
+        }
+
+        case "CARDS/CARDS-ADDED": {
+            return {...state, cardsAdded: action.value}
         }
         case "CARDS/SEARCH_CARDS": {
             return {...state, search: action.search}
@@ -70,6 +75,13 @@ export const getCardsAC = (cards: GetCardsResponseType, cardsPackId: string) => 
     return {
         type: 'CARDS/GET-CARDS',
         cards, cardsPackId
+    } as const
+}
+
+export const cardsAddedAC = (value: boolean) => {
+    return {
+        type: 'CARDS/CARDS-ADDED',
+        value
     } as const
 }
 
@@ -165,7 +177,10 @@ export const deleteCardTC = (cardId: string): AppThunk => {
         const packId = getState().cards.cardsPackId
         dispatch(setAppStatusAC("loading"))
         cardsAPI.deleteCard(cardId)
-            .then(() => dispatch(getCardsTC(packId)))
+            .then(() => {
+                    dispatch(getCardsTC(packId))
+                }
+            )
             .catch(err => {
                 const error = err.response
                     ? err.response.data.error
@@ -243,6 +258,8 @@ export type ActionsType =
     ReturnType<typeof setSortAC> |
     ReturnType<typeof setPageCountAC> |
     ReturnType<typeof setIsMyPackAC> |
-    ReturnType<typeof setPackNameAC>
+    ReturnType<typeof setPackNameAC> |
+    ReturnType<typeof cardsAddedAC>
+
 
 

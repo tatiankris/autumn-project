@@ -227,19 +227,9 @@ const Packs = () => {
                                             <SchoolIcon
                                                 fontSize="small"/>
                                         </IconButton>
-                                        {row.user_id === myId &&
-                                            <div style={{display: 'inline-block'}}>
-                                                <EditPackModal id={row.packId} name={row.name} private_={row.private_}/>
-                                            </div>
-                                        }
-                                        {row.user_id === myId &&
-                                            <div style={{display: 'inline-block'}}>
-                                                <DeletePackModal id={row.packId} name={row.name}/>
-                                            </div>
-                                        }
-                                        {row.user_id !== myId &&
-                                            <div style={{display: 'inline-block', width: '72px', height: '20px'}}></div>
-                                        }
+                                        <EditPackModal page={'packs'} userId={row.user_id} id={row.packId} name={row.name}
+                                                       private_={row.private_}/>
+                                        <DeletePackModal page={'packs'} userId={row.user_id} id={row.packId} name={row.name}/>
                                     </TableCell>
                                 </TableRow>
                             )

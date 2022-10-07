@@ -9,7 +9,6 @@ import {ReactNode} from "react";
 type PropsType = {
     title: string
     children: ReactNode
-    button: ReactNode
     open: boolean,
     handleOpen: () => void
     handleClose: () => void
@@ -27,20 +26,16 @@ const style = {
     padding: 'none',
 }
 
-export const BasicModal = ({title, children, button, open, ...props}: PropsType) => {
+export const BasicModal = ({title, children, open, ...props}: PropsType) => {
 
 
     return (
         <div>
-            <button style={{background: 'none', border: 'none', margin: '0px', padding: '0px'}} onClick={props.handleOpen}>
-                {button}
-            </button>
             <Modal
                 open={open}
                 onClose={props.handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
-                style={{position: 'relative'}}
             >
                 <Box sx={style}>
                     <Stack direction="row" spacing={2} alignItems={'center'}

@@ -1,16 +1,23 @@
 import React, {useState} from 'react';
-import {useAppDispatch} from "../../../../n1-main/m1-ui/hooks";
+import {useAppDispatch, useAppSelector} from "../../../../n1-main/m1-ui/hooks";
 import {deletePackTC} from "../../../../n1-main/m2-bll/reducers/packs-reducer";
 import {BasicModal} from "../../../../n1-main/m1-ui/common/BasicModal/BasicModal";
 import {Button, IconButton, Stack, TextField} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import Typography from "@mui/material/Typography";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 type PropsType = {
     id: string
     name: string
+    userId: string
+    page: 'packs' | 'cards'
 }
-export const DeletePackModal = ({id, name}: PropsType) => {
+export const DeletePackModal = ({id, name, userId, page}: PropsType) => {
+
+    const myId = useAppSelector(state => state.profile._id)
+
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -22,11 +29,21 @@ export const DeletePackModal = ({id, name}: PropsType) => {
     }
 
     return (
-        <BasicModal title={'Edit pack'}
-                    button={<IconButton>
-                        <DeleteIcon fontSize="small"/>
-                    </IconButton>
+    <div style={{display: 'inline-block'}}>
+        {
+            page === 'packs' &&
+            <IconButton onClick={handleOpen} style={{visibility: userId === myId ? 'visible' : 'hidden'}}>
+                <DeleteIcon fontSize="small"/>
+            </IconButton>
         }
+        {
+            page === 'cards' &&
+            <ListItemIcon onClick={handleOpen}>
+                <DeleteOutlineIcon fontSize="small"/>
+            </ListItemIcon>
+        }
+
+        <BasicModal title={'Edit pack'}
                     open={open}
                     handleOpen={handleOpen}
                     handleClose={handleClose}>
@@ -42,5 +59,6 @@ export const DeletePackModal = ({id, name}: PropsType) => {
                 </Stack>
             </div>
         </BasicModal>
+    </div>
     )
 }

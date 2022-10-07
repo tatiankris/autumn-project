@@ -12,7 +12,7 @@ import {getCardsTC} from "../../n1-main/m2-bll/reducers/cards-reducer";
 import {MyPagination} from "./CommonCardsPageComponents/MyPagination";
 import {CardsTableHead} from "./CommonCardsPageComponents/CardsTableHead";
 import {EmptyPack} from "./CommonCardsPageComponents/EmptyPack";
-import {useParams} from "react-router-dom";
+import {Navigate, useParams} from "react-router-dom";
 import {CardsTableBody} from "./CommonCardsPageComponents/CardsTableBody";
 
 

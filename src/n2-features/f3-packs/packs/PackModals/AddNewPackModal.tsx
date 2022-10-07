@@ -28,30 +28,33 @@ export const AddNewPackModal = () => {
     }
 
     return (
+        <div>
+            <Button onClick={handleOpen} variant="contained">Add New Pack</Button>
+            <BasicModal title={'Add new pack'}
+                        open={open}
+                        handleOpen={handleOpen}
+                        handleClose={handleClose}>
 
-        <BasicModal title={'Add new pack'}
-                    button={<Button variant="contained">Add New Pack</Button>}
-                    open={open}
-                    handleOpen={handleOpen}
-                    handleClose={handleClose}>
+                <div>
+                    <TextField
+                        fullWidth
+                        required
+                        id="standard-required"
+                        label="Name Pack"
+                        variant="standard"
+                        value={value}
+                        onChange={onChangeHandler}
+                        margin={'normal'}
+                    />
+                    <FormControlLabel control={<Checkbox checked={checked} onChange={handleChange} />} label="Private pack" />
+                    <Stack direction="row" spacing={2} style={{width: '100%'}} justifyContent={'space-around'}>
+                        <Button  variant="outlined" onClick={handleClose}>Cancel</Button>
+                        <Button  variant="contained" onClick={handleSave}>Save</Button>
+                    </Stack>
+                </div>
+            </BasicModal>
+        </div>
 
-            <div>
-                <TextField
-                    fullWidth
-                    required
-                    id="standard-required"
-                    label="Name Pack"
-                    variant="standard"
-                    value={value}
-                    onChange={onChangeHandler}
-                    margin={'normal'}
-                />
-                <FormControlLabel control={<Checkbox checked={checked} onChange={handleChange} />} label="Private pack" />
-                <Stack direction="row" spacing={2} style={{width: '100%'}} justifyContent={'space-around'}>
-                    <Button  variant="outlined" onClick={handleClose}>Cancel</Button>
-                    <Button  variant="contained" onClick={handleSave}>Save</Button>
-                </Stack>
-            </div>
-        </BasicModal>
+
     )
 }
