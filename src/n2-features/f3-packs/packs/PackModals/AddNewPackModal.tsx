@@ -22,12 +22,12 @@ export const AddNewPackModal = () => {
         }
     }, [value])
 
-    const [checked, setChecked] = React.useState<boolean>(false)
+    const [checked, setChecked] = useState(false)
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(e.target.checked)
     }
 
-    const [open, setOpen] = useState<boolean>(false)
+    const [open, setOpen] = useState(false)
     const handleOpen = () => setOpen(true)
     const handleClose = () => {
         setOpen(false)
@@ -39,7 +39,7 @@ export const AddNewPackModal = () => {
     const handleSave = () => {
         if (error) {
             return
-        } else if (value.trim.length < 1) {
+        } else if (value.trim().length < 1) {
             setError(true)
             return
         } else {

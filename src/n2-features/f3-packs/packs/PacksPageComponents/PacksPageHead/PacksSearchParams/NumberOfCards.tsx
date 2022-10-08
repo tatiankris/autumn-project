@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Slider } from '@mui/material'
-import style from '../Packs.module.css'
-import {useAppDispatch, useAppSelector} from '../../../../n1-main/m1-ui/hooks'
-import {setCardsRangeAC, setCardsRangeTC} from "../../../../n1-main/m2-bll/reducers/packs-reducer";
+import style from '../../../Packs.module.css'
+import {useAppDispatch, useAppSelector} from '../../../../../../n1-main/m1-ui/hooks'
+import {setCardsRangeAC, setCardsRangeTC} from "../../../../../../n1-main/m2-bll/reducers/packs-reducer";
 
 export const NumberOfCards = () => {
+
     const dispatch = useAppDispatch()
+
     const minCardsCount = useAppSelector(state => state.packs.minCardsCount)
     const maxCardsCount = useAppSelector(state => state.packs.maxCardsCount)
-
     const min = useAppSelector(state => state.packs.min)
     const max = useAppSelector(state => state.packs.max)
 
