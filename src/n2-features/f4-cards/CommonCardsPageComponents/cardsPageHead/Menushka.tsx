@@ -25,7 +25,6 @@ export const Menushka = () => {
     const packUserId = useAppSelector(state => state.cards.packUserId)
 
     const { packId } = useParams()
-    // const pack = useAppSelector(state => state.packs.cardPacks.find(p => p._id === packID))
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -35,18 +34,9 @@ export const Menushka = () => {
     const handleClose = () => {
         setAnchorEl(null)
     }
-    // const updatePack = () => {
-    //     dispatch(updatePackTC({_id: cards.cardsPackId, name: "The best of the best"}))
-    // }
-    const deletePack = () => {
-        dispatch(deletePackTC(cards.cardsPackId))
-        navigate(PACKS)
-    }
     const learnPackHandler = (packId: string) => {
         navigate(`/learn/${packId}`)
     }
-
-
 
     return (
         <React.Fragment>
@@ -69,7 +59,6 @@ export const Menushka = () => {
                 id="account-menu"
                 open={open}
                 onClose={handleClose}
-                // onClick={handleClose}
                 PaperProps={{
                     elevation: 0,
                     sx: {
@@ -104,21 +93,15 @@ export const Menushka = () => {
                     <MenuItem>
                         <EditPackModal page={'cards'} userId={packUserId} id={packId} name={packName}
                         cardsMenuClose={handleClose}/>
-                        {/*Edit*/}
                     </MenuItem>
                     <MenuItem>
                         <DeletePackModal id={packId} name={packName} userId={packUserId} page={'cards'}/>
-                        {/*<ListItemIcon>*/}
-                        {/*    <DeleteOutlineIcon fontSize="small"/>*/}
-                        {/*</ListItemIcon>*/}
-                        {/*Delete*/}
                     </MenuItem></>}
                 {!!cards.cards.length && <MenuItem
                     onClick={() => learnPackHandler(cards.cardsPackId)}>
                     <ListItemIcon>
                         <SchoolIcon fontSize="small"/>
                     </ListItemIcon>
-                    {/*Learn*/}
                 </MenuItem>}
                 </div>
             </Menu>

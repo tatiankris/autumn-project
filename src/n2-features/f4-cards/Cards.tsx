@@ -14,6 +14,7 @@ import {CardsTableHead} from "./CommonCardsPageComponents/CardsTableHead";
 import {EmptyPack} from "./CommonCardsPageComponents/EmptyPack";
 import {Navigate, useParams} from "react-router-dom";
 import {CardsTableBody} from "./CommonCardsPageComponents/CardsTableBody";
+import {PACKS} from "../../n1-main/m1-ui/routing/Routing";
 
 
 export const Cards = () => {
@@ -26,13 +27,13 @@ export const Cards = () => {
     const debounceSearchValue = useDebounce<string>(search, 1000)
     const sort = useAppSelector(state => state.cards.sort)
     const {packId} = useParams()
+    const pack = useAppSelector(state => state.packs.cardPacks.find(p => p._id === packId))
 
     useEffect(() => {
-        if (packId != null) {
+        if (packId && pack) {
             dispatch(getCardsTC(packId))
         }
     }, [page, pageCount, sort, debounceSearchValue])
-
 
     if (!cards.length && !search.length) {return <EmptyPack/>}
 

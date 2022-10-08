@@ -184,7 +184,7 @@ export const createPackTC = (cardsPack: { name?: string, deckCover?: string, pri
 
 export const deletePackTC = (id: string): AppThunk => (dispatch) => {
     dispatch(setAppStatusAC("loading"))
-
+    debugger
     packsAPI.deletePack(id)
         .then(() => {
             dispatch(setPacksTC());

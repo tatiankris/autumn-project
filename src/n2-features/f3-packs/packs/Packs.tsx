@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, useCallback, useEffect, useState} from "react";
 import {
     Button,
     ButtonGroup,
@@ -76,6 +76,8 @@ const Packs = () => {
     const isMyId = useAppSelector(state => state.packs.isMyId);
     const cardPacksTotalCount = useAppSelector(state => state.packs.cardPacksTotalCount);
     const page = useAppSelector(state => state.packs.page)
+    const pageCount = useAppSelector(state => state.packs.pageCount)
+    let packs = useAppSelector(state => state.packs.cardPacks)
     const search = useAppSelector(state => state.packs.search);
     const debounceSearchValue = useDebounce<string>(search, 700);
 
@@ -95,10 +97,11 @@ const Packs = () => {
     ) {
         return {packId, name, user_id, user_name, cards, lastUpdated, createdBy, private_};
     }
-    let packs = useAppSelector(state => state.packs.cardPacks)
     const rows = packs.map(m => {
         return createData(m._id, m.name, m.user_id, m.user_name, m.cardsCount, m.updated, m.created, m.private)
     })
+
+
     const searchPacksHandler = (search: string) => {
         dispatch(searchPacksAC(search))
     }
@@ -111,6 +114,14 @@ const Packs = () => {
     const resetAllFilter = () => {
         dispatch(resetAllPacksFilterTC())
     }
+    const handleChangePageCount = (event: SelectChangeEvent<any>) => {
+        dispatch(setPacksPageCountAC(event.target.value));
+        dispatch(setPacksTC());
+    };
+    const learnPackHandler = (packId: string) => {
+        navigate(`/learn/${packId}`)
+    }
+
     const [sort, setSort] = useState<string>('')
     const onSortHandler = () => {
         if (sort === '') {
@@ -120,17 +131,6 @@ const Packs = () => {
         }
         dispatch(setSortPacksAC(sort))
         dispatch(setPacksTC())
-    }
-
-    const pageCount = useAppSelector(state => state.packs.pageCount)
-
-    const handleChangePageCount = (event: SelectChangeEvent<any>) => {
-        dispatch(setPacksPageCountAC(event.target.value));
-        dispatch(setPacksTC());
-    };
-
-    const learnPackHandler = (packId: string) => {
-        navigate(`/learn/${packId}`)
     }
 
     return <Container maxWidth="lg">

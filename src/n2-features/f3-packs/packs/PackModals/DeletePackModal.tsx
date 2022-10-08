@@ -7,6 +7,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Typography from "@mui/material/Typography";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import {PACKS} from "../../../../n1-main/m1-ui/routing/Routing";
+import {useNavigate} from "react-router-dom";
 
 type PropsType = {
     id: string
@@ -16,16 +18,20 @@ type PropsType = {
 }
 export const DeletePackModal = ({id, name, userId, page}: PropsType) => {
 
+    const navigate = useNavigate()
     const myId = useAppSelector(state => state.profile._id)
 
-    const [open, setOpen] = useState<boolean>(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [open, setOpen] = useState<boolean>(false)
+    const handleOpen = () => setOpen(true)
+    const handleClose = () => setOpen(false)
 
     const dispatch = useAppDispatch();
     const handleDelete = () => {
+
         dispatch(deletePackTC(id))
-        handleClose();
+        handleClose()
+
+        page === 'cards' && navigate(PACKS)
     }
 
     return (
@@ -42,7 +48,6 @@ export const DeletePackModal = ({id, name, userId, page}: PropsType) => {
                 <DeleteOutlineIcon fontSize="small"/>
             </ListItemIcon>
         }
-
         <BasicModal title={'Edit pack'}
                     open={open}
                     handleOpen={handleOpen}

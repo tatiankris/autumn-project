@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "../../../../n1-main/m1-ui/hooks";
 import {updatePackTC} from "../../../../n1-main/m2-bll/reducers/packs-reducer";
 import {BasicModal} from "../../../../n1-main/m1-ui/common/BasicModal/BasicModal";
@@ -17,40 +17,45 @@ type PropsType = {
 }
 export const EditPackModal = ({id, name, private_, userId, page, cardsMenuClose}: PropsType) => {
 
-
+    const dispatch = useAppDispatch()
     const myId = useAppSelector(state => state.profile._id)
-
-    const [open, setOpen] = useState<boolean>(false)
-    const handleOpen = () => setOpen(true)
-    const handleClose = () => setOpen(false)
+    const [error, setError] = useState(false)
 
     const [value, setValue] = useState<string>(name)
     const onChangeHandler = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        setValue(e.currentTarget.value)
+        setValue(e.currentTarget.value)}
+
+    useEffect( () => {
+        if (value.trim().length === 0) {
+            setError(true)
+        }
+        else {
+            setError(false)
+        }
+    }, [value])
+
+    const [checked, setChecked] = useState<boolean>(private_ ? private_ : false)
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setChecked(e.target.checked)}
+
+    const [open, setOpen] = useState<boolean>(false)
+    const handleOpen = () => setOpen(true)
+    const handleClose = () => {
+        setValue(name)
+        private_ && setChecked(private_)
+        setError(false)
+        setOpen(false)
+        cardsMenuClose && cardsMenuClose()
     }
-
-    const dispatch = useAppDispatch()
-
-        const [checked, setChecked] = useState<boolean>(private_ ? private_ : false)
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setChecked(e.target.checked)
-        };
-
-
 
     const handleUpdate = () => {
-        dispatch(updatePackTC({_id: id, name: value, private: checked}))
-        handleClose()
-
-        cardsMenuClose && cardsMenuClose();
-    }
-
-    const handleCancel = () => {
-        handleClose()
-        cardsMenuClose && cardsMenuClose()
-        setValue(name)
-
-        private_ && setChecked(private_)
+        if (value.length < 1) {
+            setError(true)
+        } else {
+            dispatch(updatePackTC({_id: id, name: value, private: checked}))
+            handleClose()
+            cardsMenuClose && cardsMenuClose()
+        }
     }
 
     return (
@@ -65,7 +70,6 @@ export const EditPackModal = ({id, name, private_, userId, page, cardsMenuClose}
                     <ListItemIcon onClick={handleOpen}>
                         <BorderColorIcon fontSize="small"/>
                     </ListItemIcon>
-
             }
         <BasicModal title={'Edit pack'}
                     open={open}
@@ -82,12 +86,14 @@ export const EditPackModal = ({id, name, private_, userId, page, cardsMenuClose}
                     value={value}
                     onChange={onChangeHandler}
                     margin={'normal'}
+                    error={error}
+                    helperText={error ? "Pack name cannot be empty!" : " "}
                 />
                 {private_ &&
                     <FormControlLabel control={<Checkbox checked={checked} onChange={handleChange} />} label="Private pack" />
                 }
                 <Stack direction="row" spacing={2} style={{width: '100%'}} justifyContent={'space-around'}>
-                    <Button  variant="outlined" onClick={handleCancel}>Cancel</Button>
+                    <Button  variant="outlined" onClick={handleClose}>Cancel</Button>
                     <Button  variant="contained" onClick={handleUpdate}>Save</Button>
                 </Stack>
             </div>
