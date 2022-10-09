@@ -1,14 +1,15 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import SuperEditableSpan from "../../../n1-main/m1-ui/common/SuperEditableSpan/SuperEditableSpan";
 import {Navigate} from "react-router-dom";
-import {changeNameTC} from "../../../n1-main/m2-bll/reducers/profile-reducer";
+import {changeNameAC, changeProfileInfoTC} from "../../../n1-main/m2-bll/reducers/profile-reducer";
 import {useAppDispatch, useAppSelector} from "../../../n1-main/m1-ui/hooks";
 import {logoutTC} from "../../../n1-main/m2-bll/reducers/auth-reducer";
 import {LOGIN} from "../../../n1-main/m1-ui/routing/Routing";
 import s from './Profile.module.css';
 import {Button, Grid, Paper, Typography} from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
-import { BackToPackList } from "../../f4-cards/CommonCardsPageComponents/BackToPackList";
+import {BackToPackList} from "../../f4-cards/CommonCardsPageComponents/BackToPackList";
+import {ChangeAva} from "./ChangeAva";
 
 const Profile = React.memo(() => {
 
@@ -18,8 +19,12 @@ const Profile = React.memo(() => {
     const email = useAppSelector(state => state.profile.email);
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn);
 
+    useEffect(()=>{
+        dispatch(changeProfileInfoTC(name,avatar))
+    },[name,avatar])
+
     const setNewName = useCallback((name: string) => {
-        dispatch(changeNameTC(name));
+        dispatch(changeNameAC(name));
     }, [dispatch, name]);
 
     const logout = useCallback(() => {
@@ -41,6 +46,7 @@ const Profile = React.memo(() => {
                                 Personal Information
                             </Typography>
                             <div className={s.avatar} style={{backgroundImage: `url(${avatar})`}}>
+                               <ChangeAva/>
                             </div>
                             <div style={{cursor: 'pointer', fontSize: '20px'}}>
                                 <SuperEditableSpan value={name} onChange={setNewName}/>

@@ -1,8 +1,8 @@
-import {AppDispatch, AppRootStateType} from "../store";
+import {AppDispatch} from "../store";
 import {AxiosError} from "axios";
 import {handleServerNetworkError} from "../../m1-ui/common/utils/error-utils";
 import {setAppStatusAC} from "./app-reducer";
-import {authAPI} from "../../m3-dal/api/auth-api";
+import {authAPI, LoginResponseType} from "../../m3-dal/api/auth-api";
 
 //state
 const initialState = {} as ProfileStateType;
@@ -13,14 +13,17 @@ export const profileReducer = (state: ProfileStateType = initialState, action: P
         case 'profile/SET-PROFILE': {
             return {
                 ...state,
-                _id: action.id,
-                name: action.name,
-                email: action.email,
-                avatar: action.avatar
+                _id: action.res._id,
+                name: action.res.name,
+                email: action.res.email,
+                avatar: action.res.avatar ? action.res.avatar : 'https:\//i.pinimg.com/originals/ea/09/10/ea0910307bcc7fea70790f85c0598aa3.jpg'
             };
         }
         case 'profile/CHANGE-NAME': {
             return {...state, name: action.name};
+        }
+        case 'profile/CHANGE-AVATAR': {
+            return {...state, avatar: action.avatar};
         }
         default:
             return state;
@@ -29,13 +32,10 @@ export const profileReducer = (state: ProfileStateType = initialState, action: P
 
 
 //actions
-export const setProfileAC = (id: string, email: string, name: string, avatar?: string ) => {
+export const setProfileAC = (res: LoginResponseType) => {
     return {
         type: 'profile/SET-PROFILE',
-        id,
-        name,
-        email,
-        avatar: 'https:\//i.pinimg.com/originals/ea/09/10/ea0910307bcc7fea70790f85c0598aa3.jpg',
+        res
     } as const
 };
 export const changeNameAC = (name: string) => {
@@ -45,29 +45,34 @@ export const changeNameAC = (name: string) => {
     } as const
 };
 
-
-//thunks
-export const changeNameTC = (name: string) =>
-    (dispatch: AppDispatch, getState: () => AppRootStateType) => {
-        dispatch(setAppStatusAC("loading"))
-    const avatar = getState().profile.avatar;
-
-    authAPI.changeProfile(name, avatar)
-        .then(res => {
-            dispatch(changeNameAC(res.data.updatedUser.name));
-        })
-        .catch((err: AxiosError<{ error: string }>) => {
-            const error = err.response
-                ? err.response.data.error
-                : err.message
-            handleServerNetworkError({message:error},dispatch)
-        })
-        .finally(() => dispatch(setAppStatusAC("idle")))
+export const changeAvatarAC = (avatar: string) => {
+    return {
+        type: 'profile/CHANGE-AVATAR',
+        avatar,
+    } as const
 };
 
 
+//thunks
+export const changeProfileInfoTC = (name: string, avatar: string) =>
+    (dispatch: AppDispatch) => {
+        dispatch(setAppStatusAC("loading"))
+        authAPI.changeProfile(name, avatar)
+            .then(res => {
+                dispatch(changeNameAC(res.data.updatedUser.name));
+            })
+            .catch((err: AxiosError<{ error: string }>) => {
+                const error = err.response
+                    ? err.response.data.error
+                    : err.message
+                handleServerNetworkError({message: error}, dispatch)
+            })
+            .finally(() => dispatch(setAppStatusAC("idle")))
+    };
+
+
 //types
-export type ProfileActionsType = ReturnType<typeof changeNameAC | typeof setProfileAC>;
+export type ProfileActionsType = ReturnType<typeof changeNameAC | typeof setProfileAC | typeof changeAvatarAC>;
 export type ProfileStateType = {
     _id: string
     name: string

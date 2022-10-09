@@ -40,7 +40,6 @@ export const BasicModal = ({title, children, button, open, ...props}: PropsType)
                 onClose={props.handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
-                style={{position: 'relative'}}
             >
                 <Box sx={style}>
                     <Stack direction="row" spacing={2} alignItems={'center'}
