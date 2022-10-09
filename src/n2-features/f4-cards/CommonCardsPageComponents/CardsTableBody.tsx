@@ -4,8 +4,8 @@ import {Rating, Stack} from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import {useAppSelector} from "../../../n1-main/m1-ui/hooks";
 import {CardType} from "../../../n1-main/m3-dal/api/cards-api";
-import {DeleteCardModal} from "../../f5-modals/DeleteCard.Modal";
-import {EditCardModal} from "../../f5-modals/EditCardModal";
+import {DeleteCardModal} from "../../f6-modals/DeleteCard.Modal";
+import {EditCardModal} from "../../f6-modals/EditCardModal";
 
 type PropsType={
     card:CardType

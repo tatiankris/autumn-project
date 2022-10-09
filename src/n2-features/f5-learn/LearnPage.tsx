@@ -34,7 +34,7 @@ const LearnPage = () => {
     const [first, setFirst] = useState<boolean>(true);
     const cards = useAppSelector(state => state.cards.cards);
     const packName = useAppSelector(state => state.cards.packName);
-    const {packId} = useParams();
+    const {packId, cardsCount} = useParams();
 
     const [card, setCard] = useState<CardType>({
         _id: '',
@@ -56,7 +56,7 @@ const LearnPage = () => {
 
     useEffect(() => {
         if (first) {
-            dispatch(getCardsTC(packId || '', true));
+            dispatch(getCardsTC(packId || '', Number(cardsCount)));
             setFirst(false);
         }
 
