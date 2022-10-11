@@ -42,6 +42,10 @@ const LearnPage = () => {
 
         answer: '',
         question: '',
+
+        answerImg: '',
+        questionImg: '',
+
         grade: 0,
         shots: 0,
 
@@ -82,7 +86,10 @@ const LearnPage = () => {
                 <Paper elevation={14} style={{padding: "30px", width: '350px'}}>
                     <div>
                         <div className={s.question}>
-                            <p><b>Question:</b> {card.question}</p>
+                            <p><b>Question:</b></p>
+                            {card.questionImg
+                                ? <img src={card.questionImg} alt="" style={{height: '100px', display: 'block', margin: '0 auto'}}/>
+                                : <p>{card.question}</p>}
                         </div>
                         <div className={s.attemptsNumber}>
                             <span>Number of attempts to answer a question: {card.shots}</span>
@@ -91,7 +98,10 @@ const LearnPage = () => {
                         {isChecked && (
                             <>
                                 <div>
-                                    <p><b>Answer:</b> {card.answer}</p>
+                                    <p><b>Answer:</b></p>
+                                    {card.answerImg
+                                        ? <img src={card.answerImg} alt="" style={{height: '100px', display: 'block', margin: '0 auto'}}/>
+                                        : <p>{card.answer}</p>}
                                 </div>
 
                                 <FormControl>

@@ -70,6 +70,8 @@ export type GetCardsResponseType = {
 export type CardType = {
     answer: string
     question: string
+    answerImg?: string
+    questionImg?: string
     cardsPack_id: string
     grade: number
     type: string
