@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {FormControl, InputAdornment, InputLabel, OutlinedInput} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import {useAppDispatch, useAppSelector} from "../../../../../../n1-main/m1-ui/hooks";
@@ -9,9 +9,9 @@ export const PackSearch = () => {
 
     const search = useAppSelector(state => state.packs.search);
 
-    const searchPacksHandler = (search: string) => {
+    const searchPacksHandler = useCallback((search: string) => {
         dispatch(searchPacksAC(search))
-    }
+    }, [dispatch, searchPacksAC])
 
     return (
         <div>

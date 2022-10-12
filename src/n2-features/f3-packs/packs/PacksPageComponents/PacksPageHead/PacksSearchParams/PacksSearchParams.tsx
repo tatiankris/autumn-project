@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {Grid, IconButton} from "@mui/material";
 import {PackSearch} from "./PackSearch";
 import {MyAllPacksFilter} from "./MyAllPacksFilter";
@@ -10,9 +10,10 @@ import {resetAllPacksFilterTC} from "../../../../../../n1-main/m2-bll/reducers/p
 export const PacksSearchParams = () => {
     const dispatch = useAppDispatch();
 
-    const resetAllFilter = () => {
+    const resetAllFilter = useCallback(() => {
         dispatch(resetAllPacksFilterTC())
-    }
+    }, [dispatch, resetAllPacksFilterTC])
+
     return (
         <div>
             <Grid container spacing={4}>

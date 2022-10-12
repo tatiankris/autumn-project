@@ -3,6 +3,7 @@ import {NavLink} from "react-router-dom";
 import {LOGIN, PROFILE} from "../routing/Routing";
 import {AppBar, Avatar, Box, Button, Toolbar, Typography} from "@mui/material";
 import {useAppSelector} from "../hooks";
+import Logo from '../common/img/logo.jpg'
 
 const Header = () => {
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn);
@@ -12,7 +13,8 @@ const Header = () => {
     return (<Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
             <Toolbar>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} fontSize={'24px'}>
+                <img src={Logo} height={'54px'} style={{borderRadius: '30px'}} />
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} fontSize={'24px'} marginLeft={'12px'}>
                     Learning Cards
                 </Typography>
                 {

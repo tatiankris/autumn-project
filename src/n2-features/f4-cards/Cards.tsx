@@ -15,6 +15,7 @@ import {EmptyPack} from "./CommonCardsPageComponents/EmptyPack";
 import {Navigate, useParams} from "react-router-dom";
 import {CardsTableBody} from "./CommonCardsPageComponents/CardsTableBody";
 import {PACKS} from "../../n1-main/m1-ui/routing/Routing";
+import {defaultCover} from "../../n1-main/m1-ui/common/img/base64DefaultCover";
 
 
 export const Cards = () => {
@@ -26,11 +27,11 @@ export const Cards = () => {
     const pageCount = useAppSelector(state => state.cards.pageCount)
     const debounceSearchValue = useDebounce<string>(search, 1000)
     const sort = useAppSelector(state => state.cards.sort)
+    const packCover = useAppSelector(state => state.cards.packDeckCover)
     const {packId} = useParams()
-    const pack = useAppSelector(state => state.packs.cardPacks.find(p => p._id === packId))
 
     useEffect(() => {
-        if (packId && pack) {
+        if (packId) {
             dispatch(getCardsTC(packId))
         }
     }, [page, pageCount, sort, debounceSearchValue])
@@ -42,6 +43,9 @@ export const Cards = () => {
             <BackToPackList/>
             <Grid container spacing={3} marginTop={'8px'}>
                 <CardsPageHead/>
+                <img src={packCover ? packCover : defaultCover}
+                     style={{height: '140px', display: 'inline-block', margin: '24px 0px 0px 24px', borderRadius: '8px'}}
+                />
                 <CardSearch/>
             </Grid>
             <TableContainer component={Paper}>

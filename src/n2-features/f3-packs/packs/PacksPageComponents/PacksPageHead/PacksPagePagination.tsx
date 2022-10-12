@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react'
+import React, {ChangeEvent, useCallback} from 'react'
 import {Grid, MenuItem, Pagination, Select, SelectChangeEvent, Stack} from "@mui/material";
 import {changePacksPageAC, setPacksPageCountAC, setPacksTC} from "../../../../../n1-main/m2-bll/reducers/packs-reducer";
 import {useAppDispatch, useAppSelector} from "../../../../../n1-main/m1-ui/hooks";
@@ -10,14 +10,14 @@ export const PacksPagePagination = () => {
     const pageCount = useAppSelector(state => state.packs.pageCount)
     const cardPacksTotalCount = useAppSelector(state => state.packs.cardPacksTotalCount);
 
-    const changePageHandler = (event: ChangeEvent<unknown>, page: number) => {
+    const changePageHandler = useCallback((event: ChangeEvent<unknown>, page: number) => {
         dispatch(changePacksPageAC(page))
-    }
+    }, [dispatch, changePacksPageAC])
 
-    const handleChangePageCount = (event: SelectChangeEvent<any>) => {
+    const handleChangePageCount = useCallback((event: SelectChangeEvent<any>) => {
         dispatch(setPacksPageCountAC(event.target.value));
         dispatch(setPacksTC());
-    };
+    }, [dispatch, setPacksPageCountAC, setPacksTC])
 
     return (
         <Grid container spacing={1} marginTop={'28px'} marginBottom={'46px'}>
