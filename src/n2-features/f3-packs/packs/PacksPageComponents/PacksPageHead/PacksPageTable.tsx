@@ -24,7 +24,7 @@ export const PacksPageTable = () => {
         cards: number,
         lastUpdated: string,
         createdBy: string,
-        private_: boolean
+        private_: boolean,
     ) {
         return {packId, name, user_id, user_name, cards, lastUpdated, createdBy, private_};
     }
@@ -42,8 +42,8 @@ export const PacksPageTable = () => {
         dispatch(setSortPacksAC(sort))
         dispatch(setPacksTC())
     }
-    const learnPackHandler = (packId: string) => {
-        navigate(`/learn/${packId}`)
+    const learnPackHandler = (packId: string, cardsCount: number) => {
+        navigate(`/learn/${packId}/${cardsCount}`)
     }
 
     return (
@@ -83,7 +83,7 @@ export const PacksPageTable = () => {
                                     <TableCell align="right">{row.user_name}</TableCell>
                                     <TableCell align="right">
                                         <IconButton
-                                            onClick={() => learnPackHandler(row.packId)}
+                                            onClick={() => learnPackHandler(row.packId, row.cards)}
                                             disabled={row.cards === 0}>
                                             <SchoolIcon
                                                 fontSize="small"/>

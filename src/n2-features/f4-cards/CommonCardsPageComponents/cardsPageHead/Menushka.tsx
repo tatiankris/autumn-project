@@ -34,8 +34,8 @@ export const Menushka = () => {
     const handleClose = () => {
         setAnchorEl(null)
     }
-    const learnPackHandler = (packId: string) => {
-        navigate(`/learn/${packId}`)
+    const learnPackHandler = (packId: string, cardsCount: number) => {
+        navigate(`/learn/${packId}/${cardsCount}`)
     }
 
     return (
@@ -98,7 +98,7 @@ export const Menushka = () => {
                         <DeletePackModal id={packId} name={packName} userId={packUserId} page={'cards'}/>
                     </MenuItem></>}
                 {!!cards.cards.length && <MenuItem
-                    onClick={() => learnPackHandler(cards.cardsPackId)}>
+                    onClick={() => learnPackHandler(cards.cardsPackId, cards.cardsTotalCount)}>
                     <ListItemIcon>
                         <SchoolIcon fontSize="small"/>
                     </ListItemIcon>

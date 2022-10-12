@@ -4,7 +4,7 @@ import {BackToPackList} from "./BackToPackList";
 import {CardsPageHead} from "./cardsPageHead/CardsPageHead";
 import s from "../Cards.module.css";
 import {useAppSelector} from "../../../n1-main/m1-ui/hooks";
-import {AddNewCardModal} from "../../f5-modals/AddNewCardModal";
+import {AddNewCardModal} from "../../f6-modals/AddNewCardModal";
 
 export const EmptyPack = () => {
 

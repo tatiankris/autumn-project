@@ -129,13 +129,13 @@ export const setPackNameAC = (name: string) => {
 
 
 //thunks
-export const getCardsTC = (packId: string, all?: boolean): AppThunk => {
+export const getCardsTC = (packId: string, cardsCount?: number): AppThunk => {
     return (dispatch, getState) => {
-        const {pageCount, page, sort, search, cardsTotalCount} = getState().cards
+        const {pageCount, page, sort, search} = getState().cards
         const packUserId = getState().profile._id
         dispatch(setAppStatusAC("loading"))
         cardsAPI.getCards({
-            pageCount: all ? cardsTotalCount : pageCount,
+            pageCount: cardsCount ? cardsCount : pageCount,
             page,
             sortCards: sort,
             cardQuestion: search,
@@ -191,7 +191,7 @@ export const deleteCardTC = (cardId: string): AppThunk => {
     }
 }
 
-export const updateCardTC = (card:UpdateCardType): AppThunk => {
+export const updateCardTC = (card: UpdateCardType): AppThunk => {
     return (dispatch, getState) => {
         const packId = getState().cards.cardsPackId
         dispatch(setAppStatusAC("loading"))
@@ -251,15 +251,14 @@ export const updateCardGradeTC = (stringGrade: string, packId: string, cardId: s
 }
 
 //types
-export type ActionsType =
-    ReturnType<typeof getCardsAC> |
-    ReturnType<typeof searchCardsAC> |
-    ReturnType<typeof setPageAC> |
-    ReturnType<typeof setSortAC> |
-    ReturnType<typeof setPageCountAC> |
-    ReturnType<typeof setIsMyPackAC> |
-    ReturnType<typeof setPackNameAC> |
-    ReturnType<typeof cardsAddedAC>
+export type ActionsType = ReturnType<typeof getCardsAC>
+    | ReturnType<typeof searchCardsAC>
+    | ReturnType<typeof setPageAC>
+    | ReturnType<typeof setSortAC>
+    | ReturnType<typeof setPageCountAC>
+    | ReturnType<typeof setIsMyPackAC>
+    | ReturnType<typeof setPackNameAC>
+    | ReturnType<typeof cardsAddedAC>
 
 
 
