@@ -76,7 +76,7 @@ export const loginTC = (data: LoginDataType) => {
         dispatch(setAppStatusAC("loading"))
         authAPI.login(data)
             .then(res => {
-                dispatch(setProfileAC(res.data._id, res.data.email, res.data.name, res.data.avatar))
+                dispatch(setProfileAC(res.data))
                 dispatch(loginAC(true))
             })
             .catch(err => {
@@ -111,7 +111,7 @@ export const initializeAppTC = () => (dispatch: AppDispatch) => {
     authAPI.me()
         .then(res => {
             dispatch(loginAC(true))
-            dispatch(setProfileAC(res.data._id, res.data.email, res.data.name, res.data.avatar));
+            dispatch(setProfileAC(res.data));
         })
         .catch( () => {
                 // const error = err.response
@@ -179,7 +179,7 @@ export const setNewPasswordTC = (password: string, resetPasswordToken: string) =
     }
 
     authAPI.setNewPassword(data)
-        .then(res => {
+        .then(() => {
             dispatch(setNewPasswordAC(true));
         })
         .catch(err => {

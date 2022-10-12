@@ -34,7 +34,7 @@ export type LoginDataType = {
 }
 
 export type LoginResponseType = {
-    avatar: string
+    avatar?: string
     created: string
     email: string
     isAdmin: boolean
