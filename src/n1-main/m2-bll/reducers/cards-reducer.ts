@@ -17,7 +17,8 @@ let initialState = {
     sort: "0updated",
     search: "",
     isMyPack: false,
-    cardsAdded: false
+    cardsAdded: false,
+    packDeckCover: null as string | null
 }
 
 export type StateType = typeof initialState;
@@ -36,7 +37,8 @@ export const cardsReducer = (state: StateType = initialState, action: ActionsTyp
                 minGrade: action.cards.maxGrade,
                 packUserId: action.cards.packUserId,
                 packName: action.cards.packName,
-                cardsPackId: action.cardsPackId
+                cardsPackId: action.cardsPackId,
+                packDeckCover: action.cards.packDeckCover,
             }
         }
 

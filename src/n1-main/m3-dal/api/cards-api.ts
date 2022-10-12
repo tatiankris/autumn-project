@@ -55,7 +55,7 @@ export type GetCardsResponseType = {
     packUserId: string;
     packName: string;
     packPrivate: boolean;
-    packDeckCover?: any;
+    packDeckCover: string | null ;
     packCreated: string;
     packUpdated: string;
     page: number;

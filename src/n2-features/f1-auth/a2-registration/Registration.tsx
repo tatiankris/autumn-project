@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {
     Button,
     FormControl,
@@ -9,7 +9,7 @@ import {
     TextField
 } from "@mui/material";
 import {FormikErrors, useFormik} from "formik";
-import {Navigate, NavLink} from "react-router-dom";
+import {Navigate, NavLink, useNavigate} from "react-router-dom";
 import {LOGIN} from "../../../n1-main/m1-ui/routing/Routing";
 import {registrationTC} from "../../../n1-main/m2-bll/reducers/auth-reducer";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
@@ -32,6 +32,7 @@ type FormikErrorType   = {
 const Registration = () => {
 
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
@@ -70,25 +71,30 @@ const Registration = () => {
         },
     });
 
-    let [password, showPassword] = useState<boolean>(false);
-    let [confirmPassword, showConfirmPassword] = useState<boolean>(false);
-    const handleClickShowPassword = () => {
+    let [password, showPassword] = useState(false);
+    let [confirmPassword, showConfirmPassword] = useState(false);
+
+    const handleClickShowPassword = useCallback(() => {
         showPassword(true);
-    };
-    const handleMouseDownPassword = () => {
+    }, [showPassword])
+    const handleMouseDownPassword = useCallback(() => {
         showPassword(false);
-    };
-    const handleClickShowConfirmPassword = () => {
+    }, [showPassword])
+    const handleClickShowConfirmPassword = useCallback(() => {
         showConfirmPassword(true);
-    };
-    const handleMouseDownConfirmPassword = () => {
+    }, [showConfirmPassword])
+    const handleMouseDownConfirmPassword = useCallback(() => {
         showConfirmPassword(false);
-    };
+    }, [showConfirmPassword])
 
     const signUp = useAppSelector(state => state.auth.signUp);
-    if (signUp) {
-        return <Navigate to={LOGIN}/>
-    }
+
+    useEffect(() => {
+        if (signUp) {
+            navigate(LOGIN)
+        }
+    }, [signUp])
+
 
     return (<Grid container justifyContent={'center'} >
             <Grid marginTop={'50px'} textAlign={"center"} width={'400px'} >

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {Button, ButtonGroup} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../../../../../n1-main/m1-ui/hooks";
 import {setMyPacksToPageAC} from "../../../../../../n1-main/m2-bll/reducers/packs-reducer";
@@ -7,9 +7,9 @@ export const MyAllPacksFilter = () => {
 
     const dispatch = useAppDispatch();
     const isMyId = useAppSelector(state => state.packs.isMyId);
-    const setMyPacksHandler = (isMyPack: boolean) => {
+    const setMyPacksHandler = useCallback((isMyPack: boolean) => {
         dispatch(setMyPacksToPageAC(isMyPack))
-    }
+    }, [dispatch, setMyPacksToPageAC])
 
     return (
         <div>

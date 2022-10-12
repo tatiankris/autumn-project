@@ -7,7 +7,7 @@ export const packsAPI = {
         return instance.get<GetPacksParamsType, AxiosResponse<GetPacksResponseType>>('/cards/pack', {params})
     },
     ///про private пишет, что это зарезервированное слово
-    createPack({cardsPack: {name = 'no Name', deckCover = 'url or base64', private_ = false}}: CreatePackDataType) {
+    createPack({cardsPack: {name = 'no Name', deckCover = null, private_ = false}}: CreatePackDataType) {
         return instance.post<CreatePackDataType, AxiosResponse<{ newCardsPack: any }>>('/cards/pack', {
             cardsPack: {
                 name,
@@ -36,18 +36,20 @@ export type PackType = {
     created: string
     updated: string
     private: boolean
+    deckCover?: null | string
 }
 
 export type UpdatePackDataType = {
     _id: string
     name: string
+    deckCover?: null | string
     private?: boolean
 }
 
 export type CreatePackDataType = {
     cardsPack: {
         name?: string // если не отправить будет таким
-        deckCover?: string // не обязателен
+        deckCover?: null | string // не обязателен
         private_?: boolean // если не отправить будет такой
     }
 }

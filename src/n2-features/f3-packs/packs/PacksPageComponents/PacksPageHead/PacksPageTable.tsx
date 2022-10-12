@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "../../../../../n1-main/m1-ui/hooks";
 import {Grid, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -8,6 +8,8 @@ import SchoolIcon from "@mui/icons-material/School";
 import {EditPackModal} from "../../PackModals/EditPackModal";
 import {DeletePackModal} from "../../PackModals/DeletePackModal";
 import {setPacksTC, setSortPacksAC} from "../../../../../n1-main/m2-bll/reducers/packs-reducer";
+import {defaultCover} from "../../../../../n1-main/m1-ui/common/img/base64DefaultCover";
+
 
 export const PacksPageTable = () => {
 
@@ -25,15 +27,16 @@ export const PacksPageTable = () => {
         lastUpdated: string,
         createdBy: string,
         private_: boolean,
+        deckCover?: null | string
     ) {
-        return {packId, name, user_id, user_name, cards, lastUpdated, createdBy, private_};
+        return {packId, name, user_id, user_name, cards, lastUpdated, createdBy, private_, deckCover};
     }
     const rows = packs.map(m => {
-        return createData(m._id, m.name, m.user_id, m.user_name, m.cardsCount, m.updated, m.created, m.private)
+        return createData(m._id, m.name, m.user_id, m.user_name, m.cardsCount, m.updated, m.created, m.private, m.deckCover)
     })
 
-    const [sort, setSort] = useState<string>('')
-    const onSortHandler = () => {
+    const [sort, setSort] = useState('')
+    const onSortHandler = useCallback(() => {
         if (sort === '') {
             setSort('1updated')
         } else {
@@ -41,7 +44,8 @@ export const PacksPageTable = () => {
         }
         dispatch(setSortPacksAC(sort))
         dispatch(setPacksTC())
-    }
+    }, [dispatch, sort, setSort, setSortPacksAC, setPacksTC])
+
     const learnPackHandler = (packId: string, cardsCount: number) => {
         navigate(`/learn/${packId}/${cardsCount}`)
     }
@@ -49,10 +53,11 @@ export const PacksPageTable = () => {
     return (
         <Grid container spacing={1} marginTop={'8px'}>
             <TableContainer component={Paper}>
-                <Table sx={{minWidth: 650}} aria-label="simple table">
+                <Table sx={{minWidth: 700}} aria-label="simple table">
                     <TableHead style={{background: '#EFEFEF'}}>
                         <TableRow>
-                            <TableCell>Name</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell align="left">Name</TableCell>
                             <TableCell align="right">Cards</TableCell>
                             <TableCell align="right">Last Updated<IconButton
                                 onClick={onSortHandler}><ArrowDropDownIcon/></IconButton></TableCell>
@@ -73,6 +78,11 @@ export const PacksPageTable = () => {
                                     key={row.packId}
                                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                 >
+
+                                    <TableCell>
+                                        <img src={row.deckCover ? row.deckCover : defaultCover}
+                                             style={{width: '80px', height: '46px', borderRadius: '4px'}}/>
+                                    </TableCell>
                                     <TableCell component="th" scope="row">
                                         <NavLink className={s.nav} to={`/cards/${row.packId}`}>
                                             {row.name}
@@ -89,7 +99,7 @@ export const PacksPageTable = () => {
                                                 fontSize="small"/>
                                         </IconButton>
                                         <EditPackModal page={'packs'} userId={row.user_id} id={row.packId} name={row.name}
-                                                       private_={row.private_}/>
+                                                       private_={row.private_} packCover={row.deckCover}/>
                                         <DeletePackModal page={'packs'} userId={row.user_id} id={row.packId} name={row.name}/>
                                     </TableCell>
                                 </TableRow>

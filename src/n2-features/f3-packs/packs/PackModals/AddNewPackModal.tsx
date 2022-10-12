@@ -1,17 +1,24 @@
 import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import {BasicModal} from "../../../../n1-main/m1-ui/common/BasicModal/BasicModal";
-import {Button, Checkbox, FormControlLabel, Stack, TextField} from "@mui/material";
+import {Alert, Button, Checkbox, FormControlLabel, Stack, TextField} from "@mui/material";
 import {createPackTC} from "../../../../n1-main/m2-bll/reducers/packs-reducer";
 import {useAppDispatch} from "../../../../n1-main/m1-ui/hooks";
+import {UploadPackCoverButton} from "./UploadPackCoverButton";
+import { defaultCover } from '../../../../n1-main/m1-ui/common/img/base64DefaultCover';
 
 export const AddNewPackModal = () => {
 
     const dispatch = useAppDispatch()
     const [error, setError] = useState(false)
 
+
     const [value, setValue] = useState('')
+    const [cover, setCover] = useState(defaultCover);
+
     const onChangeHandler = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setValue(e.currentTarget.value)}
+
+
 
     useEffect( () => {
         if (value.trim().length === 0) {
@@ -33,7 +40,15 @@ export const AddNewPackModal = () => {
         setOpen(false)
         setError(false)
         setValue('')
+        setCover(defaultCover)
         setChecked(false)
+    }
+
+    const getDeckCover = (file64: string) => {
+        setCover(file64);
+    }
+    const deleteCover = () => {
+        setCover(defaultCover)
     }
 
     const handleSave = () => {
@@ -43,7 +58,8 @@ export const AddNewPackModal = () => {
             setError(true)
             return
         } else {
-            dispatch(createPackTC({name: value, private_: checked}))
+
+            dispatch(createPackTC({name: value, deckCover: cover, private_: checked}))
             handleClose()
             setValue('')
         }
@@ -52,6 +68,7 @@ export const AddNewPackModal = () => {
     return (
         <div>
             <Button onClick={handleOpen} variant="contained">Add New Pack</Button>
+
             <BasicModal title={'Add new pack'}
                         open={open}
                         handleOpen={handleOpen}
@@ -71,7 +88,15 @@ export const AddNewPackModal = () => {
                         helperText={error ? "Pack name cannot be empty!" : " "}
                     />
                     <FormControlLabel control={<Checkbox checked={checked} onChange={handleChange} />} label="Private pack" />
-                    <Stack direction="row" spacing={2} style={{width: '100%'}} justifyContent={'space-around'}>
+                    <UploadPackCoverButton callback={getDeckCover} />
+                    {
+                        cover !== defaultCover &&
+                        <div>
+                        <img src={cover} width={'100%'} height={'180px'} style={{display: 'inline-block', marginTop: '8px'}}/>
+                        <Button onClick={deleteCover} style={{background: '#FF3636'}} variant="contained">DELETE UPLOADED COVER</Button>
+                        </div>
+                    }
+                    <Stack marginTop={'8px'} direction="row" spacing={2} style={{width: '100%'}} justifyContent={'space-around'}>
                         <Button  variant="outlined" onClick={handleClose}>Cancel</Button>
                         <Button  variant="contained" onClick={handleSave}>Save</Button>
                     </Stack>
