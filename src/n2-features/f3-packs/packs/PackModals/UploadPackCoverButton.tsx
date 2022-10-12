@@ -1,5 +1,6 @@
 import React, {ChangeEvent, useState} from 'react'
 import {Alert, AlertTitle, Button} from "@mui/material";
+import {convertFileToBase64} from "../../../../n1-main/m1-ui/common/utils/convertToBase64";
 type PropsType = {
     callback: (file64: string) => void
 
@@ -31,16 +32,6 @@ export const UploadPackCoverButton = ({callback}: PropsType) => {
                 }
         }
     }
-
-    const convertFileToBase64 = (file: File, callBack: (value: string) => void) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            const file64 = reader.result as string
-            callBack(file64)
-        }
-        reader.readAsDataURL(file)
-    }
-
 
 
     return (

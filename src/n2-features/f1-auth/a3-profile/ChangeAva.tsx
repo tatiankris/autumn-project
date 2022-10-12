@@ -5,6 +5,7 @@ import {setAppErrorAC} from "../../../n1-main/m2-bll/reducers/app-reducer";
 import {changeAvatarAC} from "../../../n1-main/m2-bll/reducers/profile-reducer";
 import s from './Profile.module.css';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import {convertFileToBase64} from "../../../n1-main/m1-ui/common/utils/convertToBase64";
 
 
 export const ChangeAva = () => {
@@ -26,14 +27,7 @@ export const ChangeAva = () => {
             }
         }
     }
-    const convertFileToBase64 = (file: File, callBack: (value: string) => void) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            const file64 = reader.result as string
-            callBack(file64)
-        }
-        reader.readAsDataURL(file)
-    }
+
     return (
         <div className={s.bottomRight}>
             <IconButton sx={{padding:"0"}} component="label">
